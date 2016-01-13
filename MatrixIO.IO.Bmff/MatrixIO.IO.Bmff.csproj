@@ -1,0 +1,183 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{4A565C90-1850-4A15-816D-E332981735AB}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MatrixIO</RootNamespace>
+    <AssemblyName>MatrixIO.IO.Bmff</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Profile136</TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <CodeAnalysisRuleSet>BasicDesignGuidelineRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\MatrixIO.IO\Diagnostics\Trace.cs">
+      <Link>Diagnostics\Trace.cs</Link>
+    </Compile>
+    <Compile Include="IO\Bmff\BaseMedia.cs" />
+    <Compile Include="IO\Bmff\BaseMediaOptions.cs" />
+    <Compile Include="IO\Bmff\BaseMediaReader.cs" />
+    <Compile Include="IO\Bmff\BmffReader.cs" />
+    <Compile Include="IO\Bmff\BmffWriter.cs" />
+    <Compile Include="IO\Bmff\Box.cs" />
+    <Compile Include="IO\Bmff\BoxAttribute.cs" />
+    <Compile Include="IO\Bmff\Boxes\AdditionalMetadataContainerBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\ChunkLargeOffsetBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\ChunkOffsetBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\CompactSampleSizeBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\CompositionOffsetBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\DataEntryUrlBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\DataEntryUrnBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\DataReferenceBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\HandlerBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\HintMediaHeaderBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\InitialObjectDescriptorBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\MediaHeaderBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\MovieExtendsHeaderBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\NullMediaHeaderBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\QuickTime\CompressedMovieBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\QuickTime\CompressedMovieDataBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\QuickTime\DataCompressionBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\DataInformationBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\EditBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\EditListBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\FileDeliveryItemInformationBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\ItemProtectionBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\Jp2\BitsPerComponentBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\Jp2\ColourSpecificationBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\Jp2\ImageHeaderBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\Jp2\ContiguousCodestreamBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\Jp2\Jp2HeaderBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\Jp2\Jp2SignatureBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\Jp2\ResolutionBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\MediaBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\MediaInformationBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\MetaBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\MovieBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\MovieExtendsBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\MovieHeaderBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\PartitionEntryBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\ProtectionSchemeInfoBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\QuickTime\DataEntryAliasBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\QuickTime\DataEntryResourceBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\QuickTime\ElementaryStreamDescriptorBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\QuickTime\MovieHintInfoBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\QuickTime\TrackApertureModeDimensionsBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\QuickTime\TrackCleanApertureDimensionsBox.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IO\Bmff\Boxes\QuickTime\TrackEncodedPixelsDimensionsBox.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IO\Bmff\Boxes\QuickTime\TrackProductionApertureDimensionsBox.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IO\Bmff\Boxes\QuickTime\WideBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\SampleDependencyTypeBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\SampleDescriptionBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\SampleSizeBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\SampleTableBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\SampleToChunkBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\SkipBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\FileTypeBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\FreeSpaceBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\MovieDataBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\MovieFragmentBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\MovieFragmentHeaderBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\MovieFragmentRandomAccessBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\MovieFragmentRandomAccessOffsetBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\SoundMediaHeaderBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\SyncSampleBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\TimeToSampleBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\TrackBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\TrackExtendsBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\TrackFragmentBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\TrackFragmentHeaderBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\TrackFragmentRandomAccessBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\TrackHeaderBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\TrackReferenceBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\TrackRunBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\UnknownBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\UserDataBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\VideoMediaHeaderBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\Jp2\XmlBox.cs" />
+    <Compile Include="IO\Bmff\BoxType.cs" />
+    <None Include="IO\Bmff\BoxTypes.cs" />
+    <Compile Include="IO\Bmff\FourCC.cs" />
+    <Compile Include="IO\Bmff\IContentBox.cs" />
+    <Compile Include="IO\Bmff\ISuperBox.cs" />
+    <Compile Include="IO\Bmff\FullBox.cs" />
+    <Compile Include="IO\Bmff\IOpaqueData.cs" />
+    <Compile Include="IO\Bmff\ITableBox.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Include="Specifications\Draft DASH\29n12310t1.doc" />
+    <None Include="Specifications\Draft DASH\29n12310t2.doc" />
+    <None Include="Specifications\Draft DASH\29n12313t.doc" />
+    <None Include="Specifications\Draft DASH\29n12316t.pdf" />
+    <None Include="Specifications\a121.tm3904r3.ff0020r12.DVB_File_Format_Specification.pdf" />
+    <None Include="Specifications\ISO_15444-2_JPEG2000 _Extensions.pdf" />
+    <None Include="Specifications\C.S0050-B_v1.0_070521.pdf" />
+    <None Include="Specifications\ISO_15444-1_JPEG2000.pdf" />
+    <None Include="Specifications\ISO_14496-12_ISOBMFF.pdf" />
+    <None Include="Specifications\ISO_14496-12_ISOBMFF_Cor1.pdf" />
+    <None Include="Specifications\ISO_14496-12_ISOBMFF_Cor2.pdf" />
+    <None Include="Specifications\ISO_15444-3_MJPEG2000.pdf" />
+    <None Include="Specifications\Protected Interoperable File Format %28PIFF%29 1.1.pdf" />
+    <None Include="Specifications\qtff.pdf" />
+    <None Include="Specifications\video_file_format_spec_v10_1.pdf" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="LICENSE.txt" />
+    <None Include="ROADMAP.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="IO\Bmff\Boxes\Dash\" />
+    <Folder Include="IO\Bmff\Boxes\Jpx\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MatrixIO.IO\MatrixIO.IO.csproj">
+      <Project>{EDC16014-ECA3-4B93-A849-B81EAC369DD2}</Project>
+      <Name>MatrixIO.IO</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

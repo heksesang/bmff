@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B2B26824-21F0-4576-BD4A-104EDD61E180}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MatrixIO</RootNamespace>
+    <AssemblyName>MatrixIO.IO.MPEGTS</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Profile136</TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\MatrixIO.IO\Diagnostics\Trace.cs">
+      <Link>Diagnostics\Trace.cs</Link>
+    </Compile>
+    <Compile Include="IO\MpegTs\NalUnit.cs" />
+    <Compile Include="IO\MpegTs\AacsPacket.cs" />
+    <Compile Include="IO\MpegTs\TsSection.cs" />
+    <Compile Include="IO\MpegTs\Streams\ByteStream.cs" />
+    <Compile Include="IO\MpegTs\Streams\PacketizedElementalStream.cs" />
+    <Compile Include="IO\MpegTs\Streams\TableStream.cs" />
+    <Compile Include="IO\MpegTs\Tables\DescriptionTable.cs" />
+    <Compile Include="IO\MpegTs\PesPacket.cs" />
+    <Compile Include="IO\MpegTs\Tables\ProgramAssociationTable.cs" />
+    <Compile Include="IO\MpegTs\TsDescriptor.cs" />
+    <Compile Include="IO\MpegTs\Tables\ProgramMapTable.cs" />
+    <Compile Include="IO\MpegTs\AdaptationField.cs" />
+    <Compile Include="IO\MpegTs\AdaptationFieldExtension.cs" />
+    <Compile Include="IO\MpegTs\Descriptors\ProgramStreamDescriptor.cs" />
+    <Compile Include="IO\MpegTs\TsDemuxer.cs" />
+    <Compile Include="IO\MpegTs\TsPacket.cs" />
+    <Compile Include="IO\MpegTs\TsProgram.cs" />
+    <Compile Include="IO\MpegTs\TsStream.cs" />
+    <Compile Include="IO\MpegTs\TsTable.cs" />
+    <Compile Include="IO\MpegTs\Descriptors\UnknownDescriptor.cs" />
+    <Compile Include="IO\MpegTs\TsUnit.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Specifications\iso13818-1.pdf" />
+    <None Include="Specifications\ISO_IEC_13818-1_2007_PDF_version_%28en%29.pdf" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MatrixIO.IO\MatrixIO.IO.csproj">
+      <Project>{EDC16014-ECA3-4B93-A849-B81EAC369DD2}</Project>
+      <Name>MatrixIO.IO</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

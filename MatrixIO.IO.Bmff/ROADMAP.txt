@@ -1,0 +1,239 @@
+﻿1. Complete known box types for BMFF, MOV/QTFF, QTIF, 3GPP/3GPP2, JP2, JPM, DVB and DASH
+2. Find and implement the optimal reusable API for BmffReader/BmffWriter for all expected and potential uses (seeking specific atoms, copying with changes or reordering)
+2.1. BmffReader and BmffWriter need options flags
+2.2. BmffReader should handle both sequential and seekable streams -- Sequential handling needs an event model!
+2.3. Need an equivalent of XmlDocument for Bmff files -- As output from BmffReader and input to BmffWriter.
+3. Implement 'moov' compression (decompression is already supported)
+3.1. Determine the best way to expose the compressed 'moov' through BmffReader -- an AutoDecompress option flag?
+4. Add more XML comments for design-time support!!!
+5. Consider converting public unsigned properties to signed of a larger size with range checking for CLS compliance (ugly, but what can you do?)
+5.1 What the heck do we do with ulongs?
+6. Do intensive performance testing.
+7. Add Unit Testing comparing input and output to ensure bit-identical serialization and deserialization
+
+Remaining Unsupported JP2 Box Types: (7)
+	bpcc - Bits Per Component Box
+	pclr - Palette Box
+	cmap - Component Mapping Box
+	cdef - Channel Definition Box
+	resc - Capture Resolution Box
+	resd - Dgefault Display Resolution Box
+	jp2i - Intellectual Property Box
+
+Remaining Unsupported JPX Box Types: (24)
+	rreq - Reader Requirements Box
+	jpch - Codestream Header Box
+	jplh - Compositing Layer Header Box
+	cgrp - Colour Group Box
+	opct - Opacity Box
+	creg - Codestream Registration Box
+	dtbl - Data Reference Box
+	ftbl - Fragment Table Box
+	flst - Fragment List Box
+	cref - Cross-Reference Box
+	comp - Composition Box
+	copt - Composition Options Box
+	inst - Instruction Set Box
+	asoc - Association Box
+	nlst - Number List Box
+	lbl  - Label Box
+	bfil - Binary Filter Box
+	drep - Desired Reproductions Box
+	gtso - Graphics Technology Standard Output Box
+	roid - ROI Description Box
+	chck - Digital Signature Box
+	mp7t - MPEG-7 Textual Box (ISO/IEC 15938)
+	mp7b - MPEG-7 Binary Box (BIM Encoded ISO/IEC 15938)
+	ipr  - Intellectual Property Rights Box
+
+Remaining Unsupported BMFF Box Types: (28 + 4)
+	xml  - XML Box
+    nmhd - Null Media Header Box
+	bxml - Binary XML Box
+	cprt - Copyright Box
+	fecr - FEC Reservoir Box [Forward Error Correction]
+	fpar - File Partition Box
+	frma - Original Format Box
+	gitn - Group Id To Name Box
+	iinf - Item Information Box
+	iloc - Item Location Box
+	imif - IPMP Info Box
+	ipmc - IPMP Control Box
+	mere - Metabox Relation Box
+	padb - Padding Bits Box
+	pdin - Progressive Download Information Box
+	pitm - Primary Item Box
+	sbgp - Sample To Group Box
+	schi - Scheme Information Box
+	schm - Scheme Type Box
+	segr - FD Session Group Box [File Delivery]
+	sgpd - Sample Group Description Box
+	stdp - Degradation Priority Box
+	stsh - Shadow Sync Sample Box
+	subs - Sub Sample Information Box
+	tsel - Track Selection Box
+	???? - Various stsd child boxes.  These are odd, one of four types is determined by moov\trak\mdia\hdlr HandlerType
+
+Remaining Unsupported QTFF Atom Types: (21)
+	clip - Clipping Atom
+	crgn - Clipping Region Atom
+	ctab - Color Table Atom
+	elng - Extended Language Tag Atom
+	gmhd - Base Media Information Header Atom
+	gmin - Base Media Information Atom
+	imap - Track Input Map Atom
+	kmat - Compressed Matte Atom
+	load - Track Load Settings Atom
+	matt - Track Matte Atom
+	obid - Object Id Atom
+	pnot - Preview Atom
+	rdrf - Data Reference Atom
+	rmcd - Component Detect Atom
+	rmcs - Cpu Speed Atom
+	rmda - Reference Movie Descriptor Atom
+	rmdr - Data Rate Atom
+	rmqu - Quality Atom
+	rmra - Reference Movie Atom
+	rmvc - Version Check Atom
+	tcmi - Timecode Media Information Atom
+
+Remaining Unsupported QTIF Box Types:
+	To Be Determined
+
+Remaining Unsupported JPM Box Types:
+	To Be Determined
+
+Remaining Unsupported DVB Box Types:
+	To Be Determined
+
+Remaining Unsupported DASH Box Types:
+	saiz - Sample Auxiliary Information Sizes Box
+	saio - Sample Auxiliary Information Offsets Box
+	leva - Level Assignment Box
+	tfdt - Track Fragment Base Media Decode Time Box
+	styp - Segment Type Box
+	sidx - Segment Index Box
+	ssix - Subsegment Index Box
+	prft - Producer Reference Time Box
+	trun * Extends Track Run Box with new version for signed sample_composition_time_offset
+
+Unknown boxes we've encountered but haven't supported yet:
+	uuid(18020d3a-e90a-1541-b376-4bca41ce0e71) Adobe?
+	uuid(cc2cc947-a1d1-8145-b904-38bb5467713b) Adobe?
+	uuid(74a745bc-50dd-c64e-a9f6-f3a137f47e90) Adobe?
+	uuid(efc5c8d7-1f95-b243-8757-042500f538e8) Adobe?
+	uuid(be7acfcb-97a9-42e8-9c71-999491e3afac) Adobe eXtensible Metadata Platform (XMP) Box
+
+
+Sample Table Description Box ('stsd') children:  (These will just be a BoxAttribute on one of four possible types)
+  Video Sample Descriptions:
+	cvid - Cinepak
+	jpeg - JPEG
+	smc  - Graphics
+	rle  - Animation
+	rpza - Apple Video
+	kpcd - Kodak Photo CD
+	png  - Portable Network Graphics
+	mjpa - Motion-JPEG (Format A)
+	mjpb - Motion-JPEG (Format B)
+	SVQ1 - Sorenson video, version 1
+	SVQ3 - Sorenson video, version 3
+	mp4v - MPEG-4 video
+	avc1 - H.264 video
+	dvc  - NTSC DV-25 video
+	dvcp - PAL DV-25 video
+	gif  - CompuServe Graphics Interchange Format
+	h263 - H.263 video
+	tiff - Tagged Image File Format
+	raw  - Uncompressed RGB
+	2vuY - Uncompressed Y'CbCr; 8-bit-per-component 4:2:2
+	yuv2 - Uncompressed Y'CbCr; 8-bit-per-component 4:2:2
+	v308 - Uncompressed Y'CbCr; 8-bit-per-component 4:4:4
+	v408 - Uncompressed Y'CbCr; 8-bit-per-component 4:4:4:4
+	v216 - Uncompressed Y'CbCr; 10, 12, 14 or 16 bit-per-component 4:2:2
+	v410 - Uncompressed Y'CbCr; 10-bit-per-component 4:4:4
+	v210 - Uncompressed Y'CbCr; 10-bit-per-component 4:2:2
+
+  Video Sample Description Extensions:
+	gama - Gamma Level
+	fiel - Field Handling
+	mjqt - Default Quantization Table (for Motion-JPEG)
+	mjht - Default Huffman Table (for Motion JPEG)
+	esds - Elementary Stream Descriptor Atom
+	avcC - AVCConfigurationBox (h.264)
+	pasp - Pixel Aspect Ratio
+	colr - Color Parameters
+	clap - Clean Aperture
+
+  Sound Sample Descriptions:
+	0x00000000 - Not Specified (This may  present problems if we implement it)
+	NONE - Not Compressed (raw or twos format
+	raw  - Uncompressed 8-bit offset format (0-255, 128 is silence)
+	twos - Uncompressed 8-bit or 16-bit two's-complement (-128 to 127 or -32768 to 32767, 0 silence)
+	sowt - little-endian version of twos
+	MAC3 - MACE 3:1
+	MAC6 - MACE 6:1
+	ima4 - IMA 4:1
+	fl32 - 32-bit floating point
+	fl64 - 64-bit floating point
+	in24 - 24-bit integer
+	in32 - 32-bit integer
+	ulaw - uLaw 2:1
+	alaw - uLaw 2:1
+	0x6D730002 - Microsoft ADPCM-ACM code 2
+	0x6D730011 - DVI/Intel IMAADPCM-ACM code 17
+	dvca - DV Audio
+	QDMC - QDesign music
+	QDM2 - QDesign music version 2
+	Qclp - QUALCOMM PureVoice
+	0x6D730055 - MPEG-1 layer 3, CBR only
+	.mp3 - MPEG-1 layer 3, CBR & VBR
+	mp4a - MPEG-4, Advanced Audio Coding (AAC)
+	ac-3 - Digital Audio Compression Standard (AC-3, Enhanced AC-3)
+
+User Data Atoms: (Most of these are a single type with multiple BoxAttributes)
+	©com - Name of composer
+	©cpy - Copyright Statement
+	©day - Date the movie content was created
+	©dir - Name of movie's director
+	©ed1 - Edit date and description
+	©ed2
+	©ed3
+	©ed4
+	©ed5
+	©ed6
+	©ed7
+	©ed8
+	©ed9
+	©fmt - Indicatin of movie format (computer-generated, digitized, and so on)
+	©inf - Information about the movie
+	©isr - ISRC code
+	©lab - Name of record label
+	©lal - URL of record label
+	©mak - Name of file creator or maker
+	©mal - URL of file creator or maker
+	©nak - Title keywords of the content
+	©nam - Title of the content
+	©pdk - Keywords for producer
+	©phg - Recording copyright statement
+	©prd - Name of producer
+	©prf - Names of performers
+	©prk - Keywords of main artist and performer
+	©prl - URL of main artist and performer
+	©req - Special hardware and software requirements
+	©snk - Subtitle keywords of the content
+	©snm - Subtitle of content
+	©src - Credits for those who provided movie source content
+	©swf - Name of songwriter
+	©swk - Keywords of songwriter
+	©swr - Name and version number of the software (or hardware) that generated this movie
+	©wrt - Name of movie's writer
+	AllF - Play all frames—byte indicating that all frames of video should be played, regardless of timing
+	hinf - Hint track information
+	hnti * Hint info atom -- data used for real-time streaming of a movie or track.
+	name - Name of object
+	ptv  - Print To Video (Full Screen Mode)
+	tnam - Localized track name optionally present in Track userdata
+	LOOP - Long integer indicating looping style.  Not present unless movie is set to loop.  0 for normal, 1 for palindromic.
+	Sel0 - Play selection only -- byte indicating that only the selected area of the movie should be played
+	WLOC - Default window location for movie -- two 16-bit values, {x,y}
