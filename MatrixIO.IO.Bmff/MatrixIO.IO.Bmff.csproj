@@ -67,6 +67,7 @@
     <Compile Include="IO\Bmff\Boxes\MediaHeaderBox.cs" />
     <Compile Include="IO\Bmff\Boxes\MovieExtendsHeaderBox.cs" />
     <Compile Include="IO\Bmff\Boxes\NullMediaHeaderBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\OriginalFormatBox.cs" />
     <Compile Include="IO\Bmff\Boxes\QuickTime\CompressedMovieBox.cs" />
     <Compile Include="IO\Bmff\Boxes\QuickTime\CompressedMovieDataBox.cs" />
     <Compile Include="IO\Bmff\Boxes\QuickTime\DataCompressionBox.cs" />

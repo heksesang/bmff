@@ -31,7 +31,6 @@ namespace MatrixIO.IO.Bmff.Boxes
             return Children.GetEnumerator();
         }
 
-        /*
         public OriginalFormatBox OriginalFormat
         {
             get
@@ -41,6 +40,8 @@ namespace MatrixIO.IO.Bmff.Boxes
                        select (OriginalFormatBox)c).FirstOrDefault();
             }
         }
+
+        /*
         public SchemeTypeBox SchemeType
         {
             get
