@@ -61,6 +61,9 @@
     <Compile Include="IO\Bmff\Boxes\DataEntryUrlBox.cs" />
     <Compile Include="IO\Bmff\Boxes\DataEntryUrnBox.cs" />
     <Compile Include="IO\Bmff\Boxes\DataReferenceBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\FairPlay\DrmAudioStreamBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\FairPlay\DrmVideoStreamBox.cs" />
+    <Compile Include="IO\Bmff\Boxes\FairPlay\ProtectedCEA608Box.cs" />
     <Compile Include="IO\Bmff\Boxes\HandlerBox.cs" />
     <Compile Include="IO\Bmff\Boxes\HintMediaHeaderBox.cs" />
     <Compile Include="IO\Bmff\Boxes\InitialObjectDescriptorBox.cs" />
