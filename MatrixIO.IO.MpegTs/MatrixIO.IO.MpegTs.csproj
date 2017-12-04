@@ -6,11 +6,12 @@
     <VersionPrefix>1.0.0</VersionPrefix>
     <LangVersion>7.1</LangVersion>
   </PropertyGroup>
-  
-  <ItemGroup>
-    <None Include="Specifications\iso13818-1.pdf" />
-    <None Include="Specifications\ISO_IEC_13818-1_2007_PDF_version_%28en%29.pdf" />
-  </ItemGroup>
+
+ <ItemGroup>
+   <Compile Remove="Specifications\**" />
+   <EmbeddedResource Remove="Specifications\**" />
+   <None Remove="Specifications\**" />
+ </ItemGroup>
   
   <ItemGroup>
     <ProjectReference Include="..\MatrixIO.IO\MatrixIO.IO.csproj" />
