@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 
 namespace MatrixIO.IO.Bmff.Boxes
@@ -91,13 +89,13 @@ namespace MatrixIO.IO.Bmff.Boxes
             foreach (TrackRunEntry entry in _Entries)
             {
                 if ((Flags & TrackRunFlags.SampleDurationPresent) == TrackRunFlags.SampleDurationPresent)
-                    stream.WriteBEUInt32(entry.SampleDuration.HasValue ? entry.SampleDuration.Value : 0);
+                    stream.WriteBEUInt32(entry.SampleDuration ?? 0);
                 if ((Flags & TrackRunFlags.SampleSizePresent) == TrackRunFlags.SampleSizePresent)
-                    stream.WriteBEUInt32(entry.SampleSize.HasValue ? entry.SampleSize.Value : 0);
+                    stream.WriteBEUInt32(entry.SampleSize ?? 0);
                 if ((Flags & TrackRunFlags.SampleFlagsPresent) == TrackRunFlags.SampleFlagsPresent)
                     stream.WriteBEUInt32(entry.SampleFlags != null ? entry.SampleFlags._flags : 0);
                 if ((Flags & TrackRunFlags.SampleCompositionTimeOffsetsPresent) == TrackRunFlags.SampleCompositionTimeOffsetsPresent)
-                    stream.WriteBEUInt32(entry.SampleCompositionTimeOffset.HasValue ? entry.SampleCompositionTimeOffset.Value : 0);
+                    stream.WriteBEUInt32(entry.SampleCompositionTimeOffset ?? 0);
             }
         }
 
@@ -116,7 +114,7 @@ namespace MatrixIO.IO.Bmff.Boxes
         public int? DataOffset { get; set; }
         public SampleFlags FirstSampleFlags { get; set; }
         
-        private IList<TrackRunEntry> _Entries = Portability.CreateList<TrackRunEntry>();
+        private IList<TrackRunEntry> _Entries = new List<TrackRunEntry>();
         public IList<TrackRunEntry> Entries { get { return _Entries; } }
 
         [FlagsAttribute]

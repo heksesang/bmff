@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.IO;
 
 namespace MatrixIO.IO.Bmff.Boxes
@@ -17,7 +14,7 @@ namespace MatrixIO.IO.Bmff.Boxes
 
         internal override ulong CalculateSize()
         {
-            return base.CalculateSize() + 4 + 4 + ((ulong)_Entries.Count * 4);
+            return base.CalculateSize() + 4 + 4 + ((ulong)Entries.Count * 4);
         }
 
         protected override void LoadFromStream(Stream stream)
@@ -31,7 +28,7 @@ namespace MatrixIO.IO.Bmff.Boxes
             {
                 for (uint i = 0; i < _SampleCount; i++)
                 {
-                    _Entries.Add(new SampleSizeEntry(stream.ReadBEUInt32()));
+                    Entries.Add(new SampleSizeEntry(stream.ReadBEUInt32()));
                 }
             }
         }
@@ -43,20 +40,14 @@ namespace MatrixIO.IO.Bmff.Boxes
             stream.WriteBEUInt32(SampleSize);
             stream.WriteBEUInt32(SampleCount);
 
-            foreach (SampleSizeEntry SampleSizeEntry in _Entries)
+            foreach (SampleSizeEntry SampleSizeEntry in Entries)
             {
                 stream.WriteBEUInt32(SampleSizeEntry.EntrySize);
             }
         }
 
-        private IList<SampleSizeEntry> _Entries = Portability.CreateList<SampleSizeEntry>();
-        public IList<SampleSizeEntry> Entries
-        {
-            get
-            {
-                return _Entries;
-            }
-        }
+        public IList<SampleSizeEntry> Entries { get; } = new List<SampleSizeEntry>();
+
 
         public uint SampleSize { get; set; }
         private uint _SampleCount;
@@ -64,7 +55,7 @@ namespace MatrixIO.IO.Bmff.Boxes
         { 
             get 
             { 
-                if(SampleSize == 0) return (uint)_Entries.Count;
+                if(SampleSize == 0) return (uint)Entries.Count;
                 return _SampleCount;
             } 
         }
@@ -73,7 +64,7 @@ namespace MatrixIO.IO.Bmff.Boxes
         {
             get
             {
-                return (uint)_Entries.Count;
+                return (uint)Entries.Count;
             }
         }
 

@@ -18,9 +18,9 @@ namespace MatrixIO.IO.Bmff.Boxes
         internal override ulong CalculateSize()
         {
             ulong calculatedSize = base.CalculateSize() + 3 + 1;
-            if (FieldSize == 4) calculatedSize += (ulong)Math.Ceiling((double)_Entries.Count / 2D);
-            else if (FieldSize == 8) calculatedSize += (ulong)_Entries.Count;
-            else if (FieldSize == 16) calculatedSize += (ulong)_Entries.Count * 2;
+            if (FieldSize == 4) calculatedSize += (ulong)Math.Ceiling((double)Entries.Count / 2D);
+            else if (FieldSize == 8) calculatedSize += (ulong)Entries.Count;
+            else if (FieldSize == 16) calculatedSize += (ulong)Entries.Count * 2;
             return calculatedSize;
         }
 
@@ -37,14 +37,14 @@ namespace MatrixIO.IO.Bmff.Boxes
                 if (FieldSize == 4)
                 {
                     byte twoFieldSizes = stream.ReadOneByte();
-                    _Entries.Add(new CompactSampleSizeEntry((ushort)(twoFieldSizes & 0xFF00 >> 4)));
+                    Entries.Add(new CompactSampleSizeEntry((ushort)(twoFieldSizes & 0xFF00 >> 4)));
                     if(i < entryCount)
-                        _Entries.Add(new CompactSampleSizeEntry((ushort)(twoFieldSizes & 0x00FF)));
+                        Entries.Add(new CompactSampleSizeEntry((ushort)(twoFieldSizes & 0x00FF)));
                 }
                 else if (FieldSize == 8)
-                    _Entries.Add(new CompactSampleSizeEntry(stream.ReadOneByte()));
+                    Entries.Add(new CompactSampleSizeEntry(stream.ReadOneByte()));
                 else if (FieldSize == 16)
-                    _Entries.Add(new CompactSampleSizeEntry(stream.ReadBEUInt16()));
+                    Entries.Add(new CompactSampleSizeEntry(stream.ReadBEUInt16()));
             }
         }
 
@@ -54,21 +54,21 @@ namespace MatrixIO.IO.Bmff.Boxes
 
             stream.WriteBEUInt24(_Reserved);
             stream.WriteByte(FieldSize);
-            stream.WriteBEUInt32((uint)_Entries.Count);
+            stream.WriteBEUInt32((uint)Entries.Count);
 
             if (FieldSize == 4)
             {
-                for (int i = 0; i < _Entries.Count; i += 2)
+                for (int i = 0; i < Entries.Count; i += 2)
                 {
-                    byte twoFieldSizes = (byte)((_Entries[i].EntrySize & 0x00FF) << 4);
-                    if (i + 1 < _Entries.Count)
-                        twoFieldSizes |= (byte)(_Entries[i].EntrySize & 0x00FF);
+                    byte twoFieldSizes = (byte)((Entries[i].EntrySize & 0x00FF) << 4);
+                    if (i + 1 < Entries.Count)
+                        twoFieldSizes |= (byte)(Entries[i].EntrySize & 0x00FF);
                     stream.WriteByte(twoFieldSizes);
                 }
             }
             else
             {
-                foreach (CompactSampleSizeEntry compactSampleSizeEntry in _Entries)
+                foreach (CompactSampleSizeEntry compactSampleSizeEntry in Entries)
                 {
                     if (FieldSize == 8)
                         stream.WriteByte((byte)compactSampleSizeEntry.EntrySize);
@@ -78,14 +78,7 @@ namespace MatrixIO.IO.Bmff.Boxes
             }
         }
 
-        private IList<CompactSampleSizeEntry> _Entries = Portability.CreateList<CompactSampleSizeEntry>();
-        public IList<CompactSampleSizeEntry> Entries
-        {
-            get
-            {
-                return _Entries;
-            }
-        }
+        public IList<CompactSampleSizeEntry> Entries { get; } = new List<CompactSampleSizeEntry>();
 
         private uint _Reserved;
 
@@ -103,7 +96,7 @@ namespace MatrixIO.IO.Bmff.Boxes
             }
         }
 
-        public int EntryCount { get { return _Entries.Count; } }
+        public int EntryCount => Entries.Count;
 
         public class CompactSampleSizeEntry
         {

@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using MatrixIO.IO.MpegTs.Descriptors;
 
 namespace MatrixIO.IO.MpegTs.Tables
@@ -33,7 +31,7 @@ namespace MatrixIO.IO.MpegTs.Tables
             _programClockReferencePid = (ushort)((buffer[_position++] << 8) | buffer[_position++]);
             _programInfoLength = (ushort)((buffer[_position++] << 8) | buffer[_position++]);
 
-            ProgramInfo = Portability.CreateList<TsDescriptor>();
+            ProgramInfo = new List<TsDescriptor>();
             var descriptorEndPosition = _position + ProgramInfoLength;
             while (_position < descriptorEndPosition)
             {
@@ -66,7 +64,7 @@ namespace MatrixIO.IO.MpegTs.Tables
             PacketIdentifier = (ushort) (((buffer[position++] << 8) | buffer[position++]) & 0x1FFF);
             var streamInfoLength = (ushort)(((buffer[position++] << 8) | buffer[position++]) & 0x0FFF);
 
-            StreamInfo = Portability.CreateList<TsDescriptor>();
+            StreamInfo = new List<TsDescriptor>();
             var descriptorEndPosition = position + streamInfoLength;
             while (position < descriptorEndPosition)
             {

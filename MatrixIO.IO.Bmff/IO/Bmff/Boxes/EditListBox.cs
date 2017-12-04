@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.IO;
 
 namespace MatrixIO.IO.Bmff.Boxes
@@ -43,7 +40,7 @@ namespace MatrixIO.IO.Bmff.Boxes
                 entry.MediaRateInteger = stream.ReadBEInt16();
                 entry.MediaRateFraction = stream.ReadBEInt16();
 
-                _Entries.Add(entry);
+                Entries.Add(entry);
             }
         }
 
@@ -70,16 +67,9 @@ namespace MatrixIO.IO.Bmff.Boxes
             }
         }
 
-        private IList<EditListEntry> _Entries = Portability.CreateList<EditListEntry>();
-        public IList<EditListEntry> Entries
-        {
-            get
-            {
-                return _Entries;
-            }
-        }
+        public IList<EditListEntry> Entries { get; } = new List<EditListEntry>();
 
-        public int EntryCount { get { return _Entries.Count; } }
+        public int EntryCount => Entries.Count;
 
         public class EditListEntry
         {

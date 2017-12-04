@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
-using System.Collections;
+using System.Linq;
 
 namespace MatrixIO.IO.Bmff.Boxes
 {
@@ -181,7 +179,7 @@ namespace MatrixIO.IO.Bmff.Boxes
             public uint SampleNumber { get; set; }
         }
 
-        private IList<TrackFragmentEntry> _Entries = Portability.CreateList<TrackFragmentEntry>();
+        private IList<TrackFragmentEntry> _Entries = new List<TrackFragmentEntry>();
         public IList<TrackFragmentEntry> Entries
         {
             get

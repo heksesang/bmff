@@ -43,8 +43,9 @@ namespace MatrixIO.IO.Bmff.Boxes
             }
         }
 
-        private IList<ComponentBitsEntry> _Entries = Portability.CreateList<ComponentBitsEntry>();
-        public IList<ComponentBitsEntry> Entries { get { return _Entries; } }
+        private IList<ComponentBitsEntry> _Entries =  new List<ComponentBitsEntry>();
+
+        public IList<ComponentBitsEntry> Entries => _Entries;
 
         public int EntryCount { get { return _Entries.Count; } }
 

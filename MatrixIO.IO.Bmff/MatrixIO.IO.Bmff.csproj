@@ -22,12 +22,6 @@
    <None Remove="LICENSE.txt" />
    <None Remove="ROADMAP.txt" />
  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="..\MatrixIO.IO\Diagnostics\Trace.cs">
-      <Link>Diagnostics\Trace.cs</Link>
-    </Compile>
-  </ItemGroup>
   
   <ItemGroup>
     <Folder Include="IO\Bmff\Boxes\Dash\" />
