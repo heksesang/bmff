@@ -83,7 +83,7 @@ namespace MatrixIO
             {
                 var newNumerator = (remainder > Denominator) ? remainder : remainder * 10;
                 var digit = newNumerator / Denominator;
-                yield return digit;
+                yield return (int)digit;
                 remainder = (long)newNumerator % Denominator;
             }
         }
@@ -152,9 +152,10 @@ namespace MatrixIO
         #endregion
 
         #region IComparable<Fraction> Implementation
+
         public int CompareTo(Fraction other)
         {
-            return ((long)Numerator * b.Denominator) - ((long)Denominator * b.Numerator);
+            return (int) (((long)Numerator * other.Denominator) - ((long)Denominator * other.Numerator));
         }
         public int CompareTo(object obj)
         {
