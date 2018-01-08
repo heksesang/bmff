@@ -18,7 +18,7 @@ namespace MatrixIO.IO.Bmff
             get
             {
 #pragma warning disable 612,618
-                if (_rootBoxes == null) return _rootBoxes = Portability.CreateList<Box>(GetBoxes());
+                if (_rootBoxes == null) return _rootBoxes = new List<Box>(GetBoxes());
 #pragma warning restore 612,618
                 return _rootBoxes;
             }

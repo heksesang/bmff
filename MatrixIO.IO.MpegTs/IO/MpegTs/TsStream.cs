@@ -59,12 +59,10 @@ namespace MatrixIO.IO.MpegTs
 
     public abstract class TsStream : INotifyPropertyChanged
     {
-
         public event EventHandler<TsStreamEventArgs> UnitReceived;
         public void OnUnitReceived(TsStreamEventArgs e)
         {
-            if (UnitReceived != null)
-                UnitReceived(this, e);
+            UnitReceived?.Invoke(this, e);
         }
 
         private ushort _packetIdentifier;
@@ -120,8 +118,7 @@ namespace MatrixIO.IO.MpegTs
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)
         {
-            if (PropertyChanged != null) 
-                Portability.DispatchAction(() => PropertyChanged(this, new PropertyChangedEventArgs(propertyName)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         #endregion
 

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using MatrixIO.IO.MpegTs.Descriptors;
 
 namespace MatrixIO.IO.MpegTs.Tables
@@ -12,7 +9,7 @@ namespace MatrixIO.IO.MpegTs.Tables
         public DescriptionTable() : base() {}
         public DescriptionTable(byte[] buffer, int offset, int length) : base(buffer, offset, length)
         {
-            Descriptors = Portability.CreateList<TsDescriptor>();
+            Descriptors = new List<TsDescriptor>();
 
             while (_position < _sectionLengthStartOffset + SectionLength - 4 && _position < offset + length - 4)
             {

@@ -1,9 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
-using System.Diagnostics;
 
 namespace MatrixIO.IO.Bmff
 {
@@ -24,7 +22,9 @@ namespace MatrixIO.IO.Bmff
         }
 
         private bool _childrenLoaded = false;
-        private readonly IList<Box> _children = Portability.CreateList<Box>();
+
+        private readonly IList<Box> _children = new List<Box>();
+
         public IList<Box> Children
         {
             get 
@@ -65,14 +65,8 @@ namespace MatrixIO.IO.Bmff
             return box.CalculateSize();
         }
 
-        public IEnumerator<Box> GetEnumerator()
-        {
-            return Children.GetEnumerator();
-        }
+        public IEnumerator<Box> GetEnumerator() => Children.GetEnumerator();
 
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-        {
-            return Children.GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => Children.GetEnumerator();
     }
 }

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using MatrixIO.IO.MpegTs.Streams;
 using MatrixIO.IO.MpegTs.Tables;
 
@@ -27,7 +25,7 @@ namespace MatrixIO.IO.MpegTs
 
         public TsDemuxer()
         {
-            Programs = Portability.CreateList<TsProgram>();
+            Programs = new List<TsProgram>();
 
             var programAssociationStream = new TableStream()
                                                {PacketIdentifier = (ushort) PacketIdentifier.ProgramAssociationTable};
@@ -138,9 +136,10 @@ namespace MatrixIO.IO.MpegTs
             if (packet.PayloadUnitStartIndicator) dbg.Append("First in series. ");
             Debug.WriteLine(dbg.ToString());
 #endif
-            TsStream stream;
-            if (_streams.TryGetValue(packet.PacketIdentifier, out stream)) stream.ProcessInput(packet);
-
+            if (_streams.TryGetValue(packet.PacketIdentifier, out TsStream stream))
+            {
+                stream.ProcessInput(packet);
+            }
         }
 
         private void ProgramAssociationTableReceived(object sender, TsStreamEventArgs eventArgs)

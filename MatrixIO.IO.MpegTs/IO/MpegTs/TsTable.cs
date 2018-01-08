@@ -126,8 +126,9 @@ namespace MatrixIO.IO.MpegTs
 
         protected TsTable()
         {
-            Rows = Portability.CreateList<T>();
+            Rows = new List<T>();
         }
+
         protected TsTable(byte[] buffer, int offset, int length) : this()
         {
             _position = offset;

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using MatrixIO.IO.MpegTs.Streams;
 using MatrixIO.IO.MpegTs.Tables;
 
@@ -31,7 +30,7 @@ namespace MatrixIO.IO.MpegTs
             ProgramNumber = programNumber;
             ProgramMapStream = programMapStream;
             ProgramMapStream.UnitReceived += ProgramMapTableReceived;
-            Streams = Portability.CreateList<TsStream>();
+            Streams = new List<TsStream>();
         }
 
         void ProgramMapTableReceived(object sender, TsStreamEventArgs eventArgs)
@@ -80,7 +79,7 @@ namespace MatrixIO.IO.MpegTs
 
         private void OnStreamAdded(TsStream stream)
         {
-            if (StreamAdded != null) StreamAdded(this, new ProgramStreamEventArgs() { Stream = stream });
+            StreamAdded?.Invoke(this, new ProgramStreamEventArgs() { Stream = stream });
         }
 
         public override string ToString()

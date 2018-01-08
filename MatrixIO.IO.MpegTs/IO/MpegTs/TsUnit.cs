@@ -1,31 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace MatrixIO.IO.MpegTs
 {
     public class TsUnit
     {
         private readonly IList<TsPacket> _packets;
-        public IList<TsPacket> Packets { get { return _packets; } }
+        public IList<TsPacket> Packets => _packets;
 
         private readonly TsUnitPayload _payload;
-        public IList<byte> Payload { get { return _payload; }}
+        public IList<byte> Payload => _payload;
 
         public TsUnit()
         {
-            _packets = Portability.CreateList<TsPacket>();
+            _packets = new List<TsPacket>();
             _payload = new TsUnitPayload(_packets);
         }
+
         public TsUnit(int capacity)
         {
-            _packets = Portability.CreateList<TsPacket>(capacity);
+            _packets = new List<TsPacket>(capacity);
             _payload = new TsUnitPayload(_packets);
         }
+
         public TsUnit(IEnumerable<TsPacket> packets)
         {
-            _packets = Portability.CreateList(packets);
+            _packets = new List<TsPacket>(packets);
             _payload = new TsUnitPayload(_packets);
         }
 

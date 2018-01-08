@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.IO;
 
 namespace MatrixIO.IO.Bmff.Boxes
@@ -17,7 +14,7 @@ namespace MatrixIO.IO.Bmff.Boxes
 
         internal override ulong CalculateSize()
         {
-            return base.CalculateSize() + (ulong)_Entries.Count;
+            return base.CalculateSize() + (ulong)Entries.Count;
         }
 
         protected override void LoadFromStream(Stream stream)
@@ -27,7 +24,7 @@ namespace MatrixIO.IO.Bmff.Boxes
             while (stream.Position < (long)(Offset + EffectiveSize))
             {
                 byte b = stream.ReadOneByte();
-                _Entries.Add(new SampleDependencyEntry(b));
+                Entries.Add(new SampleDependencyEntry(b));
             }
         }
 
@@ -35,14 +32,13 @@ namespace MatrixIO.IO.Bmff.Boxes
         {
             base.SaveToStream(stream);
 
-            foreach (SampleDependencyEntry entry in _Entries)
+            foreach (SampleDependencyEntry entry in Entries)
             {
                 stream.WriteByte(entry.SampleDependency);
             }
         }
 
-        private IList<SampleDependencyEntry> _Entries = Portability.CreateList<SampleDependencyEntry>();
-        public IList<SampleDependencyEntry> Entries { get { return _Entries; } }
+        public IList<SampleDependencyEntry> Entries { get; } = new List<SampleDependencyEntry>();
 
         public class SampleDependencyEntry
         {

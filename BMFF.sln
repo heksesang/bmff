@@ -1,15 +1,32 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2010
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MatrixIO.IO.Bmff", "MatrixIO.IO.Bmff\MatrixIO.IO.Bmff.csproj", "{4A565C90-1850-4A15-816D-E332981735AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MatrixIO.IO.Bmff", "MatrixIO.IO.Bmff\MatrixIO.IO.Bmff.csproj", "{4A565C90-1850-4A15-816D-E332981735AB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MatrixIO.IO.MpegTs", "MatrixIO.IO.MpegTs\MatrixIO.IO.MpegTs.csproj", "{B2B26824-21F0-4576-BD4A-104EDD61E180}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MatrixIO.IO.Ebml", "MatrixIO.IO.Ebml\MatrixIO.IO.Ebml.csproj", "{74FCBCE0-CF0D-49A4-9EB7-A172D4865E94}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MatrixIO.IO.Ebml", "MatrixIO.IO.Ebml\MatrixIO.IO.Ebml.csproj", "{74FCBCE0-CF0D-49A4-9EB7-A172D4865E94}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MatrixIO.IO", "MatrixIO.IO\MatrixIO.IO.csproj", "{EDC16014-ECA3-4B93-A849-B81EAC369DD2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MatrixIO.IO", "MatrixIO.IO\MatrixIO.IO.csproj", "{EDC16014-ECA3-4B93-A849-B81EAC369DD2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Specifications", "Specifications", "{B23DCE71-9122-44BA-B467-A92FA67DBC3D}"
+	ProjectSection(SolutionItems) = preProject
+		MatrixIO.IO.Bmff\Specifications\a121.tm3904r3.ff0020r12.DVB_File_Format_Specification.pdf = MatrixIO.IO.Bmff\Specifications\a121.tm3904r3.ff0020r12.DVB_File_Format_Specification.pdf
+		MatrixIO.IO.Bmff\Specifications\C.S0050-B_v1.0_070521.pdf = MatrixIO.IO.Bmff\Specifications\C.S0050-B_v1.0_070521.pdf
+		MatrixIO.IO.MpegTs\Specifications\iso13818-1.pdf = MatrixIO.IO.MpegTs\Specifications\iso13818-1.pdf
+		MatrixIO.IO.Bmff\Specifications\ISO_14496-12_ISOBMFF.pdf = MatrixIO.IO.Bmff\Specifications\ISO_14496-12_ISOBMFF.pdf
+		MatrixIO.IO.Bmff\Specifications\ISO_14496-12_ISOBMFF_Cor1.pdf = MatrixIO.IO.Bmff\Specifications\ISO_14496-12_ISOBMFF_Cor1.pdf
+		MatrixIO.IO.Bmff\Specifications\ISO_14496-12_ISOBMFF_Cor2.pdf = MatrixIO.IO.Bmff\Specifications\ISO_14496-12_ISOBMFF_Cor2.pdf
+		MatrixIO.IO.Bmff\Specifications\ISO_15444-1_JPEG2000.pdf = MatrixIO.IO.Bmff\Specifications\ISO_15444-1_JPEG2000.pdf
+		MatrixIO.IO.Bmff\Specifications\ISO_15444-2_JPEG2000 _Extensions.pdf = MatrixIO.IO.Bmff\Specifications\ISO_15444-2_JPEG2000 _Extensions.pdf
+		MatrixIO.IO.Bmff\Specifications\ISO_15444-3_MJPEG2000.pdf = MatrixIO.IO.Bmff\Specifications\ISO_15444-3_MJPEG2000.pdf
+		MatrixIO.IO.MpegTs\Specifications\ISO_IEC_13818-1_2007_PDF_version_(en).pdf = MatrixIO.IO.MpegTs\Specifications\ISO_IEC_13818-1_2007_PDF_version_(en).pdf
+		MatrixIO.IO.Bmff\Specifications\Protected Interoperable File Format (PIFF) 1.1.pdf = MatrixIO.IO.Bmff\Specifications\Protected Interoperable File Format (PIFF) 1.1.pdf
+		MatrixIO.IO.Bmff\Specifications\qtff.pdf = MatrixIO.IO.Bmff\Specifications\qtff.pdf
+		MatrixIO.IO.Bmff\Specifications\video_file_format_spec_v10_1.pdf = MatrixIO.IO.Bmff\Specifications\video_file_format_spec_v10_1.pdf
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -64,5 +81,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9CAADDC4-B2C2-40A2-8363-F093866C2C40}
 	EndGlobalSection
 EndGlobal

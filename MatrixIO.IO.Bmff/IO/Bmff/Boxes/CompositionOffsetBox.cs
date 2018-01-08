@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.IO;
 
 namespace MatrixIO.IO.Bmff.Boxes
@@ -17,7 +14,7 @@ namespace MatrixIO.IO.Bmff.Boxes
 
         internal override ulong CalculateSize()
         {
-            return base.CalculateSize() + 4 + ((ulong)_Entries.Count * (4 + 4));
+            return base.CalculateSize() + 4 + ((ulong)Entries.Count * (4 + 4));
         }
 
         protected override void LoadFromStream(Stream stream)
@@ -28,7 +25,7 @@ namespace MatrixIO.IO.Bmff.Boxes
 
             for (uint i = 0; i < entryCount; i++)
             {
-                _Entries.Add(new CompositionOffsetEntry()
+                Entries.Add(new CompositionOffsetEntry()
                 {
                     SampleCount = stream.ReadBEUInt32(),
                     SampleOffset = stream.ReadBEUInt32(),
@@ -40,25 +37,18 @@ namespace MatrixIO.IO.Bmff.Boxes
         {
             base.SaveToStream(stream);
 
-            stream.WriteBEUInt32((uint)_Entries.Count);
+            stream.WriteBEUInt32((uint)Entries.Count);
 
-            foreach (CompositionOffsetEntry CompositionOffsetEntry in _Entries)
+            foreach (CompositionOffsetEntry CompositionOffsetEntry in Entries)
             {
                 stream.WriteBEUInt32(CompositionOffsetEntry.SampleCount);
                 stream.WriteBEUInt32(CompositionOffsetEntry.SampleOffset);
             }
         }
 
-        private IList<CompositionOffsetEntry> _Entries = Portability.CreateList<CompositionOffsetEntry>();
-        public IList<CompositionOffsetEntry> Entries
-        {
-            get
-            {
-                return _Entries;
-            }
-        }
+        public IList<CompositionOffsetEntry> Entries { get; } = new List<CompositionOffsetEntry>();
 
-        public int EntryCount { get { return _Entries.Count; } }
+        public int EntryCount => Entries.Count;
 
         public class CompositionOffsetEntry
         {
