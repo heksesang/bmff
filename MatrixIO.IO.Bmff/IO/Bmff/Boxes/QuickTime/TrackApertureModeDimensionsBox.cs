@@ -12,7 +12,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     {
         public TrackApertureModeDimensionsBox() : base() { }
         public TrackApertureModeDimensionsBox(Stream stream) : base(stream) { }
-        
+
         public IList<Box> Children { get; } = new List<Box>();
 
         public IEnumerator<Box> GetEnumerator() => Children.GetEnumerator();
