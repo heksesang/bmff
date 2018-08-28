@@ -10,23 +10,22 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Track Fragment Header Box ("tfhd")
     /// </summary>
     [Box("tfhd", "Track Fragment Header Box")]
-    public class TrackFragmentHeaderBox : FullBox
+    public sealed class TrackFragmentHeaderBox : FullBox
     {
-
         public TrackFragmentHeaderBox() : base() { }
         public TrackFragmentHeaderBox(Stream stream) : base(stream) { }
 
         internal override ulong CalculateSize()
         {
-                ulong calculatedSize = base.CalculateSize() + 4;
+            ulong calculatedSize = base.CalculateSize() + 4;
 
-                if (BaseDataOffset.HasValue) calculatedSize += 8;
-                if (SampleDescriptionIndex.HasValue) calculatedSize += 4;
-                if (DefaultSampleDuration.HasValue) calculatedSize += 4;
-                if (DefaultSampleSize.HasValue) calculatedSize += 4;
-                if (DefaultSampleFlags != null) calculatedSize += 4;
+            if (BaseDataOffset.HasValue) calculatedSize += 8;
+            if (SampleDescriptionIndex.HasValue) calculatedSize += 4;
+            if (DefaultSampleDuration.HasValue) calculatedSize += 4;
+            if (DefaultSampleSize.HasValue) calculatedSize += 4;
+            if (DefaultSampleFlags != null) calculatedSize += 4;
 
-                return calculatedSize;
+            return calculatedSize;
         }
 
         protected override void LoadFromStream(Stream stream)
@@ -69,7 +68,7 @@ namespace MatrixIO.IO.Bmff.Boxes
             if (SampleDescriptionIndex.HasValue) stream.WriteBEUInt32(SampleDescriptionIndex.Value);
             if (DefaultSampleDuration.HasValue) stream.WriteBEUInt32(DefaultSampleDuration.Value);
             if (DefaultSampleSize.HasValue) stream.WriteBEUInt32(DefaultSampleSize.Value);
-            if (DefaultSampleFlags!=null) stream.WriteBEUInt32(DefaultSampleFlags._flags);
+            if (DefaultSampleFlags != null) stream.WriteBEUInt32(DefaultSampleFlags._flags);
         }
 
 

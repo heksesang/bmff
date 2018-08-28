@@ -8,7 +8,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Data Compression Atom ("dcom")
     /// </summary>
     [Box("dcom", "Data Compression Atom")]
-    public class DataCompressionBox: Box
+    public sealed class DataCompressionBox : Box
     {
         public DataCompressionBox() : base() { }
         public DataCompressionBox(Stream stream) : base(stream) { }

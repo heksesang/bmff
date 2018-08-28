@@ -6,7 +6,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Elementary Stream Descriptor Atom ("esds")
     /// </summary>
     [Box("esds", "Elementary Stream Descriptor Atom")]
-    public class ElementaryStreamDescriptorBox : FullBox, IContentBox
+    public sealed class ElementaryStreamDescriptorBox : FullBox, IContentBox
     {
         public ElementaryStreamDescriptorBox() : base() { }
         public ElementaryStreamDescriptorBox(Stream stream) : base(stream) { }

@@ -8,7 +8,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Track Aperture Mode Dimensions Atom ("tapt")
     /// </summary>
     [Box("tapt", "Track Aperture Mode Dimensions Atom")]
-    public class TrackApertureModeDimensionsBox : Box, ISuperBox
+    public sealed class TrackApertureModeDimensionsBox : Box, ISuperBox
     {
         public TrackApertureModeDimensionsBox() : base() { }
         public TrackApertureModeDimensionsBox(Stream stream) : base(stream) { }

@@ -6,7 +6,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Hint Media Header Box ("hmhd")
     /// </summary>
     [Box("hmhd", "Hint Media Header Box")]
-    public class HintMediaHeaderBox : FullBox
+    public sealed class HintMediaHeaderBox : FullBox
     {
         public HintMediaHeaderBox() : base() { }
         public HintMediaHeaderBox(Stream stream) : base(stream) { }

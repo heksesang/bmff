@@ -7,7 +7,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Edit List Box ("elst")
     /// </summary>
     [Box("elst", "Edit List Box")]
-    public class EditListBox : FullBox, ITableBox<EditListBox.EditListEntry>
+    public sealed class EditListBox : FullBox, ITableBox<EditListBox.EditListEntry>
     {
         public EditListBox() : base() { }
         public EditListBox(Stream stream) : base(stream) { }

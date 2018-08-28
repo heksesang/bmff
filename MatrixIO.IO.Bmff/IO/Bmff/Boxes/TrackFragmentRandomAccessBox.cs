@@ -9,7 +9,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Track Fragment Random Access Box ("tfra")
     /// </summary>
     [Box("tfra", "Track Fragment Random Access Box")]
-    public class TrackFragmentRandomAccessBox : FullBox, ITableBox<TrackFragmentRandomAccessBox.TrackFragmentEntry>
+    public sealed class TrackFragmentRandomAccessBox : FullBox, ITableBox<TrackFragmentRandomAccessBox.TrackFragmentEntry>
     {
         public TrackFragmentRandomAccessBox() : base() { }
         public TrackFragmentRandomAccessBox(Stream stream) : base(stream) { }
@@ -52,7 +52,7 @@ namespace MatrixIO.IO.Bmff.Boxes
                 else if (SizeOfTrafNumber == 2) entry.TrafNumber = stream.ReadBEUInt16();
                 else if (SizeOfTrafNumber == 3) entry.TrafNumber = stream.ReadBEUInt24();
                 else entry.TrafNumber = stream.ReadBEUInt32();
-              
+
                 if (SizeOfTrunNumber == 1) entry.TrunNumber = stream.ReadOneByte();
                 else if (SizeOfTrunNumber == 2) entry.TrunNumber = stream.ReadBEUInt16();
                 else if (SizeOfTrunNumber == 3) entry.TrunNumber = stream.ReadBEUInt24();
@@ -97,7 +97,7 @@ namespace MatrixIO.IO.Bmff.Boxes
             stream.WriteOneByte(_SizeOf);
 
             stream.WriteBEUInt32((uint)_Entries.Count);
-            foreach(var entry in _Entries)
+            foreach (var entry in _Entries)
             {
                 if (Version == 0x01)
                 {
@@ -131,7 +131,7 @@ namespace MatrixIO.IO.Bmff.Boxes
         private byte[] Reserved = new byte[4];
 
         private byte _SizeOf;
-        public sbyte SizeOfTrafNumber 
+        public sbyte SizeOfTrafNumber
         {
             get
             {

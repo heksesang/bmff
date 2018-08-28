@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace MatrixIO.IO.Bmff.Boxes
 {
@@ -8,9 +7,8 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// File Type Box ("ftyp")
     /// </summary>
     [Box("ftyp", "File Type Box")]
-    public class FileTypeBox : Box
+    public sealed class FileTypeBox : Box
     {
-
         public FileTypeBox() : base() { }
         public FileTypeBox(Stream stream) : base(stream) { }
         public FileTypeBox(FourCC majorBrand, uint minorVersion, FourCC[] compatibleBrands)
@@ -37,8 +35,8 @@ namespace MatrixIO.IO.Bmff.Boxes
             MinorVersion = stream.ReadBEUInt32();
 
             ulong remainingBytes = EffectiveSize - CalculateSize();
-            ulong numBrands =  remainingBytes / 4;
-            for (ulong i = 0; i < numBrands ; i++)
+            ulong numBrands = remainingBytes / 4;
+            for (ulong i = 0; i < numBrands; i++)
             {
                 CompatibleBrands.Add(new FourCC(stream.ReadBEUInt32()));
             }

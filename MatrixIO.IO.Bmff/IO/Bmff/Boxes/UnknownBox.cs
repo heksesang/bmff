@@ -9,10 +9,10 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// <summary>
     /// Unknown Box Type
     /// </summary>
-    public class UnknownBox : Box, IContentBox
+    public sealed class UnknownBox : Box, IContentBox
     {
         public UnknownBox() : base() { }
-        public UnknownBox(BoxType type) : base() 
+        public UnknownBox(BoxType type) : base()
         {
             Type = type;
         }

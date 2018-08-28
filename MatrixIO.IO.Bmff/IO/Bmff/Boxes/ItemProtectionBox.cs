@@ -8,7 +8,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Item Protection Box ("ipro")
     /// </summary>
     [Box("ipro", "Item Protection Box")]
-    public class ItemProtectionBox : FullBox, ISuperBox
+    public sealed class ItemProtectionBox : FullBox, ISuperBox
     {
         public ItemProtectionBox() : base() { }
         public ItemProtectionBox(Stream stream) : base(stream) { }

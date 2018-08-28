@@ -8,7 +8,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Data Entry Alias Box ("alis")
     /// </summary>
     [Box("alis", "Data Entry Alias Atom")]
-    public class DataEntryAliasBox : FullBox
+    public sealed class DataEntryAliasBox : FullBox
     {
         public DataEntryAliasBox() : base() { }
         public DataEntryAliasBox(Stream stream) : base(stream) { }

@@ -8,7 +8,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Track Run Box ("trun")
     /// </summary>
     [Box("trun", "Track Run Box")]
-    public class TrackRunBox : FullBox, ITableBox<TrackRunBox.TrackRunEntry>
+    public sealed class TrackRunBox : FullBox, ITableBox<TrackRunBox.TrackRunEntry>
     {
         public TrackRunBox() : base() { }
         public TrackRunBox(Stream stream) : base(stream) { }
@@ -44,7 +44,7 @@ namespace MatrixIO.IO.Bmff.Boxes
 
             if ((Flags & TrackRunFlags.DataOffsetPresent) == TrackRunFlags.DataOffsetPresent)
                 DataOffset = stream.ReadBEInt32();
-            
+
             if ((Flags & TrackRunFlags.FirstSampleFlagsPresent) == TrackRunFlags.FirstSampleFlagsPresent)
                 FirstSampleFlags = new SampleFlags(stream.ReadBEUInt32());
 
@@ -113,7 +113,7 @@ namespace MatrixIO.IO.Bmff.Boxes
 
         public int? DataOffset { get; set; }
         public SampleFlags FirstSampleFlags { get; set; }
-        
+
         private IList<TrackRunEntry> _Entries = new List<TrackRunEntry>();
         public IList<TrackRunEntry> Entries { get { return _Entries; } }
 

@@ -8,7 +8,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// User Data Box ("udta")
     /// </summary>
     [Box("udta", "User Data Box")]
-    public class UserDataBox : Box, ISuperBox
+    public sealed class UserDataBox : Box, ISuperBox
     {
         public UserDataBox() : base() { }
         public UserDataBox(Stream stream) : base(stream) { }

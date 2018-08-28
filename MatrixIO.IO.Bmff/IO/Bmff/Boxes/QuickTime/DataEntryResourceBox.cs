@@ -8,7 +8,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Data Entry Resource Box ("rsrc")
     /// </summary>
     [Box("rsrc", "Data Entry Resource Atom")]
-    public class DataEntryResourceBox : FullBox
+    public sealed class DataEntryResourceBox : FullBox
     {
         public DataEntryResourceBox() : base() { }
         public DataEntryResourceBox(Stream stream) : base(stream) { }

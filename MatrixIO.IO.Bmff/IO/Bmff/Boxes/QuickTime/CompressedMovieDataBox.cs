@@ -6,7 +6,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Compressed Movie Data Atom ("cmvd")
     /// </summary>
     [Box("cmvd", "Compressed Movie Data Atom")]
-    public class CompressedMovieDataBox: Box, IContentBox
+    public sealed class CompressedMovieDataBox : Box, IContentBox
     {
         public CompressedMovieDataBox() : base() { }
         public CompressedMovieDataBox(Stream stream) : base(stream) { }

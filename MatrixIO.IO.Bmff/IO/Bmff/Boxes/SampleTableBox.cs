@@ -8,7 +8,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Sample Table Box ("stbl")
     /// </summary>
     [Box("stbl", "Sample Table Box")]
-    public class SampleTableBox : Box, ISuperBox
+    public sealed class SampleTableBox : Box, ISuperBox
     {
         public SampleTableBox() : base() { }
         public SampleTableBox(Stream stream) : base(stream) { }

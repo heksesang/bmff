@@ -7,7 +7,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Track Encoded Pixels Dimensions Atom ("enof")
     /// </summary>
     [Box("enof", "Track Encoded Pixels Dimensions Atom")]
-    public class TrackEncodedPixelsDimensionsBox : FullBox
+    public sealed class TrackEncodedPixelsDimensionsBox : FullBox
     {
         public TrackEncodedPixelsDimensionsBox() : base() { }
         public TrackEncodedPixelsDimensionsBox(Stream stream) : base(stream) { }

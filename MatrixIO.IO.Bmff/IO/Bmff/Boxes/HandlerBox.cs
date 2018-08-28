@@ -9,7 +9,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// </summary>
     // Don't ask me why the spec calls this Handler Reference Box but defines it as HandlerBox.  It's not corrected in the errata.
     [Box("hdlr", "Handler Reference Box")]
-    public class HandlerBox : FullBox
+    public sealed class HandlerBox : FullBox
     {
         public HandlerBox() : base() { }
         public HandlerBox(Stream stream) : base(stream) { }
@@ -36,7 +36,7 @@ namespace MatrixIO.IO.Bmff.Boxes
             stream.WriteBEUInt32(_Predefined);
             stream.WriteBEUInt32(HandlerType);
             for (int i = 0; i < _Reserved.Length; i++) stream.WriteBEUInt32(_Reserved[i]);
-            if(Name != null)
+            if (Name != null)
                 stream.WriteUTF8String(Name);
         }
 

@@ -7,7 +7,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Video Media Header Box ("vmhd")
     /// </summary>
     [Box("vmhd", "Video Media Header Box")]
-    public class VideoMediaHeaderBox : FullBox
+    public sealed class VideoMediaHeaderBox : FullBox
     {
         public VideoMediaHeaderBox() : base() { }
         public VideoMediaHeaderBox(Stream stream) : base(stream) { }

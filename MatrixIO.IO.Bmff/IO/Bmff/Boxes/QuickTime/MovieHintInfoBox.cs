@@ -8,7 +8,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Movie Hint Info Atom ("hnti")
     /// </summary>
     [Box("hnti", "Movie Hint Info Atom")]
-    public class MovieHintInfoBox : Box, ISuperBox
+    public sealed class MovieHintInfoBox : Box, ISuperBox
     {
         public MovieHintInfoBox() : base() { }
         public MovieHintInfoBox(Stream stream) : base(stream) { }

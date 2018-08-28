@@ -8,7 +8,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Data Entry Url Box ("url ")
     /// </summary>
     [Box("url ", "Data Entry Url Box")]
-    public class DataEntryUrlBox : FullBox
+    public sealed class DataEntryUrlBox : FullBox
     {
         public DataEntryUrlBox() : base() { }
         public DataEntryUrlBox(Stream stream) : base(stream) { }

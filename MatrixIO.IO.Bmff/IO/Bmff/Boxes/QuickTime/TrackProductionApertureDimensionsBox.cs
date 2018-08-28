@@ -7,7 +7,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Track Production Aperture Dimensions Atom ("prof")
     /// </summary>
     [Box("prof", "Track Production Aperture Dimensions Atom")]
-    public class TrackProductionApertureDimensionsBox : FullBox
+    public sealed class TrackProductionApertureDimensionsBox : FullBox
     {
         public TrackProductionApertureDimensionsBox() : base() { }
         public TrackProductionApertureDimensionsBox(Stream stream) : base(stream) { }

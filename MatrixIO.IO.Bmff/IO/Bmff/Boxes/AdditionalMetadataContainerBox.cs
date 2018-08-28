@@ -8,7 +8,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Additional Metadata Container Box ("meco")
     /// </summary>
     [Box("meco", "Additional Metadata Container Box")]
-    public class AdditionalMetadataContainerBox : Box, ISuperBox
+    public sealed class AdditionalMetadataContainerBox : Box, ISuperBox
     {
         public AdditionalMetadataContainerBox() : base() { }
         public AdditionalMetadataContainerBox(Stream stream) : base(stream) { }

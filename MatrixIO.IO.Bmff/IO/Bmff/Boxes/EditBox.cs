@@ -8,7 +8,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Edit Box ("edts")
     /// </summary>
     [Box("edts", "Edit Box")]
-    public class EditBox : Box, ISuperBox
+    public sealed class EditBox : Box, ISuperBox
     {
         public EditBox() : base() { }
         public EditBox(Stream stream) : base(stream) { }
