@@ -2,34 +2,29 @@
 
 namespace MatrixIO.IO
 {
-    public struct ByteRange
+    public readonly struct ByteRange
     {
-        private long _Start;
-        public long Start { get { return _Start; } }
-
-        private long _End;
-        public long End { get { return _End; } }
-
-        private long _Length;
-        public long Length { get { return _Length; } }
-
         public ByteRange(long start, long end)
         {
             if (start < 0 || end < 0) throw new FormatException("ByteRange does not support negative Start and End values.");
 
             if (start > end)
             {
-                _Start = end;
-                _End = start;
+                Start = end;
+                End = start;
             }
             else
             {
-                _Start = start;
-                _End = end;
+                Start = start;
+                End = end;
             }
-            _Length = _End - _Start;
-
         }
+
+        public long Start { get; }
+
+        public long End { get; }
+
+        public long Length => End - Start;
 
         public bool Contains(long offset)
         {
@@ -51,13 +46,12 @@ namespace MatrixIO.IO
 
         public bool Overlaps(ByteRange range)
         {
-            if (Contains(range.Start) || Contains(range.End)) return true;
-            else return false;
+            return Contains(range.Start) || Contains(range.End);
         }
+
         public bool Overlaps(long start, long end)
         {
-            if (Contains(start) || Contains(end)) return true;
-            else return false;
+            return Contains(start) || Contains(end);
         }
 
         #region Operator Overloads
