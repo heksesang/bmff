@@ -36,13 +36,7 @@ namespace MatrixIO.IO.Bmff
             }
         }
 
-        public int Depth
-        {
-            get
-            {
-                return _boxStack.Count;
-            }
-        }
+        public int Depth => _boxStack.Count;
 
         public Box CurrentBox
         {
@@ -53,12 +47,7 @@ namespace MatrixIO.IO.Bmff
             }
         }
 
-        public bool HasChildren
-        {
-            get {
-                return CurrentBox is ISuperBox;
-            }
-        }
+        public bool HasChildren => CurrentBox is ISuperBox;
 
         public void NextSibling()
         {

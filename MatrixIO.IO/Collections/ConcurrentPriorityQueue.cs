@@ -28,10 +28,10 @@ namespace MatrixIO.Collections
         private readonly AutoResetEvent _itemReady = new AutoResetEvent(false);
         #endregion
 
-        public int Count { get { return _count; } }
-        public bool IsEmpty { get { return _count <= 0; } }
-        public bool IsSynchronized { get { return true; } }
-        public object SyncRoot { get { return _syncRoot; } }
+        public int Count => _count; 
+        public bool IsEmpty => _count <= 0; 
+        public bool IsSynchronized => true;
+        public object SyncRoot => _syncRoot; 
 
         #region Constructors
         public ConcurrentPriorityQueue() : this(Comparer<TPriority>.Default) { }

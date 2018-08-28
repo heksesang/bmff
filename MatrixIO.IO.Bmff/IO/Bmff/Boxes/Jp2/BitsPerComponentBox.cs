@@ -44,7 +44,7 @@ namespace MatrixIO.IO.Bmff.Boxes
 
         public IList<ComponentBitsEntry> Entries => _Entries;
 
-        public int EntryCount { get { return _Entries.Count; } }
+        public int EntryCount=> _Entries.Count;
 
         public class ComponentBitsEntry
         {
