@@ -15,7 +15,7 @@ namespace MatrixIO.IO.Bmff.Boxes
 
         internal override ulong CalculateSize()
         {
-            return base.CalculateSize() + (String.IsNullOrEmpty(Format) ? 0 : (ulong)Encoding.UTF8.GetByteCount(Format));
+            return base.CalculateSize() + (string.IsNullOrEmpty(Format) ? 0 : (ulong)Encoding.UTF8.GetByteCount(Format));
         }
 
         protected override void LoadFromStream(Stream stream)

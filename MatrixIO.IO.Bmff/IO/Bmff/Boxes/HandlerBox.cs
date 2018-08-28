@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Text;
 
 namespace MatrixIO.IO.Bmff.Boxes
@@ -16,7 +15,7 @@ namespace MatrixIO.IO.Bmff.Boxes
 
         internal override ulong CalculateSize()
         {
-            return base.CalculateSize() + 4 + 4 + (4 * (ulong)_Reserved.Length) + (String.IsNullOrEmpty(Name) ? 0 : (ulong)Encoding.UTF8.GetByteCount(Name));
+            return base.CalculateSize() + 4 + 4 + (4 * (ulong)_Reserved.Length) + (string.IsNullOrEmpty(Name) ? 0 : (ulong)Encoding.UTF8.GetByteCount(Name));
         }
 
         protected override void LoadFromStream(Stream stream)

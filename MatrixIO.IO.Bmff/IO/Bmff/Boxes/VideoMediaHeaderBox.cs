@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 
 namespace MatrixIO.IO.Bmff.Boxes
 {
@@ -58,7 +57,7 @@ namespace MatrixIO.IO.Bmff.Boxes
 
             public override string ToString()
             {
-                return String.Format("[0x{0:X4}, 0x{1:X4}, 0x{2:X4}]", Red, Green, Blue);
+                return string.Format("[0x{0:X4}, 0x{1:X4}, 0x{2:X4}]", Red, Green, Blue);
             }
         }
     }

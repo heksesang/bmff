@@ -181,7 +181,7 @@ namespace MatrixIO
         public override string ToString()
         {
             // TODO: Call ToString(string format) instead once it's written.
-            return String.Format("{0}/{1}", _numerator, _denominator);
+            return string.Format("{0}/{1}", _numerator, _denominator);
         }
         #endregion
 

@@ -140,7 +140,7 @@ namespace MatrixIO.IO.MpegTs
 #if DEBUG
             if(Data!=null && Data.Length > 0)
             {
-                Debug.WriteLine("First 40 bytes of PES Data: " + String.Concat(Data.Take(40).Select((b) => b.ToString("X2")).ToArray()));
+                Debug.WriteLine("First 40 bytes of PES Data: " + string.Concat(Data.Take(40).Select((b) => b.ToString("X2")).ToArray()));
             }
 #endif
         }
