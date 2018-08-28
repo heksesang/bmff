@@ -27,5 +27,4 @@ namespace MatrixIO.IO.Bmff
 
         public string Description { get; }
     }
-
 }

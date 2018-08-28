@@ -21,7 +21,6 @@ namespace MatrixIO.IO.Bmff.Boxes
         {
             return base.CalculateSize() + 
                 (ulong)(Version == 1 ? 8 + 8 + 4 + 8 : 4 + 4 + 4 + 4) + 4 + 2 + 2 + (2 * 4) + (9 * 4) + (6 * 4) + 4;
-
         }
 
         protected override void LoadFromStream(Stream stream)
@@ -80,8 +79,6 @@ namespace MatrixIO.IO.Bmff.Boxes
             stream.WriteBytes(PreDefined);
             stream.WriteBEUInt32(NextTrackID);
         }
-
-
 
         private ulong _CreationTime;
         public DateTime CreationTime
@@ -147,8 +144,8 @@ namespace MatrixIO.IO.Bmff.Boxes
 
         public uint NextTrackID { get; set; }
 
-
         internal static readonly DateTime _1904BaseTime = new DateTime(1904, 1, 1);
+
         internal static DateTime Convert1904Time(ulong secondsSince1904)
         {
             return _1904BaseTime + TimeSpan.FromSeconds(checked((double)secondsSince1904));

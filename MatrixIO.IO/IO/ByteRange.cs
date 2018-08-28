@@ -41,6 +41,7 @@ namespace MatrixIO.IO
         public bool Contains(long start, long end)
         {
             if (start >= Start && end <= End) return true;
+
             else return false;
         }
 
