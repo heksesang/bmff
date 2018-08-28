@@ -6,7 +6,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Color Specification Box ("colr")
     /// </summary>
     [Box("colr", "Color Specification Box")]
-    public class ColourSpecificationBox : Box, IContentBox
+    public sealed class ColourSpecificationBox : Box, IContentBox
     {
         public ColourSpecificationBox() : base() { }
         public ColourSpecificationBox(Stream stream) : base(stream) { }
@@ -25,7 +25,7 @@ namespace MatrixIO.IO.Bmff.Boxes
             SpecificationMethod = (SpecificationMethods)stream.ReadOneByte();
             Precedence = stream.ReadOneByte();
             ColorspaceApproximation = stream.ReadOneByte();
-            if(SpecificationMethod == SpecificationMethods.EnumeratedColorspace)
+            if (SpecificationMethod == SpecificationMethods.EnumeratedColorspace)
                 EnumeratedColorspace = (EnumeratedColorspaces)stream.ReadBEUInt32();
             // TODO: Read Profile?
         }

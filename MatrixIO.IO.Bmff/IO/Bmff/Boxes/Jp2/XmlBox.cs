@@ -7,7 +7,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// XML Box ("xml ")
     /// </summary>
     [Box("xml ", "XML Box")]
-    public class XmlBox : Box, IContentBox
+    public sealed class XmlBox : Box, IContentBox
     {
         public XmlBox() : base() { }
         public XmlBox(Stream stream) : base(stream) { }

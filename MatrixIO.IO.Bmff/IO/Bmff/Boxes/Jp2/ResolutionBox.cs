@@ -8,7 +8,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Resolution Box ("res ")
     /// </summary>
     [Box("res ", "Resolution Box")]
-    public class ResolutionBox : Box, ISuperBox
+    public sealed class ResolutionBox : Box, ISuperBox
     {
         public ResolutionBox() : base() { }
         public ResolutionBox(Stream stream) : base(stream) { }

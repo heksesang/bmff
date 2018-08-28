@@ -8,7 +8,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// JPEG2000 Header Box ("jp2h")
     /// </summary>
     [Box("jp2h", "JPEG2000 Header Box")]
-    public class Jp2HeaderBox: Box, ISuperBox
+    public sealed class Jp2HeaderBox : Box, ISuperBox
     {
         public Jp2HeaderBox() : base() { }
         public Jp2HeaderBox(Stream stream) : base(stream) { }

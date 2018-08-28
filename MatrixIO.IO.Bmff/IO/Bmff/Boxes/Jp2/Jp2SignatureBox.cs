@@ -6,7 +6,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// JPEG2000 Signature Box
     /// </summary>
     [Box("jP  ", "JPEG2000 Signature Box")]
-    public class Jp2SignatureBox : Box
+    public sealed class Jp2SignatureBox : Box
     {
         public Jp2SignatureBox() : base() { }
         public Jp2SignatureBox(Stream stream) : base(stream) { }

@@ -6,7 +6,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Image Header Box ("ihdr")
     /// </summary>
     [Box("ihdr", "Image Header Box")]
-    public class ImageHeaderBox : Box
+    public sealed class ImageHeaderBox : Box
     {
         public ImageHeaderBox() : base() { }
         public ImageHeaderBox(Stream stream) : base(stream) { }
