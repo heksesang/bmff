@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using MatrixIO.IO;
 
 namespace MatrixIO.IO.Ebml
 {
