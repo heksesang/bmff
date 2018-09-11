@@ -161,7 +161,7 @@ namespace MatrixIO.IO
 
         public static int WriteNullTerminatedUTF8String(this Stream stream, string text)
         {
-            if (String.IsNullOrEmpty(text))
+            if (string.IsNullOrEmpty(text))
             {
                 stream.WriteOneByte(0);
                 return 1;
@@ -174,7 +174,7 @@ namespace MatrixIO.IO
 
         public static int WriteUTF8String(this Stream stream, string text)
         {
-            if (String.IsNullOrEmpty(text)) return 0;
+            if (string.IsNullOrEmpty(text)) return 0;
             
             byte[] bytes = Encoding.UTF8.GetBytes(text);
             stream.Write(bytes, 0, bytes.Length);

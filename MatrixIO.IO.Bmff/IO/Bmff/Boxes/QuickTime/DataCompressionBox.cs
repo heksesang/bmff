@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
+using System.Text;
 
 namespace MatrixIO.IO.Bmff.Boxes
 {
@@ -10,14 +8,14 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Data Compression Atom ("dcom")
     /// </summary>
     [Box("dcom", "Data Compression Atom")]
-    public class DataCompressionBox: Box
+    public sealed class DataCompressionBox : Box
     {
         public DataCompressionBox() : base() { }
         public DataCompressionBox(Stream stream) : base(stream) { }
 
         internal override ulong CalculateSize()
         {
-            return base.CalculateSize() + (String.IsNullOrEmpty(Format) ? 0 : (ulong)Encoding.UTF8.GetByteCount(Format));
+            return base.CalculateSize() + (string.IsNullOrEmpty(Format) ? 0 : (ulong)Encoding.UTF8.GetByteCount(Format));
         }
 
         protected override void LoadFromStream(Stream stream)

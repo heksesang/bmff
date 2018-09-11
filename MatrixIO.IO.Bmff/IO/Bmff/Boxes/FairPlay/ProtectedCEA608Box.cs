@@ -5,7 +5,7 @@ using System.Linq;
 namespace MatrixIO.IO.Bmff.Boxes.FairPlay
 {
     [Box("p608", "Protected CEA-608 Box")]
-    public class ProtectedCEA608Box : FullBox, ISuperBox
+    public sealed class ProtectedCEA608Box : FullBox, ISuperBox
     {
         public IList<Box> Children { get; } = new List<Box>();
 

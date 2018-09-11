@@ -8,7 +8,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Sample Description Box ("stsd")
     /// </summary>
     [Box("stsd", "Sample Description Box")]
-    public class SampleDescriptionBox : FullBox, ISuperBox
+    public sealed class SampleDescriptionBox : FullBox, ISuperBox
     {
         public SampleDescriptionBox() : base() { }
         public SampleDescriptionBox(Stream stream) : base(stream) { }

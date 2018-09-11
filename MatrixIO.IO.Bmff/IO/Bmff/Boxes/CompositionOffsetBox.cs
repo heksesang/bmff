@@ -7,7 +7,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Composition Offset Box ("ctts")
     /// </summary>
     [Box("ctts", "Composition Offset Box")]
-    public class CompositionOffsetBox : FullBox, ITableBox<CompositionOffsetBox.CompositionOffsetEntry>
+    public sealed class CompositionOffsetBox : FullBox, ITableBox<CompositionOffsetBox.CompositionOffsetEntry>
     {
         public CompositionOffsetBox() : base() { }
         public CompositionOffsetBox(Stream stream) : base(stream) { }

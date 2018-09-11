@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
-using MatrixIO.IO.Bmff;
 
 namespace MatrixIO.IO.Bmff
 {
     public class BmffReader : ISuperBox, IEnumerable<Box>
     {
         private readonly Stream _baseStream;
-        public Stream BaseStream { get { return _baseStream; } }
+        public Stream BaseStream => _baseStream;
 
         private IList<Box> _rootBoxes;
         public IList<Box> RootBoxes
@@ -24,7 +21,7 @@ namespace MatrixIO.IO.Bmff
             }
         }
 
-        public bool RandomAccess { get { return _baseStream.CanSeek; } }
+        public bool RandomAccess => _baseStream.CanSeek;
 
         #region Navigation
         private readonly Stack<Box> _boxStack = new Stack<Box>();
@@ -120,10 +117,7 @@ namespace MatrixIO.IO.Bmff
         }
 
         [Obsolete("Use the BaseMedia class instead.")]
-        IList<Box> ISuperBox.Children
-        {
-            get { return RootBoxes; }
-        }
+        IList<Box> ISuperBox.Children => RootBoxes;
 
         [Obsolete("Use the BaseMedia class instead.")]
         IEnumerator<Box> IEnumerable<Box>.GetEnumerator()

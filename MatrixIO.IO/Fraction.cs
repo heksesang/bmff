@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace MatrixIO
 {
-    public struct Fraction : IComparable, IComparable<Fraction>, IEquatable<Fraction>
+    public readonly struct Fraction : IComparable, IComparable<Fraction>, IEquatable<Fraction>
     {
         #region Value
         private readonly int _numerator;
-        public int Numerator { get { return _numerator; } }
+        public int Numerator => _numerator;
 
         private readonly int _denominator;
-        public int Denominator { get { return _denominator; } }
+        public int Denominator => _denominator;
         #endregion
 
         #region Properties
@@ -24,9 +22,9 @@ namespace MatrixIO
         public Fraction(int numerator, int denominator)
         {
             if (denominator == 0) throw new ArgumentOutOfRangeException("Denominator must not be 0.");
-            if(denominator < 0 )
+            if (denominator < 0)
             {
-                if(numerator < 0)
+                if (numerator < 0)
                 {
                     _numerator = Math.Abs(numerator);
                     _denominator = Math.Abs(denominator);
@@ -44,7 +42,7 @@ namespace MatrixIO
         public Fraction(int numerator, int denominator, bool asLowestTerms)
             : this(numerator, denominator)
         {
-            if(asLowestTerms)
+            if (asLowestTerms)
             {
                 var gcd = GreatestCommonDivisor(_numerator, _denominator);
                 _numerator = _numerator / gcd;
@@ -70,7 +68,7 @@ namespace MatrixIO
         {
             return new Fraction(_isInLowestTerms, _denominator, _numerator);
         }
-        
+
         public int GetIntegerPart()
         {
             return Numerator / Denominator;
@@ -155,7 +153,7 @@ namespace MatrixIO
 
         public int CompareTo(Fraction other)
         {
-            return (int) (((long)Numerator * other.Denominator) - ((long)Denominator * other.Numerator));
+            return (int)(((long)Numerator * other.Denominator) - ((long)Denominator * other.Numerator));
         }
         public int CompareTo(object obj)
         {
@@ -183,14 +181,14 @@ namespace MatrixIO
         public override string ToString()
         {
             // TODO: Call ToString(string format) instead once it's written.
-            return String.Format("{0}/{1}", _numerator, _denominator);
+            return string.Format("{0}/{1}", _numerator, _denominator);
         }
         #endregion
 
         public byte[] GetBytes()
         {
             var bytes = new byte[8];
-            
+
             var numerator = BitConverter.GetBytes(_numerator);
             Buffer.BlockCopy(numerator, 0, bytes, 0, numerator.Length);
 

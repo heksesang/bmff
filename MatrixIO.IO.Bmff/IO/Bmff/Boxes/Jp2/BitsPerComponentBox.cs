@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.IO;
 
 namespace MatrixIO.IO.Bmff.Boxes
@@ -10,7 +7,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Bits Per Component Box ("bpcc")
     /// </summary>
     [Box("bpcc", "Bits Per Component Box")]
-    public class BitsPerComponentBox : Box, ITableBox<BitsPerComponentBox.ComponentBitsEntry>
+    public sealed class BitsPerComponentBox : Box, ITableBox<BitsPerComponentBox.ComponentBitsEntry>
     {
         public BitsPerComponentBox() : base() { }
         public BitsPerComponentBox(Stream stream) : base(stream) { }
@@ -43,11 +40,11 @@ namespace MatrixIO.IO.Bmff.Boxes
             }
         }
 
-        private IList<ComponentBitsEntry> _Entries =  new List<ComponentBitsEntry>();
+        private IList<ComponentBitsEntry> _Entries = new List<ComponentBitsEntry>();
 
         public IList<ComponentBitsEntry> Entries => _Entries;
 
-        public int EntryCount { get { return _Entries.Count; } }
+        public int EntryCount => _Entries.Count;
 
         public class ComponentBitsEntry
         {

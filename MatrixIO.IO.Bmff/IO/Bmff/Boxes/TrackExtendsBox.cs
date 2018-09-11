@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 
 namespace MatrixIO.IO.Bmff.Boxes
@@ -10,7 +7,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Track Extends Box ("trex")
     /// </summary>
     [Box("trex", "Track Extends Box")]
-    public class TrackExtendsBox : FullBox
+    public sealed class TrackExtendsBox : FullBox
     {
         public TrackExtendsBox() : base() { }
         public TrackExtendsBox(Stream stream) : base(stream) { }
@@ -125,7 +122,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     {
         internal uint _flags;
 
-        public SampleFlags() {}
+        public SampleFlags() { }
         public SampleFlags(uint value)
         {
             _flags = value;

@@ -10,10 +10,10 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Meta Box ("meta")
     /// </summary>
     [Box("meta", "Meta Box")]
-    public class MetaBox : FullBox, ISuperBox
+    public sealed class MetaBox : FullBox, ISuperBox
     {
-        public MetaBox() : base() {}
-        public MetaBox(byte version, uint flags=0) : base(version, flags) {}
+        public MetaBox() : base() { }
+        public MetaBox(byte version, uint flags = 0) : base(version, flags) { }
         public MetaBox(Stream stream) : base(stream) { }
 
         public IList<Box> Children { get; } = new List<Box>();
@@ -42,7 +42,7 @@ namespace MatrixIO.IO.Bmff.Boxes
             }
         }
         */
-        public DataInformationBox FileLocations 
+        public DataInformationBox FileLocations
         {
             get
             {
@@ -93,7 +93,7 @@ namespace MatrixIO.IO.Bmff.Boxes
         }
         */
 
-        private Type[] StandardBoxes = 
+        private Type[] StandardBoxes =
         {
             //typeof(HandlerBox),
             //typeof(PrimaryItemBox),

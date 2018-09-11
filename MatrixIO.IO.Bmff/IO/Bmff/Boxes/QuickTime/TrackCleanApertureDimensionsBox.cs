@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 
 namespace MatrixIO.IO.Bmff.Boxes
@@ -10,7 +7,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Track Clean Aperture Dimensions Atom ("clef")
     /// </summary>
     [Box("clef", "Track Clean Aperture Dimensions Atom")]
-    public class TrackCleanApertureDimensionsBox : FullBox
+    public sealed class TrackCleanApertureDimensionsBox : FullBox
     {
         public TrackCleanApertureDimensionsBox() : base() { }
         public TrackCleanApertureDimensionsBox(Stream stream) : base(stream) { }

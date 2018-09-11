@@ -8,7 +8,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Compressed Movie Atom ("moov")
     /// </summary>
     [Box("cmov", "Compressed Movie Atom")]
-    public class CompressedMovieBox : Box, ISuperBox
+    public sealed class CompressedMovieBox : Box, ISuperBox
     {
         public CompressedMovieBox() : base() { }
         public CompressedMovieBox(Stream stream) : base(stream) { }

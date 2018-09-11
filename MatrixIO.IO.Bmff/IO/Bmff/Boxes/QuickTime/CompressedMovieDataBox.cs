@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
+﻿using System.IO;
 
 namespace MatrixIO.IO.Bmff.Boxes
 {
@@ -10,7 +6,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Compressed Movie Data Atom ("cmvd")
     /// </summary>
     [Box("cmvd", "Compressed Movie Data Atom")]
-    public class CompressedMovieDataBox: Box, IContentBox
+    public sealed class CompressedMovieDataBox : Box, IContentBox
     {
         public CompressedMovieDataBox() : base() { }
         public CompressedMovieDataBox(Stream stream) : base(stream) { }

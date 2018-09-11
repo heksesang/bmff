@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.IO;
 using System.Text;
-using System.IO;
 
 namespace MatrixIO.IO.Bmff.Boxes
 {
@@ -10,7 +7,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Data Entry Urn Box ("urn ")
     /// </summary>
     [Box("urn ", "Data Entry Urn Box")]
-    public class DataEntryUrnBox : FullBox
+    public sealed class DataEntryUrnBox : FullBox
     {
         public DataEntryUrnBox() : base() { }
         public DataEntryUrnBox(Stream stream) : base(stream) { }
@@ -18,8 +15,8 @@ namespace MatrixIO.IO.Bmff.Boxes
         internal override ulong CalculateSize()
         {
             return base.CalculateSize() + 
-                (String.IsNullOrEmpty(Name) ? 0 : (ulong)Encoding.UTF8.GetByteCount(Name)) + 1 + 
-                (String.IsNullOrEmpty(Location) ? 0 : (ulong)Encoding.UTF8.GetByteCount(Location));
+                (string.IsNullOrEmpty(Name) ? 0 : (ulong)Encoding.UTF8.GetByteCount(Name)) + 1 + 
+                (string.IsNullOrEmpty(Location) ? 0 : (ulong)Encoding.UTF8.GetByteCount(Location));
         }
 
         protected override void LoadFromStream(Stream stream)

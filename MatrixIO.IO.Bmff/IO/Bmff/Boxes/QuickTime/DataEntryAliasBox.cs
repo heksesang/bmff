@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.IO;
 using System.Text;
-using System.IO;
 
 namespace MatrixIO.IO.Bmff.Boxes
 {
@@ -10,14 +7,14 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Data Entry Alias Box ("alis")
     /// </summary>
     [Box("alis", "Data Entry Alias Atom")]
-    public class DataEntryAliasBox : FullBox
+    public sealed class DataEntryAliasBox : FullBox
     {
         public DataEntryAliasBox() : base() { }
         public DataEntryAliasBox(Stream stream) : base(stream) { }
 
         internal override ulong CalculateSize()
         {
-            return base.CalculateSize() + (String.IsNullOrEmpty(Alias) ? 0 : (ulong)Encoding.UTF8.GetByteCount(Alias));
+            return base.CalculateSize() + (string.IsNullOrEmpty(Alias) ? 0 : (ulong)Encoding.UTF8.GetByteCount(Alias));
         }
 
         protected override void LoadFromStream(Stream stream)

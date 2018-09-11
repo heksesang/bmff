@@ -45,12 +45,12 @@ namespace MatrixIO.IO
 
             if (offset < _CurrentConstraint.Start)
             {
-                Trace.WriteLine(String.Format("Attempted to set a new constraint ({0},{1}) offset outside the bounds of the existing constraint({2},{3}).", offset, length, _CurrentConstraint.Start, _CurrentConstraint.Length), "WARNING");
+                Trace.WriteLine(string.Format("Attempted to set a new constraint ({0},{1}) offset outside the bounds of the existing constraint({2},{3}).", offset, length, _CurrentConstraint.Start, _CurrentConstraint.Length), "WARNING");
                 offset = _CurrentConstraint.Start;
             }
             if (offset + length > _CurrentConstraint.End)
             {
-                Trace.WriteLine(String.Format("Attempted to set a new constraint ({0},{1}) length outside the bounds of the existing constraint({2},{3}).", offset, length, _CurrentConstraint.Start, _CurrentConstraint.Length), "WARNING");
+                Trace.WriteLine(string.Format("Attempted to set a new constraint ({0},{1}) length outside the bounds of the existing constraint({2},{3}).", offset, length, _CurrentConstraint.Start, _CurrentConstraint.Length), "WARNING");
                 length = _CurrentConstraint.End - offset;
             }
 
@@ -116,7 +116,7 @@ namespace MatrixIO.IO
             if (position + count > _CurrentConstraint.End)
             {
                 int availableCount = checked((int)(_CurrentConstraint.End - position));
-                Trace.WriteLine(String.Format("Attempt to read {0} bytes past end of constrained region.", count - availableCount), "WARNING");
+                Trace.WriteLine(string.Format("Attempt to read {0} bytes past end of constrained region.", count - availableCount), "WARNING");
                 if (availableCount > 0)
                 {
                     Trace.WriteLine("Returning partial result.", "WARNING");

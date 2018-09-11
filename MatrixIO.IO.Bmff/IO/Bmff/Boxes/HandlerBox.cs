@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.IO;
 using System.Text;
-using System.IO;
 
 namespace MatrixIO.IO.Bmff.Boxes
 {
@@ -11,14 +8,14 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// </summary>
     // Don't ask me why the spec calls this Handler Reference Box but defines it as HandlerBox.  It's not corrected in the errata.
     [Box("hdlr", "Handler Reference Box")]
-    public class HandlerBox : FullBox
+    public sealed class HandlerBox : FullBox
     {
         public HandlerBox() : base() { }
         public HandlerBox(Stream stream) : base(stream) { }
 
         internal override ulong CalculateSize()
         {
-            return base.CalculateSize() + 4 + 4 + (4 * (ulong)_Reserved.Length) + (String.IsNullOrEmpty(Name) ? 0 : (ulong)Encoding.UTF8.GetByteCount(Name));
+            return base.CalculateSize() + 4 + 4 + (4 * (ulong)_Reserved.Length) + (string.IsNullOrEmpty(Name) ? 0 : (ulong)Encoding.UTF8.GetByteCount(Name));
         }
 
         protected override void LoadFromStream(Stream stream)
@@ -38,7 +35,7 @@ namespace MatrixIO.IO.Bmff.Boxes
             stream.WriteBEUInt32(_Predefined);
             stream.WriteBEUInt32(HandlerType);
             for (int i = 0; i < _Reserved.Length; i++) stream.WriteBEUInt32(_Reserved[i]);
-            if(Name != null)
+            if (Name != null)
                 stream.WriteUTF8String(Name);
         }
 

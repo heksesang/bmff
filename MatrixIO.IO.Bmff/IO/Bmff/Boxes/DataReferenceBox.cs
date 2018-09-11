@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Diagnostics;
+using System.IO;
 
 namespace MatrixIO.IO.Bmff.Boxes
 {
@@ -9,7 +9,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Data Reference Box ("dref")
     /// </summary>
     [Box("dref", "Data Reference Box")]
-    public class DataReferenceBox : FullBox, ISuperBox
+    public sealed class DataReferenceBox : FullBox, ISuperBox
     {
         public DataReferenceBox() : base() { }
         public DataReferenceBox(Stream stream) : base(stream) { }

@@ -7,7 +7,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Edit List Box ("elst")
     /// </summary>
     [Box("elst", "Edit List Box")]
-    public class EditListBox : FullBox, ITableBox<EditListBox.EditListEntry>
+    public sealed class EditListBox : FullBox, ITableBox<EditListBox.EditListEntry>
     {
         public EditListBox() : base() { }
         public EditListBox(Stream stream) : base(stream) { }
@@ -18,7 +18,7 @@ namespace MatrixIO.IO.Bmff.Boxes
             return base.CalculateSize() + 4 + (entryLength * (ulong)Entries.Count);
         }
 
-        protected override void LoadFromStream(System.IO.Stream stream)
+        protected override void LoadFromStream(Stream stream)
         {
             base.LoadFromStream(stream);
 
@@ -44,7 +44,7 @@ namespace MatrixIO.IO.Bmff.Boxes
             }
         }
 
-        protected override void SaveToStream(System.IO.Stream stream)
+        protected override void SaveToStream(Stream stream)
         {
             base.SaveToStream(stream);
 

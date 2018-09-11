@@ -8,7 +8,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Media Information Box ("minf")
     /// </summary>
     [Box("minf", "Media Information Box")]
-    public class MediaInformationBox : Box, ISuperBox
+    public sealed class MediaInformationBox : Box, ISuperBox
     {
         public MediaInformationBox() : base() { }
         public MediaInformationBox(Stream stream) : base(stream) { }

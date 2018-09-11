@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
-using System.Collections;
 
 namespace MatrixIO.IO.Bmff.Boxes
 {
@@ -94,7 +90,7 @@ namespace MatrixIO.IO.Bmff.Boxes
         public short Volume { get; set; }
         private ushort _Reserved3;
         private int[] _Matrix = new int[9] { 0x00010000, 0, 0, 0, 0x00010000, 0, 0, 0, 0x40000000 }; // Unity Matrix
-        public int[] Matrix { get { return _Matrix; } }
+        public int[] Matrix => _Matrix;
 
         public uint Width { get; set; }
         public uint Height { get; set; }

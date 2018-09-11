@@ -1,7 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 
 namespace MatrixIO.IO.Bmff.Boxes
@@ -10,7 +8,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Track Reference Box ("tref")
     /// </summary>
     [Box("tref", "Track Reference Box")]
-    public class TrackReferenceBox : Box, ISuperBox
+    public sealed class TrackReferenceBox : Box, ISuperBox
     {
         public TrackReferenceBox() : base() { }
         public TrackReferenceBox(Stream stream) : base(stream) { }

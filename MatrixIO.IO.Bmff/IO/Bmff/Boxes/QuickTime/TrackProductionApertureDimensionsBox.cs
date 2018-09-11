@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 
 namespace MatrixIO.IO.Bmff.Boxes
@@ -10,7 +7,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Track Production Aperture Dimensions Atom ("prof")
     /// </summary>
     [Box("prof", "Track Production Aperture Dimensions Atom")]
-    public class TrackProductionApertureDimensionsBox : FullBox
+    public sealed class TrackProductionApertureDimensionsBox : FullBox
     {
         public TrackProductionApertureDimensionsBox() : base() { }
         public TrackProductionApertureDimensionsBox(Stream stream) : base(stream) { }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace MatrixIO.IO.MpegTs.Descriptors
+﻿namespace MatrixIO.IO.MpegTs.Descriptors
 {
     public class ProgramStreamDescriptor : TsDescriptor
     {

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using MatrixIO.IO.Bmff;
+﻿using System.IO;
 
 namespace MatrixIO.IO.Bmff.Boxes
 {

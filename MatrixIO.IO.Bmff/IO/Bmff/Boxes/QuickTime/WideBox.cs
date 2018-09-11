@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
+﻿using System.IO;
 
 namespace MatrixIO.IO.Bmff.Boxes
 {
@@ -10,7 +6,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// QuickTime Wide Atom ("wide")
     /// </summary>
     [Box("wide", "Wide Atom")]
-    public class WideBox : Box, IContentBox
+    public sealed class WideBox : Box, IContentBox
     {
         public WideBox() : base() { }
         public WideBox(Stream stream) : base(stream) { }

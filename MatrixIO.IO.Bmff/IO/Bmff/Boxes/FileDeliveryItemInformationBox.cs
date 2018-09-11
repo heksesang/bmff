@@ -9,7 +9,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// File Delivery Item Information Box ("fiin")
     /// </summary>
     [Box("fiin", "File Delivery Item Information Box")]
-    public class FileDeliveryItemInformationBox : FullBox, ISuperBox
+    public sealed class FileDeliveryItemInformationBox : FullBox, ISuperBox
     {
         public FileDeliveryItemInformationBox() : base() { }
         public FileDeliveryItemInformationBox(Stream stream) : base(stream) { }
@@ -44,7 +44,7 @@ namespace MatrixIO.IO.Bmff.Boxes
         IEnumerator IEnumerable.GetEnumerator() => Children.GetEnumerator();
 
         ushort EntryCount { get; set; }
-        
+
         public IEnumerable<PartitionEntryBox> PartitionEntries
         {
             get

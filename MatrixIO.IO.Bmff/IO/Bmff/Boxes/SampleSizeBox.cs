@@ -7,7 +7,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Sample Size Box ("stsz")
     /// </summary>
     [Box("stsz", "Sample Size Box")]
-    public class SampleSizeBox : FullBox, ITableBox<SampleSizeBox.SampleSizeEntry>
+    public sealed class SampleSizeBox : FullBox, ITableBox<SampleSizeBox.SampleSizeEntry>
     {
         public SampleSizeBox() : base() { }
         public SampleSizeBox(Stream stream) : base(stream) { }
@@ -51,13 +51,13 @@ namespace MatrixIO.IO.Bmff.Boxes
 
         public uint SampleSize { get; set; }
         private uint _SampleCount;
-        public uint SampleCount 
-        { 
-            get 
-            { 
-                if(SampleSize == 0) return (uint)Entries.Count;
+        public uint SampleCount
+        {
+            get
+            {
+                if (SampleSize == 0) return (uint)Entries.Count;
                 return _SampleCount;
-            } 
+            }
         }
 
         public uint EntryCount

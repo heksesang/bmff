@@ -5,7 +5,7 @@ using System.Linq;
 namespace MatrixIO.IO.Bmff.Boxes.FairPlay
 {
     [Box("drms", "DRM Audio Stream Box")]
-    public class DrmAdudioStreamBox : FullBox, ISuperBox
+    public sealed class DrmAdudioStreamBox : FullBox, ISuperBox
     {
         public IList<Box> Children { get; } = new List<Box>();
 

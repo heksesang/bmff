@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
+﻿using System.IO;
 
 namespace MatrixIO.IO.Bmff.Boxes
 {
@@ -10,7 +6,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Video Media Header Box ("vmhd")
     /// </summary>
     [Box("vmhd", "Video Media Header Box")]
-    public class VideoMediaHeaderBox : FullBox
+    public sealed class VideoMediaHeaderBox : FullBox
     {
         public VideoMediaHeaderBox() : base() { }
         public VideoMediaHeaderBox(Stream stream) : base(stream) { }
@@ -61,7 +57,7 @@ namespace MatrixIO.IO.Bmff.Boxes
 
             public override string ToString()
             {
-                return String.Format("[0x{0:X4}, 0x{1:X4}, 0x{2:X4}]", Red, Green, Blue);
+                return string.Format("[0x{0:X4}, 0x{1:X4}, 0x{2:X4}]", Red, Green, Blue);
             }
         }
     }

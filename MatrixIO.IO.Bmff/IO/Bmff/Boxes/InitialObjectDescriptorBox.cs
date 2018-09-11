@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
+﻿using System.IO;
 
 namespace MatrixIO.IO.Bmff.Boxes
 {
@@ -10,7 +6,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Initial Object Descriptor Box ("iods")
     /// </summary>
     [Box("iods", "Initial Object Descriptor Box")]
-    public class InitialObjectDescriptorBox : FullBox, IContentBox
+    public sealed class InitialObjectDescriptorBox : FullBox, IContentBox
     {
         public InitialObjectDescriptorBox() : base() { }
         public InitialObjectDescriptorBox(Stream stream) : base(stream) { }

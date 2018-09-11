@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using MatrixIO.IO.MpegTs.Tables;
 using MatrixIO.IO.MpegTs.Streams;
 
 namespace MatrixIO.IO.MpegTs

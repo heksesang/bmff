@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
+﻿using System.IO;
 
 namespace MatrixIO.IO.Bmff.Boxes
 {
@@ -10,7 +6,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// JPEG2000 Codestream Box ("jp2c")
     /// </summary>
     [Box("jp2c", "Contiguous Codestream Box")]
-    public class ContiguousCodestreamBox: Box
+    public sealed class ContiguousCodestreamBox : Box
     {
         public ContiguousCodestreamBox() : base() { }
         public ContiguousCodestreamBox(Stream stream) : base(stream) { }
