@@ -8,8 +8,8 @@ namespace MatrixIO.IO.Bmff
 {
     public abstract class Box
     {
-        protected Stream _SourceStream;
-        public Stream SourceStream { get { return _SourceStream; } }
+        protected Stream _sourceStream;
+        public Stream SourceStream => _sourceStream;
 
         public ulong? Offset { get; protected set; }
         public ulong? ContentOffset { get; protected set; }
@@ -43,10 +43,10 @@ namespace MatrixIO.IO.Bmff
             {
                 if (Size == 0)
                 {
-                    if (_SourceStream == null) return long.MaxValue;
+                    if (_sourceStream is null) return long.MaxValue;
                     try
                     {
-                        return (ulong)_SourceStream.Length;
+                        return (ulong)_sourceStream.Length;
                     }
                     catch (NotSupportedException)
                     {
@@ -114,7 +114,7 @@ namespace MatrixIO.IO.Bmff
 
             Size = stream.ReadBEUInt32();
             uint type = stream.ReadBEUInt32();
-            if(Size == 1) LargeSize = stream.ReadBEUInt64();
+            if (Size == 1) LargeSize = stream.ReadBEUInt64();
 
             if (type == 0x75756964) // 'uuid'
             {
@@ -125,7 +125,7 @@ namespace MatrixIO.IO.Bmff
             bool foundMatchingAttribute = false;
             object[] boxAttributes = this.GetType().GetCustomAttributes(typeof(BoxAttribute), true);
             foreach (BoxAttribute boxAttribute in boxAttributes) if (boxAttribute.Type == Type) foundMatchingAttribute = true;
-            if(!foundMatchingAttribute)
+            if (!foundMatchingAttribute)
                 throw new FormatException("Unexpected BMFF Box Type.");
 
             Initialize(stream);
@@ -134,17 +134,17 @@ namespace MatrixIO.IO.Bmff
         internal void Initialize(Stream stream, BaseMediaOptions options = BaseMediaOptions.LoadChildren)
         {
             Trace.WriteLine(Type, "Loading");
-            _SourceStream = stream;
+            _sourceStream = stream;
 
             ConstrainedStream constrainedStream = ConstrainedStream.WrapStream(stream);
 
             constrainedStream.PushConstraint((long)Offset.Value, (long)EffectiveSize);
 
             LoadFromStream(stream);
-            
+
             ContentOffset = (ulong)stream.Position;
 
-            if(((options & BaseMediaOptions.LoadChildren) == BaseMediaOptions.LoadChildren) && this is ISuperBox)
+            if (((options & BaseMediaOptions.LoadChildren) == BaseMediaOptions.LoadChildren) && this is ISuperBox)
                 LoadChildrenFromStream(stream);
 
             Sync(stream, !(this is IContentBox));
@@ -179,7 +179,7 @@ namespace MatrixIO.IO.Bmff
 
         protected virtual void LoadFromStream(Stream stream) { }
 
-        protected virtual void LoadChildrenFromStream(Stream stream) 
+        protected virtual void LoadChildrenFromStream(Stream stream)
         {
 
             Trace.Indent();
@@ -194,7 +194,7 @@ namespace MatrixIO.IO.Bmff
 
         protected virtual void SaveToStream(Stream stream) { }
 
-        protected virtual void SaveChildrenToStream(Stream stream) 
+        protected virtual void SaveChildrenToStream(Stream stream)
         {
             Trace.Indent();
             foreach (Box box in ((ISuperBox)this).Children)
@@ -204,7 +204,7 @@ namespace MatrixIO.IO.Bmff
             Trace.Unindent();
         }
 
-        public static T FromStream<T>(Stream stream) where T: Box
+        public static T FromStream<T>(Stream stream) where T : Box
         {
             return (T)FromStream(stream);
         }
@@ -219,7 +219,7 @@ namespace MatrixIO.IO.Bmff
                 uint size = stream.ReadBEUInt32();
                 uint type = stream.ReadBEUInt32();
                 ulong? largeSize = null;
-                if(size == 1) largeSize = stream.ReadBEUInt64();
+                if (size == 1) largeSize = stream.ReadBEUInt64();
 
                 BoxType boxType;
                 if (type == 0x75756964) // 'uuid'
@@ -273,7 +273,7 @@ namespace MatrixIO.IO.Bmff
         /// <param name="assembly">The assembly to search for new Boxes.</param>
         public static void AddBoxTypesFromAssembly(Assembly assembly)
         {
-            foreach(KeyValuePair<BoxType, Type> typeMapping in GetBoxTypes(assembly))
+            foreach (KeyValuePair<BoxType, Type> typeMapping in GetBoxTypes(assembly))
             {
                 if (AvailableBoxTypes.ContainsKey(typeMapping.Key))
                     AvailableBoxTypes[typeMapping.Key] = typeMapping.Value;
@@ -290,9 +290,9 @@ namespace MatrixIO.IO.Bmff
             ConstrainedStream constrainedStream = ConstrainedStream.WrapStream(stream);
             long offset = constrainedStream.Position;
 
-            ulong calculatedLength = CalculateSize() + (ulong)(Size==1 ? 0 : 8);
-            uint size=1;
-            ulong largeSize=0;
+            ulong calculatedLength = CalculateSize() + (ulong)(Size == 1 ? 0 : 8);
+            uint size = 1;
+            ulong largeSize = 0;
             if (calculatedLength > uint.MaxValue) largeSize = (ulong)calculatedLength;
             else size = (uint)calculatedLength - 8;
 
@@ -304,15 +304,15 @@ namespace MatrixIO.IO.Bmff
             if (Type.FourCC == 0x75756964) constrainedStream.WriteBytes(Type.UserType.ToByteArray());
 
             SaveToStream(constrainedStream);
-            if(this is ISuperBox) SaveChildrenToStream(constrainedStream);
+            if (this is ISuperBox) SaveChildrenToStream(constrainedStream);
 
             // TODO: Handle IContentBox properly
             if (this is IContentBox && this.HasContent)
             {
                 // TODO: Support unseekable streams for the case of Size=0
-                if (_SourceStream != null && _SourceStream.CanSeek)
+                if (_sourceStream != null && _sourceStream.CanSeek)
                 {
-                    ConstrainedStream source = new ConstrainedStream(_SourceStream);
+                    ConstrainedStream source = new ConstrainedStream(_sourceStream);
                     source.PushConstraint((long)this.ContentOffset.Value, (long)this.ContentSize.Value);
                     source.Seek((long)this.ContentOffset.Value, SeekOrigin.Begin);
 
@@ -342,7 +342,7 @@ namespace MatrixIO.IO.Bmff
 
         public Stream GetContentStream()
         {
-            Stream source = ConstrainedStream.UnwrapStream(_SourceStream);
+            Stream source = ConstrainedStream.UnwrapStream(_sourceStream);
             if (!source.CanSeek) throw new FileNotFoundException("Invalid Source Stream in Box.GetContentStream()");
 
             source.Seek((long)ContentOffset, SeekOrigin.Begin);

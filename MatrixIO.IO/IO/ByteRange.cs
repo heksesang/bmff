@@ -56,32 +56,38 @@ namespace MatrixIO.IO
         }
 
         #region Operator Overloads
+
         public static bool operator <(ByteRange a, ByteRange b)
         {
             if (a.Start > b.Start && a.End <= b.End) return true;
             else if (a.Start >= b.Start && a.End < b.End) return true;
             else return false;
         }
+
         public static bool operator >(ByteRange a, ByteRange b)
         {
             if (a.Start < b.Start && a.End >= b.End) return true;
             else if (a.Start <= b.Start && a.End > b.End) return true;
             else return false;
         }
+
         public static bool operator ==(ByteRange a, ByteRange b)
         {
             return a.Equals(b);
         }
+
         public static bool operator !=(ByteRange a, ByteRange b)
         {
             return !(a == b);
         }
+
         public static bool operator >=(ByteRange a, ByteRange b)
         {
             if (a == b) return true;
             else if (a > b) return true;
             else return false;
         }
+
         public static bool operator <=(ByteRange a, ByteRange b)
         {
             if (a == b) return true;
