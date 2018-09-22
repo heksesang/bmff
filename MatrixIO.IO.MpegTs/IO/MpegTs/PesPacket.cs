@@ -193,7 +193,6 @@ namespace MatrixIO.IO.MpegTs
             set => _header = (byte)((_header & 0xFE) | (value ? 0x01 : 0));
         }
 
-
         // 1 bit HasPTS
         private bool HasPTS
         {
@@ -228,18 +227,21 @@ namespace MatrixIO.IO.MpegTs
             get => (_flags & 0x08) > 0;
             set => _flags = (byte)((_flags & 0xF7) | (value ? 0x08 : 0));
         }
+
         // 1 bit AdditionalCopyInfoFlag
         private bool HasAdditionalCopyInfo
         {
             get => (_flags & 0x04) > 0;
             set => _flags = (byte)((_flags & 0xFB) | (value ? 0x04 : 0));
         }
+
         // 1 bit CRCFlag
         private bool HasCRC
         {
             get => (_flags & 0x02) > 0;
             set => _flags = (byte)((_flags & 0xFD) | (value ? 0x02 : 0));
         }
+
         // 1 bit ExtensionFlag
         private bool HasExtension
         {

@@ -47,10 +47,7 @@ namespace MatrixIO.IO.Bmff.Boxes
 
         public byte DefaultSampleDependsOn
         {
-            get
-            {
-                return DefaultSampleFlags.SampleDependsOn;
-            }
+            get => DefaultSampleFlags.SampleDependsOn;
             set
             {
                 DefaultSampleFlags.SampleDependsOn = value;
@@ -59,10 +56,7 @@ namespace MatrixIO.IO.Bmff.Boxes
 
         public byte DefaultSampleIsDependedOn
         {
-            get
-            {
-                return DefaultSampleFlags.SampleIsDependedOn;
-            }
+            get => DefaultSampleFlags.SampleIsDependedOn;
             set
             {
                 DefaultSampleFlags.SampleIsDependedOn = value;
@@ -71,10 +65,7 @@ namespace MatrixIO.IO.Bmff.Boxes
 
         public byte DefaultSampleHasRedundancy
         {
-            get
-            {
-                return DefaultSampleFlags.SampleHasRedundancy;
-            }
+            get => DefaultSampleFlags.SampleHasRedundancy;
             set
             {
                 DefaultSampleFlags.SampleHasRedundancy = value;
@@ -83,22 +74,13 @@ namespace MatrixIO.IO.Bmff.Boxes
 
         public byte DefaultSamplePaddingValue
         {
-            get
-            {
-                return DefaultSampleFlags.SamplePaddingValue;
-            }
-            set
-            {
-                DefaultSampleFlags.SamplePaddingValue = value;
-            }
+            get => DefaultSampleFlags.SamplePaddingValue;
+            set => DefaultSampleFlags.SamplePaddingValue = value;
         }
 
         public bool DefaultSampleIsDifferenceValue
         {
-            get
-            {
-                return DefaultSampleFlags.SampleIsDifferenceValue;
-            }
+            get => DefaultSampleFlags.SampleIsDifferenceValue;
             set
             {
                 DefaultSampleFlags.SampleIsDifferenceValue = value;
@@ -107,10 +89,7 @@ namespace MatrixIO.IO.Bmff.Boxes
 
         public ushort DefaultDegredationPriority
         {
-            get
-            {
-                return DefaultSampleFlags.DegredationPriority;
-            }
+            get => DefaultSampleFlags.DegredationPriority;
             set
             {
                 DefaultSampleFlags.DegredationPriority = value;
@@ -130,10 +109,7 @@ namespace MatrixIO.IO.Bmff.Boxes
 
         public byte SampleDependsOn // 2 bits -- Defined in Independent and Disposable Samples Box
         {
-            get
-            {
-                return (byte)((_flags & 0x3000000) >> 24);
-            }
+            get => (byte)((_flags & 0x3000000) >> 24);
             set
             {
                 if (value > 3) throw new ArgumentOutOfRangeException("SampleDependsOn is a 2 bit field and only accepts values 0 through 4.");
@@ -143,10 +119,7 @@ namespace MatrixIO.IO.Bmff.Boxes
 
         public byte SampleIsDependedOn // 2 bits -- Defined in Independent and Disposable Samples Box
         {
-            get
-            {
-                return (byte)((_flags & 0x00C00000) >> 22);
-            }
+            get => (byte)((_flags & 0x00C00000) >> 22);
             set
             {
                 if (value > 3) throw new ArgumentOutOfRangeException("SampleIsDependedOn is a 2 bit field and only accepts values 0 through 4.");
@@ -156,10 +129,7 @@ namespace MatrixIO.IO.Bmff.Boxes
 
         public byte SampleHasRedundancy // 2 bits -- Defined in Independent and Disposable Samples Box
         {
-            get
-            {
-                return (byte)((_flags & 0x00300000) >> 20);
-            }
+            get => (byte)((_flags & 0x00300000) >> 20);
             set
             {
                 if (value > 3) throw new ArgumentOutOfRangeException("SampleHasRedundancy is a 2 bit field and only accepts values 0 through 4.");
@@ -169,10 +139,7 @@ namespace MatrixIO.IO.Bmff.Boxes
 
         public byte SamplePaddingValue // 3 bits -- Defined in degredation priority table
         {
-            get
-            {
-                return (byte)((_flags & 0x000E0000) >> 17);
-            }
+            get => (byte)((_flags & 0x000E0000) >> 17);
             set
             {
                 if (value > 7) throw new ArgumentOutOfRangeException("SamplePaddingValue is a 3 bit field and only accepts values 0 through 7.");
@@ -182,26 +149,14 @@ namespace MatrixIO.IO.Bmff.Boxes
 
         public bool SampleIsDifferenceValue // 1 bit
         {
-            get
-            {
-                return (_flags & 0x00010000) == 0x00010000;
-            }
-            set
-            {
-                _flags |= 0x00010000;
-            }
+            get => (_flags & 0x00010000) == 0x00010000;
+            set => _flags |= 0x00010000;
         }
 
         public ushort DegredationPriority // 16 bits
         {
-            get
-            {
-                return (ushort)(_flags & 0x0000FFFF);
-            }
-            set
-            {
-                _flags = (_flags & 0xFFFF0000) | value;
-            }
+            get => (ushort)(_flags & 0x0000FFFF);
+            set => _flags = (_flags & 0xFFFF0000) | value;
         }
     }
 }

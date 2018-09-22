@@ -25,8 +25,8 @@ namespace MatrixIO.IO.Bmff.Boxes
             get
             {
                 return from c in Children
-                        where c is TrackFragmentRandomAccessBox
-                        select (TrackFragmentRandomAccessBox)c;
+                       where c is TrackFragmentRandomAccessBox
+                       select (TrackFragmentRandomAccessBox)c;
             }
         }
 
@@ -36,7 +36,7 @@ namespace MatrixIO.IO.Bmff.Boxes
             {
                 return (from c in Children
                         where c is MovieFragmentRandomAccessOffsetBox
-                        select (MovieFragmentRandomAccessOffsetBox) c).LastOrDefault();
+                        select (MovieFragmentRandomAccessOffsetBox)c).LastOrDefault();
             }
         }
     }

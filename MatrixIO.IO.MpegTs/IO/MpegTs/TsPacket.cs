@@ -98,10 +98,10 @@ namespace MatrixIO.IO.MpegTs
         /// </summary>
         public byte ContinuityCounter
         {
-            get { return (byte)(_header2 & 0x0F); }
+            get => (byte)(_header2 & 0x0F);
             set
             {
-                Debug.Assert((int) value < 16, "ContinuityCounter must be in the range of 0 to 15.");
+                Debug.Assert((int)value < 16, "ContinuityCounter must be in the range of 0 to 15.");
                 _header2 = (byte)((_header2 & 0xF0) | (value & 0x0F));
             }
         }

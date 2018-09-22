@@ -28,7 +28,7 @@ namespace MatrixIO.IO.Bmff.Boxes
         {
             base.SaveToStream(stream);
 
-            if(!string.IsNullOrEmpty(Location))
+            if (!string.IsNullOrEmpty(Location))
                 stream.WriteUTF8String(Location);
         }
 

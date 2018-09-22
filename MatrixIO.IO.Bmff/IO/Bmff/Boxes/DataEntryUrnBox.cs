@@ -14,8 +14,8 @@ namespace MatrixIO.IO.Bmff.Boxes
 
         internal override ulong CalculateSize()
         {
-            return base.CalculateSize() + 
-                (string.IsNullOrEmpty(Name) ? 0 : (ulong)Encoding.UTF8.GetByteCount(Name)) + 1 + 
+            return base.CalculateSize() +
+                (string.IsNullOrEmpty(Name) ? 0 : (ulong)Encoding.UTF8.GetByteCount(Name)) + 1 +
                 (string.IsNullOrEmpty(Location) ? 0 : (ulong)Encoding.UTF8.GetByteCount(Location));
         }
 
@@ -32,7 +32,7 @@ namespace MatrixIO.IO.Bmff.Boxes
             base.SaveToStream(stream);
 
             stream.WriteNullTerminatedUTF8String(Name);
-            if(Location.Length > 0)
+            if (Location.Length > 0)
                 stream.WriteUTF8String(Location);
         }
 

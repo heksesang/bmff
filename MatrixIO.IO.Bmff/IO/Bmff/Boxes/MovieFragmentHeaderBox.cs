@@ -6,7 +6,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Movie Fragment Header Box ("mfhd")
     /// </summary>
     [Box("mfhd", "Movie Fragment Header Box")]
-    public class MovieFragmentHeaderBox : FullBox
+    public sealed class MovieFragmentHeaderBox : FullBox
     {
         public MovieFragmentHeaderBox() : base() { }
         public MovieFragmentHeaderBox(Stream stream) : base(stream) { }

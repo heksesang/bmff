@@ -6,7 +6,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Movie Fragment Random Access Offset Box ("mfro")
     /// </summary>
     [Box("mfro", "Movie Fragment Random Access Offset Box")]
-    public class MovieFragmentRandomAccessOffsetBox : FullBox
+    public sealed class MovieFragmentRandomAccessOffsetBox : FullBox
     {
         public MovieFragmentRandomAccessOffsetBox() : base() { }
         public MovieFragmentRandomAccessOffsetBox(Stream stream) : base(stream) { }

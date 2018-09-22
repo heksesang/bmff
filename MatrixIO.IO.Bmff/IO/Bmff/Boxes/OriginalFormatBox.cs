@@ -6,7 +6,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Original Format Box ("frma")
     /// </summary>
     [Box("frma", "Original Format Box")]
-    public class OriginalFormatBox : Box
+    public sealed class OriginalFormatBox : Box
     {
         public OriginalFormatBox() : base() { }
         public OriginalFormatBox(Stream stream) : base(stream) { }

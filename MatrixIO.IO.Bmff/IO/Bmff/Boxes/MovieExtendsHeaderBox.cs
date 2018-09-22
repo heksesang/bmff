@@ -7,7 +7,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Movie Extends Header Box ("mehd")
     /// </summary>
     [Box("mehd", "Movie Extends Header Box")]
-    public class MovieExtendsHeaderBox : FullBox
+    public sealed class MovieExtendsHeaderBox : FullBox
     {
         public MovieExtendsHeaderBox() : base() { }
         public MovieExtendsHeaderBox(Stream stream) : base(stream) { }

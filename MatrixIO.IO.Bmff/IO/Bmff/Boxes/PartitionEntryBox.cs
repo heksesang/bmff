@@ -8,7 +8,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Partition Entry Box ("paen")
     /// </summary>
     [Box("paen", "Partition Entry Box")]
-    public class PartitionEntryBox : Box, ISuperBox
+    public sealed class PartitionEntryBox : Box, ISuperBox
     {
         public PartitionEntryBox() : base() { }
         public PartitionEntryBox(Stream stream) : base(stream) { }

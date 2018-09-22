@@ -6,7 +6,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Sound Media Header Box ("smhd")
     /// </summary>
     [Box("smhd", "Sound Media Header Box")]
-    public class SoundMediaHeaderBox : FullBox
+    public sealed class SoundMediaHeaderBox : FullBox
     {
         public SoundMediaHeaderBox() : base() { }
         public SoundMediaHeaderBox(Stream stream) : base(stream) { }
