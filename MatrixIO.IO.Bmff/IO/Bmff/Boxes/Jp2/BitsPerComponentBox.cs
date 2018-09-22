@@ -46,15 +46,14 @@ namespace MatrixIO.IO.Bmff.Boxes
 
         public int EntryCount => _Entries.Count;
 
-        public class ComponentBitsEntry
+        public readonly struct ComponentBitsEntry
         {
-            public byte ComponentBits { get; set; }
-
-            public ComponentBitsEntry() { }
             public ComponentBitsEntry(byte componentBits)
             {
                 ComponentBits = componentBits;
             }
+
+            public byte ComponentBits { get; }
 
             public static implicit operator byte(ComponentBitsEntry entry)
             {

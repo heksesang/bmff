@@ -25,11 +25,10 @@ namespace MatrixIO.IO.Bmff.Boxes
 
             for (uint i = 0; i < entryCount; i++)
             {
-                Entries.Add(new CompositionOffsetEntry()
-                {
-                    SampleCount = stream.ReadBEUInt32(),
-                    SampleOffset = stream.ReadBEUInt32(),
-                });
+                Entries.Add(new CompositionOffsetEntry(
+                    sampleCount: stream.ReadBEUInt32(),
+                    sampleOffset: stream.ReadBEUInt32()
+                ));
             }
         }
 
@@ -50,17 +49,17 @@ namespace MatrixIO.IO.Bmff.Boxes
 
         public int EntryCount => Entries.Count;
 
-        public class CompositionOffsetEntry
+        public readonly struct CompositionOffsetEntry
         {
-            public uint SampleCount { get; set; }
-            public uint SampleOffset { get; set; }
-
-            public CompositionOffsetEntry() { }
-            public CompositionOffsetEntry(uint sampleCount, uint sampleDelta)
+            public CompositionOffsetEntry(uint sampleCount, uint sampleOffset)
             {
                 SampleCount = sampleCount;
-                SampleOffset = sampleDelta;
+                SampleOffset = sampleOffset;
             }
+
+            public uint SampleCount { get; }
+
+            public uint SampleOffset { get; }
         }
     }
 }

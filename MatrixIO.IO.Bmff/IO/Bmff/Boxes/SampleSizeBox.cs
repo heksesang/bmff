@@ -60,23 +60,17 @@ namespace MatrixIO.IO.Bmff.Boxes
             }
         }
 
-        public uint EntryCount
+        public uint EntryCount => (uint)Entries.Count;
+           
+        public readonly struct SampleSizeEntry
         {
-            get
-            {
-                return (uint)Entries.Count;
-            }
-        }
-
-        public class SampleSizeEntry
-        {
-            public uint EntrySize { get; set; }
-
             public SampleSizeEntry() { }
             public SampleSizeEntry(uint entrySize)
             {
                 EntrySize = entrySize;
             }
+
+            public uint EntrySize { get; }
 
             public static implicit operator uint(SampleSizeEntry entry)
             {

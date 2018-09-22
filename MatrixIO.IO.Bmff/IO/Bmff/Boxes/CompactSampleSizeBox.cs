@@ -8,7 +8,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Compact Sample Size Box ("stz2")
     /// </summary>
     [Box("stz2", "Compact Sample Size Box")]
-    public class CompactSampleSizeBox : FullBox, ITableBox<CompactSampleSizeBox.CompactSampleSizeEntry>
+    public sealed class CompactSampleSizeBox : FullBox, ITableBox<CompactSampleSizeBox.CompactSampleSizeEntry>
     {
         public CompactSampleSizeBox() : base() { }
         public CompactSampleSizeBox(Stream stream) : base(stream) { }
@@ -36,7 +36,7 @@ namespace MatrixIO.IO.Bmff.Boxes
                 {
                     byte twoFieldSizes = stream.ReadOneByte();
                     Entries.Add(new CompactSampleSizeEntry((ushort)(twoFieldSizes & 0xFF00 >> 4)));
-                    if(i < entryCount)
+                    if (i < entryCount)
                         Entries.Add(new CompactSampleSizeEntry((ushort)(twoFieldSizes & 0x00FF)));
                 }
                 else if (FieldSize == 8)
@@ -70,7 +70,7 @@ namespace MatrixIO.IO.Bmff.Boxes
                 {
                     if (FieldSize == 8)
                         stream.WriteByte((byte)compactSampleSizeEntry.EntrySize);
-                    else if (FieldSize == 16) 
+                    else if (FieldSize == 16)
                         stream.WriteBEUInt16(compactSampleSizeEntry.EntrySize);
                 }
             }
@@ -81,12 +81,9 @@ namespace MatrixIO.IO.Bmff.Boxes
         private uint _Reserved;
 
         private byte _FieldSize;
-        public byte FieldSize 
+        public byte FieldSize
         {
-            get
-            {
-                return _FieldSize;
-            }
+            get => _FieldSize;
             set
             {
                 if (_FieldSize != 4 && _FieldSize != 8 && _FieldSize != 16) throw new ArgumentOutOfRangeException("FieldSize must be 4, 8 or 16.");
@@ -96,15 +93,14 @@ namespace MatrixIO.IO.Bmff.Boxes
 
         public int EntryCount => Entries.Count;
 
-        public class CompactSampleSizeEntry
+        public readonly struct CompactSampleSizeEntry
         {
-            public ushort EntrySize { get; set; }
-
-            public CompactSampleSizeEntry() { }
             public CompactSampleSizeEntry(ushort entrySize)
             {
                 EntrySize = entrySize;
             }
+
+            public ushort EntrySize { get; }
 
             public static implicit operator uint(CompactSampleSizeEntry entry)
             {

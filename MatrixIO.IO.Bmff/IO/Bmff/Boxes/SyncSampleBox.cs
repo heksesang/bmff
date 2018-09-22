@@ -45,20 +45,20 @@ namespace MatrixIO.IO.Bmff.Boxes
 
         public int EntryCount => Entries.Count;
 
-        public class SyncSampleEntry
+        public readonly struct SyncSampleEntry
         {
-            public uint SampleNumber { get; set; }
-
-            public SyncSampleEntry() { }
             public SyncSampleEntry(uint sampleNumber)
             {
                 SampleNumber = sampleNumber;
             }
 
+            public uint SampleNumber { get; }
+
             public static implicit operator uint(SyncSampleEntry entry)
             {
                 return entry.SampleNumber;
             }
+
             public static implicit operator SyncSampleEntry(uint sampleDependency)
             {
                 return new SyncSampleEntry(sampleDependency);

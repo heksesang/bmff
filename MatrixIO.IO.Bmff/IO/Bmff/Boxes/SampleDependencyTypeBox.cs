@@ -7,7 +7,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Sample Dependency Type Box ("sdtp")
     /// </summary>
     [Box("sdtp", "Simple Dependency Type Box")]
-    public class SampleDependencyTypeBox : FullBox, ITableBox<SampleDependencyTypeBox.SampleDependencyEntry>
+    public sealed class SampleDependencyTypeBox : FullBox, ITableBox<SampleDependencyTypeBox.SampleDependencyEntry>
     {
         public SampleDependencyTypeBox() : base() { }
         public SampleDependencyTypeBox(Stream stream) : base(stream) { }
@@ -40,15 +40,14 @@ namespace MatrixIO.IO.Bmff.Boxes
 
         public IList<SampleDependencyEntry> Entries { get; } = new List<SampleDependencyEntry>();
 
-        public class SampleDependencyEntry
+        public readonly struct SampleDependencyEntry
         {
-            public byte SampleDependency { get; set; }
-
-            public SampleDependencyEntry() { }
             public SampleDependencyEntry(byte sampleDependency)
             {
                 SampleDependency = sampleDependency;
             }
+
+            public byte SampleDependency { get; }
 
             public static implicit operator byte(SampleDependencyEntry entry)
             {
