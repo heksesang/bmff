@@ -7,12 +7,12 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Movie Header Box ("mvhd")
     /// </summary>
     [Box("mvhd", "Movie Header Box")]
-    public class MovieHeaderBox : FullBox
+    public sealed class MovieHeaderBox : FullBox
     {
         public MovieHeaderBox() : base()
         {
-            _Rate = 0x00010000; // 1.0 normal rate
-            _Volume = 0x0100; // 1.0 full volume
+            _rate = 0x00010000; // 1.0 normal rate
+            _volume = 0x0100; // 1.0 full volume
             Matrix = new int[] { 0x00010000, 0, 0, 0, 0x00010000, 0, 0, 0, 0x40000000 }; // Unity Matrix
         }
         public MovieHeaderBox(Stream stream) : base(stream) { }
@@ -41,8 +41,9 @@ namespace MatrixIO.IO.Bmff.Boxes
                 TimeScale = stream.ReadBEUInt32();
                 Duration = stream.ReadBEUInt32();
             }
-            _Rate = stream.ReadBEInt32();
-            _Volume = stream.ReadBEInt16();
+
+            _rate = stream.ReadBEInt32();
+            _volume = stream.ReadBEInt16();
             Reserved = stream.ReadBytes(2 + (2 * 4));
             for (int i = 0; i < 9; i++) Matrix[i] = stream.ReadBEInt32();
             PreDefined = stream.ReadBytes(6 * 4);
@@ -54,7 +55,10 @@ namespace MatrixIO.IO.Bmff.Boxes
             if (Version == 0 &&
                 (_CreationTime > uint.MaxValue ||
                 _ModificationTime > uint.MaxValue ||
-                Duration > uint.MaxValue)) Version = 1;
+                Duration > uint.MaxValue))
+            {
+                Version = 1;
+            }
 
             base.SaveToStream(stream);
 
@@ -72,8 +76,8 @@ namespace MatrixIO.IO.Bmff.Boxes
                 stream.WriteBEUInt32(TimeScale);
                 stream.WriteBEUInt32(checked((uint)Duration));
             }
-            stream.WriteBEInt32(_Rate);
-            stream.WriteBEInt16(_Volume);
+            stream.WriteBEInt32(_rate);
+            stream.WriteBEInt16(_volume);
             stream.WriteBytes(Reserved);
             for (int i = 0; i < 9; i++) stream.WriteBEInt32(Matrix[i]);
             stream.WriteBytes(PreDefined);
@@ -98,18 +102,18 @@ namespace MatrixIO.IO.Bmff.Boxes
 
         public ulong Duration { get; set; }
 
-        private int _Rate;
+        private int _rate;
         public double Rate
         {
-            get => (double)_Rate / ((int)ushort.MaxValue + 1);
-            set => _Rate = checked((int)Math.Round(value * ((int)short.MaxValue + 1)));
+            get => (double)_rate / ((int)ushort.MaxValue + 1);
+            set => _rate = checked((int)Math.Round(value * ((int)short.MaxValue + 1)));
         }
 
-        private short _Volume;
+        private short _volume;
         public double Volume
         {
-            get => (double)_Volume / ((int)byte.MaxValue + 1);
-            set => _Volume = checked((short)Math.Round(value * ((int)byte.MaxValue + 1)));
+            get => (double)_volume / ((int)byte.MaxValue + 1);
+            set => _volume = checked((short)Math.Round(value * ((int)byte.MaxValue + 1)));
         }
 
         public byte[] Reserved { get; private set; }
@@ -126,6 +130,7 @@ namespace MatrixIO.IO.Bmff.Boxes
         {
             return _1904BaseTime + TimeSpan.FromSeconds(checked((double)secondsSince1904));
         }
+
         internal static ulong Convert1904Time(DateTime time)
         {
             return checked((ulong)Math.Round((time - _1904BaseTime).TotalSeconds));
