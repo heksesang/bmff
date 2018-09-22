@@ -18,14 +18,14 @@ namespace MatrixIO.IO.Bmff.Boxes
             return base.CalculateSize() + 2;
         }
 
-        protected override void LoadFromStream(System.IO.Stream stream)
+        protected override void LoadFromStream(Stream stream)
         {
             base.LoadFromStream(stream);
 
             ProtectionCount = stream.ReadBEUInt16();
         }
 
-        protected override void SaveToStream(System.IO.Stream stream)
+        protected override void SaveToStream(Stream stream)
         {
             base.SaveToStream(stream);
 
