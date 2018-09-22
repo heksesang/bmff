@@ -8,7 +8,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Media Header Box ("mdhd")
     /// </summary>
     [Box("mdhd", "Media Header Box")]
-    public class MediaHeaderBox : FullBox
+    public sealed class MediaHeaderBox : FullBox
     {
         public MediaHeaderBox() : base() { }
         public MediaHeaderBox(Stream stream) : base(stream) { }
@@ -82,7 +82,7 @@ namespace MatrixIO.IO.Bmff.Boxes
         {
             byte[] langBytes = Encoding.UTF8.GetBytes(language);
             if (langBytes.Length != 3) throw new ArgumentOutOfRangeException();
-            return (ushort)((((langBytes[0]-CHARBASE) << 10) & CHARMASK1) | (((langBytes[1]-CHARBASE) << 5) & CHARMASK2) | (((langBytes[2]-CHARBASE) & CHARMASK3)));
+            return (ushort)((((langBytes[0] - CHARBASE) << 10) & CHARMASK1) | (((langBytes[1] - CHARBASE) << 5) & CHARMASK2) | (((langBytes[2] - CHARBASE) & CHARMASK3)));
         }
         internal string ConvertThreeLetterLanguageCode(ushort language)
         {
