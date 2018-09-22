@@ -75,19 +75,19 @@ namespace MatrixIO.IO.Bmff.Boxes
             uint MaxTrafNumber = (from entry in _Entries select entry.TrafNumber).Max();
             if (MaxTrafNumber > 16777215) SizeOfTrafNumber = 4;
             else if (MaxTrafNumber > UInt16.MaxValue) SizeOfTrafNumber = 3;
-            else if (MaxTrafNumber > Byte.MaxValue) SizeOfTrafNumber = 2;
+            else if (MaxTrafNumber > byte.MaxValue) SizeOfTrafNumber = 2;
             else SizeOfTrafNumber = 1;
 
             uint MaxTrunNumber = (from entry in _Entries select entry.TrunNumber).Max();
             if (MaxTrunNumber > 16777215) SizeOfTrunNumber = 4;
             else if (MaxTrunNumber > UInt16.MaxValue) SizeOfTrunNumber = 3;
-            else if (MaxTrunNumber > Byte.MaxValue) SizeOfTrunNumber = 2;
+            else if (MaxTrunNumber > byte.MaxValue) SizeOfTrunNumber = 2;
             else SizeOfTrunNumber = 1;
 
             uint MaxSampleNumber = (from entry in _Entries select entry.SampleNumber).Max();
             if (MaxSampleNumber > 16777215) SizeOfSampleNumber = 4;
             else if (MaxSampleNumber > UInt16.MaxValue) SizeOfSampleNumber = 3;
-            else if (MaxSampleNumber > Byte.MaxValue) SizeOfSampleNumber = 2;
+            else if (MaxSampleNumber > byte.MaxValue) SizeOfSampleNumber = 2;
             else SizeOfSampleNumber = 1;
 
             base.SaveToStream(stream);
@@ -133,10 +133,7 @@ namespace MatrixIO.IO.Bmff.Boxes
         private byte _SizeOf;
         public sbyte SizeOfTrafNumber
         {
-            get
-            {
-                return (sbyte)(((_SizeOf & 0x30) >> 4) + 1);
-            }
+            get => (sbyte)(((_SizeOf & 0x30) >> 4) + 1);
             private set
             {
                 if (value < 1 || value > 4) throw new OverflowException("SizeOfTrafNumber must be a value between 1 and 4.");
@@ -145,10 +142,7 @@ namespace MatrixIO.IO.Bmff.Boxes
         }
         public sbyte SizeOfTrunNumber
         {
-            get
-            {
-                return (sbyte)(((_SizeOf & 0x30) >> 4) + 1);
-            }
+            get => (sbyte)(((_SizeOf & 0x30) >> 4) + 1);
             private set
             {
                 if (value < 1 || value > 4) throw new OverflowException("SizeOfTrunNumber must be a value between 1 and 4.");
@@ -157,10 +151,7 @@ namespace MatrixIO.IO.Bmff.Boxes
         }
         public sbyte SizeOfSampleNumber
         {
-            get
-            {
-                return (sbyte)(((_SizeOf & 0x30) >> 4) + 1);
-            }
+            get => (sbyte)(((_SizeOf & 0x30) >> 4) + 1);
             private set
             {
                 if (value < 1 || value > 4) throw new OverflowException("SizeOfSampleNumber must be a value between 1 and 4.");
@@ -180,12 +171,6 @@ namespace MatrixIO.IO.Bmff.Boxes
         }
 
         private IList<TrackFragmentEntry> _Entries = new List<TrackFragmentEntry>();
-        public IList<TrackFragmentEntry> Entries
-        {
-            get
-            {
-                return _Entries;
-            }
-        }
+        public IList<TrackFragmentEntry> Entries => _Entries;
     }
 }
