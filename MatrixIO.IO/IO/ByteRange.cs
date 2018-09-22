@@ -2,7 +2,7 @@
 
 namespace MatrixIO.IO
 {
-    public readonly struct ByteRange
+    public readonly struct ByteRange : IEquatable<ByteRange>
     {
         public ByteRange(long start, long end)
         {
@@ -88,9 +88,15 @@ namespace MatrixIO.IO
             else if (a < b) return true;
             else return false;
         }
+
+        public bool Equals(ByteRange other)
+        {
+            return Start == other.Start && End == other.End;
+        }
+
         public override bool Equals(object obj)
         {
-            return base.Equals(obj) && ((ByteRange)obj).Start == Start && ((ByteRange)obj).End == End;
+            return obj is ByteRange other && Equals(other);
         }
 
         private const long TOP_MASK = unchecked((long)0xFFFFFFFF00000000);
