@@ -151,95 +151,100 @@ namespace MatrixIO.IO.MpegTs
         private byte _header;
         private byte _flags;
 
-        public int Length
-        {
-            get { return 3 + RemainingLength; }
-        }
+        public int Length => 3 + RemainingLength;
 
         // 2 bit Marker = 0x02
         // 2 bit ScramblingControl : binary 00 = not scrambled
         public int ScramblingControl
         {
-            get { return (_header & 0x30) >> 4; }
-            set 
-            { 
+            get => (_header & 0x30) >> 4;
+            set
+            {
                 if (value > 4) throw new ArgumentException("ScramblingControl must be a value between 0 and 3.");
-                _header = (byte) ((_header & 0xCF) | (value << 4));
+                _header = (byte)((_header & 0xCF) | (value << 4));
             }
         }
+
         // 1 bit Priority
         public bool Priority
         {
-            get { return (_header & 0x08) > 0; }
-            set { _header = (byte)((_header & 0xF7) | (value ? 0x08 : 0)); }
+            get => (_header & 0x08) > 0;
+            set => _header = (byte)((_header & 0xF7) | (value ? 0x08 : 0));
         }
+
         // 1 bit DataAlignmentIndicator : 1 indicates packet header is immediately followed by video start code or audio sync word
         public bool DataAlignmentIndicator
         {
-            get { return (_header & 0x04) > 0; }
-            set { _header = (byte)((_header & 0xFB) | (value ? 0x04 : 0)); }
+            get => (_header & 0x04) > 0;
+            set => _header = (byte)((_header & 0xFB) | (value ? 0x04 : 0));
         }
+
         // 1 bit IsCopyrighted
         public bool IsCopyrighted
         {
-            get { return (_header & 0x02) > 0; }
-            set { _header = (byte)((_header & 0xFD) | (value ? 0x02 : 0)); }
+            get => (_header & 0x02) > 0;
+            set => _header = (byte)((_header & 0xFD) | (value ? 0x02 : 0));
         }
+
         // 1 bit IsOriginal
         public bool IsOriginal
         {
-            get { return (_header & 0x01) > 0; }
-            set { _header = (byte)((_header & 0xFE) | (value ? 0x01 : 0)); }
+            get => (_header & 0x01) > 0;
+            set => _header = (byte)((_header & 0xFE) | (value ? 0x01 : 0));
         }
 
 
         // 1 bit HasPTS
         private bool HasPTS
         {
-            get { return (_flags & 0x80) > 0; }
-            set { _flags = (byte)((_flags & 0x7F) | (value ? 0x80 : 0)); }
+            get => (_flags & 0x80) > 0;
+            set => _flags = (byte)((_flags & 0x7F) | (value ? 0x80 : 0));
         }
+
         // 1 bit HasDTS
         private bool HasDTS
         {
-            get { return (_flags & 0x40) > 0; }
-            set { _flags = (byte)((_flags & 0xBF) | (value ? 0x40 : 0)); }
+            get => (_flags & 0x40) > 0;
+            set => _flags = (byte)((_flags & 0xBF) | (value ? 0x40 : 0));
         }
+
         // 1 bit ESCRFlag
         private bool HasESCR
         {
-            get { return (_flags & 0x20) > 0; }
-            set { _flags = (byte)((_flags & 0xDF) | (value ? 0x20 : 0)); }
+            get => (_flags & 0x20) > 0;
+            set => _flags = (byte)((_flags & 0xDF) | (value ? 0x20 : 0));
         }
+
         // 1 bit ESRateFlag
         private bool HasESRate
         {
-            get { return (_flags & 0x10) > 0; }
-            set { _flags = (byte)((_flags & 0xEF) | (value ? 0x10 : 0)); }
+            get => (_flags & 0x10) > 0;
+            set => _flags = (byte)((_flags & 0xEF) | (value ? 0x10 : 0));
         }
+
         // 1 bit DSMTrickModeFlag
         private bool HasDSMTrickMode
         {
-            get { return (_flags & 0x08) > 0; }
-            set { _flags = (byte)((_flags & 0xF7) | (value ? 0x08 : 0)); }
+            get => (_flags & 0x08) > 0;
+            set => _flags = (byte)((_flags & 0xF7) | (value ? 0x08 : 0));
         }
         // 1 bit AdditionalCopyInfoFlag
         private bool HasAdditionalCopyInfo
         {
-            get { return (_flags & 0x04) > 0; }
-            set { _flags = (byte)((_flags & 0xFB) | (value ? 0x04 : 0)); }
+            get => (_flags & 0x04) > 0;
+            set => _flags = (byte)((_flags & 0xFB) | (value ? 0x04 : 0));
         }
         // 1 bit CRCFlag
         private bool HasCRC
         {
-            get { return (_flags & 0x02) > 0; }
-            set { _flags = (byte)((_flags & 0xFD) | (value ? 0x02 : 0)); }
+            get => (_flags & 0x02) > 0;
+            set => _flags = (byte)((_flags & 0xFD) | (value ? 0x02 : 0));
         }
         // 1 bit ExtensionFlag
         private bool HasExtension
         {
-            get { return (_flags & 0x01) > 0; }
-            set { _flags = (byte)((_flags & 0xFE) | (value ? 0x01 : 0)); }
+            get => (_flags & 0x01) > 0;
+            set => _flags = (byte)((_flags & 0xFE) | (value ? 0x01 : 0));
         }
 
         // TODO: This should actually be calculated for serialization
