@@ -101,21 +101,15 @@ namespace MatrixIO.IO.Bmff.Boxes
 
         private new TrackRunFlags Flags
         {
-            get
-            {
-                return (TrackRunFlags)_Flags;
-            }
-            set
-            {
-                _Flags = (uint)value;
-            }
+            get => (TrackRunFlags)_Flags;
+            set => _Flags = (uint)value;
         }
 
         public int? DataOffset { get; set; }
         public SampleFlags FirstSampleFlags { get; set; }
 
         private IList<TrackRunEntry> _Entries = new List<TrackRunEntry>();
-        public IList<TrackRunEntry> Entries { get { return _Entries; } }
+        public IList<TrackRunEntry> Entries => _Entries;
 
         [FlagsAttribute]
         public enum TrackRunFlags : uint

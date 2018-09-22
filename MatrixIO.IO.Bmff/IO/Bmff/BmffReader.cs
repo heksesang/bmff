@@ -26,21 +26,9 @@ namespace MatrixIO.IO.Bmff
         #region Navigation
         private readonly Stack<Box> _boxStack = new Stack<Box>();
 
-        public int Depth
-        {
-            get
-            {
-                return _boxStack.Count;
-            }
-        }
+        public int Depth => _boxStack.Count;
 
-        public Box CurrentBox
-        {
-            get
-            {
-                return _boxStack.Peek();
-            }
-        }
+        public Box CurrentBox => _boxStack.Peek();
 
         public bool HasChildren
         {

@@ -7,14 +7,7 @@ namespace MatrixIO.IO
     {
         private static PortabilityFactory _current;
 
-        public static PortabilityFactory Current
-        {
-            get
-            {
-                if (_current == null) throw new InvalidOperationException();
-                return _current;
-            }
-        }
+        public static PortabilityFactory Current => _current ?? throw new InvalidOperationException();
 
         protected PortabilityFactory()
         {
@@ -34,16 +27,10 @@ namespace MatrixIO.IO
         }
 
         private int _traceIndentLevel = 0;
-        public virtual int TraceIndentLevel 
+        public virtual int TraceIndentLevel
         {
-            get
-            {
-                return _traceIndentLevel;
-            }
-            set
-            {
-                _traceIndentLevel = value;
-            }
+            get => _traceIndentLevel;
+            set => _traceIndentLevel = value;
         }
     }
 }

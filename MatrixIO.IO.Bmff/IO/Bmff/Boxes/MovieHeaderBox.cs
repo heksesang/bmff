@@ -9,7 +9,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     [Box("mvhd", "Movie Header Box")]
     public class MovieHeaderBox : FullBox
     {
-        public MovieHeaderBox() : base() 
+        public MovieHeaderBox() : base()
         {
             _Rate = 0x00010000; // 1.0 normal rate
             _Volume = 0x0100; // 1.0 full volume
@@ -19,7 +19,7 @@ namespace MatrixIO.IO.Bmff.Boxes
 
         internal override ulong CalculateSize()
         {
-            return base.CalculateSize() + 
+            return base.CalculateSize() +
                 (ulong)(Version == 1 ? 8 + 8 + 4 + 8 : 4 + 4 + 4 + 4) + 4 + 2 + 2 + (2 * 4) + (9 * 4) + (6 * 4) + 4;
         }
 
@@ -51,9 +51,9 @@ namespace MatrixIO.IO.Bmff.Boxes
 
         protected override void SaveToStream(Stream stream)
         {
-            if (Version==0 && 
-                (_CreationTime > uint.MaxValue || 
-                _ModificationTime > uint.MaxValue || 
+            if (Version == 0 &&
+                (_CreationTime > uint.MaxValue ||
+                _ModificationTime > uint.MaxValue ||
                 Duration > uint.MaxValue)) Version = 1;
 
             base.SaveToStream(stream);
@@ -83,27 +83,15 @@ namespace MatrixIO.IO.Bmff.Boxes
         private ulong _CreationTime;
         public DateTime CreationTime
         {
-            get
-            {
-                return Convert1904Time(_CreationTime);
-            }
-            set
-            {
-                _CreationTime = Convert1904Time(value);
-            }
+            get => Convert1904Time(_CreationTime);
+            set => _CreationTime = Convert1904Time(value);
         }
 
         private ulong _ModificationTime;
         public DateTime ModificationTime
         {
-            get
-            {
-                return Convert1904Time(_ModificationTime);
-            }
-            set
-            {
-                _ModificationTime = Convert1904Time(value);
-            }
+            get => Convert1904Time(_ModificationTime);
+            set => _ModificationTime = Convert1904Time(value);
         }
 
         public uint TimeScale { get; set; }
@@ -113,27 +101,15 @@ namespace MatrixIO.IO.Bmff.Boxes
         private int _Rate;
         public double Rate
         {
-            get
-            {
-                return (double)_Rate / ((int)ushort.MaxValue + 1);
-            }
-            set
-            {
-                _Rate = checked((int)Math.Round(value * ((int)short.MaxValue + 1)));
-            }
+            get => (double)_Rate / ((int)ushort.MaxValue + 1);
+            set => _Rate = checked((int)Math.Round(value * ((int)short.MaxValue + 1)));
         }
 
         private short _Volume;
         public double Volume
         {
-            get
-            {
-                return (double)_Volume / ((int)byte.MaxValue + 1);
-            }
-            set
-            {
-                _Volume = checked((short)Math.Round(value * ((int)byte.MaxValue + 1)));
-            }
+            get => (double)_Volume / ((int)byte.MaxValue + 1);
+            set => _Volume = checked((short)Math.Round(value * ((int)byte.MaxValue + 1)));
         }
 
         public byte[] Reserved { get; private set; }

@@ -12,13 +12,7 @@ namespace MatrixIO.IO
         private Stack<ByteRange> _ConstraintStack = new Stack<ByteRange>();
 
         private ByteRange _CurrentConstraint = ByteRange.MaxValue;
-        public ByteRange CurrentConstraint
-        {
-            get
-            {
-                return _CurrentConstraint;
-            }
-        }
+        public ByteRange CurrentConstraint => _CurrentConstraint;
 
         public ConstrainedStream(Stream baseStream)
         {
@@ -68,33 +62,18 @@ namespace MatrixIO.IO
             }
         }
 
-        public override bool CanRead
-        {
-            get { return _BaseStream.CanRead; }
-        }
+        public override bool CanRead => _BaseStream.CanRead;
 
-        public override bool CanSeek
-        {
-            get { return _BaseStream.CanSeek; }
-        }
+        public override bool CanSeek => _BaseStream.CanSeek;
 
-        public override bool CanWrite
-        {
-            get { return _BaseStream.CanWrite; }
-        }
+        public override bool CanWrite => _BaseStream.CanWrite;
 
         public override void Flush()
         {
             _BaseStream.Flush();
         }
 
-        public override long Length
-        {
-            get 
-            { 
-                return Math.Min(_BaseStream.Length, _CurrentConstraint.End); 
-            }
-        }
+        public override long Length => Math.Min(_BaseStream.Length, _CurrentConstraint.End);
 
         public long _Count;
         public override long Position

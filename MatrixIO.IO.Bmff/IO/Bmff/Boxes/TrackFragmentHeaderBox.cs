@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 
 namespace MatrixIO.IO.Bmff.Boxes
@@ -74,14 +71,8 @@ namespace MatrixIO.IO.Bmff.Boxes
 
         private new TrackFragmentFlags Flags
         {
-            get
-            {
-                return (TrackFragmentFlags)_Flags;
-            }
-            set
-            {
-                _Flags = (uint)value;
-            }
+            get => (TrackFragmentFlags)_Flags;
+            set => _Flags = (uint)value;
         }
 
         public uint TrackID { get; set; }
@@ -92,7 +83,7 @@ namespace MatrixIO.IO.Bmff.Boxes
         public SampleFlags DefaultSampleFlags { get; set; }
         bool DurationIsEmpty { get; set; }
 
-        [FlagsAttribute]
+        [Flags]
         public enum TrackFragmentFlags : int
         {
             BaseDataOffsetPresent = 0x000001,
@@ -102,6 +93,5 @@ namespace MatrixIO.IO.Bmff.Boxes
             DefaultSampleFlagsPresent = 0x000020,
             DurationIsEmpty = 0x010000,
         }
-
     }
 }

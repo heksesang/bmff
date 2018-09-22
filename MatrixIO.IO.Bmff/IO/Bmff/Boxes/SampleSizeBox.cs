@@ -64,7 +64,6 @@ namespace MatrixIO.IO.Bmff.Boxes
            
         public readonly struct SampleSizeEntry
         {
-            public SampleSizeEntry() { }
             public SampleSizeEntry(uint entrySize)
             {
                 EntrySize = entrySize;
