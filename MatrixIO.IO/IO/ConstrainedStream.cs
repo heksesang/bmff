@@ -7,7 +7,7 @@ namespace MatrixIO.IO
 {
     public class ConstrainedStream : Stream
     {
-        private Stream _BaseStream;
+        private Stream _baseStream;
 
         private Stack<ByteRange> _ConstraintStack = new Stack<ByteRange>();
 
@@ -16,7 +16,7 @@ namespace MatrixIO.IO
 
         public ConstrainedStream(Stream baseStream)
         {
-            _BaseStream = baseStream;
+            _baseStream = baseStream;
         }
 
         public static ConstrainedStream WrapStream(Stream baseStream)
@@ -26,7 +26,7 @@ namespace MatrixIO.IO
         }
         public static Stream UnwrapStream(Stream stream)
         {
-            if (stream is ConstrainedStream) return ((ConstrainedStream)stream)._BaseStream;
+            if (stream is ConstrainedStream) return ((ConstrainedStream)stream)._baseStream;
             else return stream;
         }
 
@@ -62,30 +62,30 @@ namespace MatrixIO.IO
             }
         }
 
-        public override bool CanRead => _BaseStream.CanRead;
+        public override bool CanRead => _baseStream.CanRead;
 
-        public override bool CanSeek => _BaseStream.CanSeek;
+        public override bool CanSeek => _baseStream.CanSeek;
 
-        public override bool CanWrite => _BaseStream.CanWrite;
+        public override bool CanWrite => _baseStream.CanWrite;
 
         public override void Flush()
         {
-            _BaseStream.Flush();
+            _baseStream.Flush();
         }
 
-        public override long Length => Math.Min(_BaseStream.Length, _CurrentConstraint.End);
+        public override long Length => Math.Min(_baseStream.Length, _CurrentConstraint.End);
 
         public long _Count;
         public override long Position
         {
             get
             {
-                if (CanSeek) return _BaseStream.Position;
+                if (CanSeek) return _baseStream.Position;
                 else return _Count;
             }
             set
             {
-                _BaseStream.Position = value;
+                _baseStream.Position = value;
             }
         }
 
@@ -99,7 +99,7 @@ namespace MatrixIO.IO
                 if (availableCount > 0)
                 {
                     Trace.WriteLine("Returning partial result.", "WARNING");
-                    int actualCount = _BaseStream.Read(buffer, offset, availableCount);
+                    int actualCount = _baseStream.Read(buffer, offset, availableCount);
                     if (!CanSeek) _Count += actualCount;
                     return actualCount;
                 }
@@ -107,7 +107,7 @@ namespace MatrixIO.IO
             }
             else
             {
-                int actualCount = _BaseStream.Read(buffer, offset, count);
+                int actualCount = _baseStream.Read(buffer, offset, count);
                 if (!CanSeek) _Count += actualCount;
                 return actualCount;
             }
@@ -120,19 +120,19 @@ namespace MatrixIO.IO
                (origin == SeekOrigin.End && !_CurrentConstraint.Contains(Length - 1 - Math.Abs(offset)))) 
                throw new EndOfStreamException("Attempt to seek beyond constrained region.");
 
-            return _BaseStream.Seek(offset, origin);
+            return _baseStream.Seek(offset, origin);
         }
 
         public override void SetLength(long value)
         {
-            _BaseStream.SetLength(value);
+            _baseStream.SetLength(value);
         }
 
         public override void Write(byte[] buffer, int offset, int count)
         {
             if (Position + count > _CurrentConstraint.End) throw new IOException("Attempt to write past end of constrained region.");
             if (!CanSeek) _Count += count;
-            _BaseStream.Write(buffer, offset, count);
+            _baseStream.Write(buffer, offset, count);
         }
     }
 }

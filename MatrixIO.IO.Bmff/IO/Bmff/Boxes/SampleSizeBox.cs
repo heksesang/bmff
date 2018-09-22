@@ -22,11 +22,11 @@ namespace MatrixIO.IO.Bmff.Boxes
             base.LoadFromStream(stream);
 
             SampleSize = stream.ReadBEUInt32();
-            _SampleCount = stream.ReadBEUInt32();
+            _sampleCount = stream.ReadBEUInt32();
 
             if (SampleSize == 0)
             {
-                for (uint i = 0; i < _SampleCount; i++)
+                for (uint i = 0; i < _sampleCount; i++)
                 {
                     Entries.Add(new SampleSizeEntry(stream.ReadBEUInt32()));
                 }
@@ -50,13 +50,13 @@ namespace MatrixIO.IO.Bmff.Boxes
 
 
         public uint SampleSize { get; set; }
-        private uint _SampleCount;
+        private uint _sampleCount;
         public uint SampleCount
         {
             get
             {
                 if (SampleSize == 0) return (uint)Entries.Count;
-                return _SampleCount;
+                return _sampleCount;
             }
         }
 
