@@ -8,8 +8,52 @@ namespace MatrixIO.IO.Bmff.Boxes
     [Box("ihdr", "Image Header Box")]
     public sealed class ImageHeaderBox : Box
     {
-        public ImageHeaderBox() : base() { }
-        public ImageHeaderBox(Stream stream) : base(stream) { }
+        private uint _height;
+        private uint _width;
+        private ushort _numberOfComponents;
+        private byte _isUnknownColorSpace;
+        private byte _isIntellectualProperty;
+
+        public ImageHeaderBox()
+            : base() { }
+
+        public ImageHeaderBox(Stream stream)
+            : base(stream) { }
+
+        public long Height
+        {
+            get => _height;
+            set => _height = checked((uint)value);
+        }
+
+        public long Width
+        {
+            get => _width;
+            set => _width = checked((uint)value);
+        }
+
+        public int NumberOfComponents
+        {
+            get => _numberOfComponents;
+            set => _numberOfComponents = checked((ushort)value);
+        }
+
+        public byte BitsPerComponent { get; set; }
+
+        // Note: default value defined in 15444-1 Annex I
+        public byte CompressionType { get; set; } = 7;
+
+        public bool IsUnknownColorspace
+        {
+            get => _isUnknownColorSpace > 0;
+            set => _isUnknownColorSpace = value ? (byte)0x01 : (byte)0x00;
+        }
+
+        public bool IsIntellectualProperty
+        {
+            get => _isIntellectualProperty > 0;
+            set => _isIntellectualProperty = value ? (byte)0x01 : (byte)0x00;
+        }
 
         internal override ulong CalculateSize()
         {
@@ -40,46 +84,6 @@ namespace MatrixIO.IO.Bmff.Boxes
             stream.WriteOneByte(CompressionType);
             stream.WriteOneByte(_isUnknownColorSpace);
             stream.WriteOneByte(_isIntellectualProperty);
-        }
-
-        private uint _height;
-        public long Height
-        {
-            get => _height;
-            set => _height = checked((uint)value);
-        }
-
-        private uint _width;
-        public long Width
-        {
-            get => _width;
-            set => _width = checked((uint)value);
-        }
-
-        private ushort _numberOfComponents;
-        public int NumberOfComponents
-        {
-            get => _numberOfComponents; set => 
-                _numberOfComponents = checked((ushort)value);
-        }
-
-        public byte BitsPerComponent { get; set; }
-
-        // Note: default value defined in 15444-1 Annex I
-        public byte CompressionType { get; set; } = 7;
-
-        private byte _isUnknownColorSpace;
-        public bool IsUnknownColorspace
-        {
-            get => _isUnknownColorSpace > 0;
-            set => _isUnknownColorSpace = value ? (byte)0x01 : (byte)0x00;
-        }
-
-        private byte _isIntellectualProperty;
-        public bool IsIntellectualProperty
-        {
-            get => _isIntellectualProperty > 0;
-            set => _isIntellectualProperty = value ? (byte)0x01 : (byte)0x00;
         }
     }
 }
