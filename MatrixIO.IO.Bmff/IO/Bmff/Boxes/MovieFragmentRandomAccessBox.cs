@@ -22,22 +22,12 @@ namespace MatrixIO.IO.Bmff.Boxes
 
         public IEnumerable<TrackFragmentRandomAccessBox> TrackFragmentRandomAccessBoxes
         {
-            get
-            {
-                return from c in Children
-                       where c is TrackFragmentRandomAccessBox
-                       select (TrackFragmentRandomAccessBox)c;
-            }
+            get => Children.OfType<TrackFragmentRandomAccessBox>();
         }
 
         public MovieFragmentRandomAccessOffsetBox MovieFragmentRandomAccessOffsetBox
         {
-            get
-            {
-                return (from c in Children
-                        where c is MovieFragmentRandomAccessOffsetBox
-                        select (MovieFragmentRandomAccessOffsetBox)c).LastOrDefault();
-            }
+            get => Children.OfType<MovieFragmentRandomAccessOffsetBox>().LastOrDefault();
         }
     }
 }

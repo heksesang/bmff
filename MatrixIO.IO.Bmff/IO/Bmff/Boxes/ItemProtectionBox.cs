@@ -43,12 +43,7 @@ namespace MatrixIO.IO.Bmff.Boxes
         /*
         public IEnumerable<ProtectionSchemeInfoBox> ProtectionInformation
         {
-            get
-            {
-                return from c in Children
-                       where c is ProtectionSchemeInfoBox
-                       select (ProtectionSchemeInfoBox)c;
-            }
+            get => Children.OfType<ProtectionSchemeInfoBox>();
         }
         */
     }

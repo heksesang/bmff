@@ -30,9 +30,7 @@ namespace MatrixIO.IO.Bmff.Boxes
         {
             base.SaveToStream(stream);
 
-            EntryCount = (ushort)(from c in Children
-                                  where c is PartitionEntryBox
-                                  select c).Count();
+            EntryCount = (ushort)Children.OfType<PartitionEntryBox>().Count();
 
             stream.WriteBEUInt16(EntryCount);
         }
@@ -47,33 +45,18 @@ namespace MatrixIO.IO.Bmff.Boxes
 
         public IEnumerable<PartitionEntryBox> PartitionEntries
         {
-            get
-            {
-                return from c in Children
-                       where c is PartitionEntryBox
-                       select (PartitionEntryBox)c;
-            }
+            get => Children.OfType<PartitionEntryBox>();
         }
 
         /*
         public FileDeliveySessionGroupBox SessionInfo
         {
-            get
-            {
-                return (from c in Children
-                        where c is FDSessionGroupBox
-                        select (FDSessionGroupBox)c).FirstOrDefault();
-            }
+            get => Children.OfType<FDSessionGroupBox>().FirstOrDefault();
         }
 
         public GroupIdToNameBox GroupIdToName
         {
-            get
-            {
-                return (from c in Children
-                        where c is GroupIdToNameBox
-                        select (GroupIdToNameBox)c).FirstOrDefault();
-            }
+            get => Children.OfType<GroupIdToNameBox>().FirstOrDefault();
         }
         */
     }

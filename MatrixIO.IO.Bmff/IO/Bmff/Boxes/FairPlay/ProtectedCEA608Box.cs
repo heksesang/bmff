@@ -15,12 +15,7 @@ namespace MatrixIO.IO.Bmff.Boxes.FairPlay
 
         public ProtectionSchemeInfoBox ProtectionSchemeInfo
         {
-            get
-            {
-                return (from c in Children
-                        where c is ProtectionSchemeInfoBox
-                        select (ProtectionSchemeInfoBox)c).FirstOrDefault();
-            }
+            get => Children.OfType<ProtectionSchemeInfoBox>().FirstOrDefault();
         }
     }
 }
