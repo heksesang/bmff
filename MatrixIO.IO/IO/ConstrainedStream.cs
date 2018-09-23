@@ -5,14 +5,14 @@ using System.IO;
 
 namespace MatrixIO.IO
 {
-    public class ConstrainedStream : Stream
+    public sealed class ConstrainedStream : Stream
     {
         private Stream _baseStream;
+        private ByteRange _currentConstraint = ByteRange.MaxValue;
 
         private Stack<ByteRange> _ConstraintStack = new Stack<ByteRange>();
 
-        private ByteRange _CurrentConstraint = ByteRange.MaxValue;
-        public ByteRange CurrentConstraint => _CurrentConstraint;
+        public ByteRange CurrentConstraint => _currentConstraint;
 
         public ConstrainedStream(Stream baseStream)
         {
@@ -21,44 +21,52 @@ namespace MatrixIO.IO
 
         public static ConstrainedStream WrapStream(Stream baseStream)
         {
-            if (baseStream is ConstrainedStream) return (ConstrainedStream)baseStream;
-            else return new ConstrainedStream(baseStream);
+            return baseStream is ConstrainedStream constrainedStream
+                ? constrainedStream
+                : new ConstrainedStream(baseStream);
         }
+
         public static Stream UnwrapStream(Stream stream)
         {
-            if (stream is ConstrainedStream) return ((ConstrainedStream)stream)._baseStream;
-            else return stream;
+            return stream is ConstrainedStream constrainedStream
+                ? constrainedStream._baseStream
+                : stream;
         }
 
         public void PushConstraint(long length)
         {
             PushConstraint(Position, length);
         }
+
         public void PushConstraint(long offset, long length)
         {
-
-            if (offset < _CurrentConstraint.Start)
+            if (offset < _currentConstraint.Start)
             {
-                Trace.WriteLine(string.Format("Attempted to set a new constraint ({0},{1}) offset outside the bounds of the existing constraint({2},{3}).", offset, length, _CurrentConstraint.Start, _CurrentConstraint.Length), "WARNING");
-                offset = _CurrentConstraint.Start;
-            }
-            if (offset + length > _CurrentConstraint.End)
-            {
-                Trace.WriteLine(string.Format("Attempted to set a new constraint ({0},{1}) length outside the bounds of the existing constraint({2},{3}).", offset, length, _CurrentConstraint.Start, _CurrentConstraint.Length), "WARNING");
-                length = _CurrentConstraint.End - offset;
+                Trace.WriteLine($"Attempted to set a new constraint ({offset},{length}) offset outside the bounds of the existing constraint({_currentConstraint.Start},{_currentConstraint.Length}).", "WARNING");
+                offset = _currentConstraint.Start;
             }
 
-            if (_CurrentConstraint != null) _ConstraintStack.Push(_CurrentConstraint);
-            _CurrentConstraint = new ByteRange(offset, offset + length);
+            if (offset + length > _currentConstraint.End)
+            {
+                Trace.WriteLine($"Attempted to set a new constraint ({offset},{length}) length outside the bounds of the existing constraint({_currentConstraint.Start},{_currentConstraint.Length}).", "WARNING");
+                length = _currentConstraint.End - offset;
+            }
+
+            if (_currentConstraint != null)
+            {
+                _ConstraintStack.Push(_currentConstraint);
+            }
+
+            _currentConstraint = new ByteRange(offset, offset + length);
         }
 
         public void PopConstraint()
         {
-            if (_ConstraintStack.Count > 0) _CurrentConstraint = _ConstraintStack.Pop();
+            if (_ConstraintStack.Count > 0) _currentConstraint = _ConstraintStack.Pop();
             else
             {
                 Trace.WriteLine("Attempted to pop constraint too many times.", "WARNING");
-                _CurrentConstraint = ByteRange.MaxValue;
+                _currentConstraint = ByteRange.MaxValue;
             }
         }
 
@@ -73,34 +81,27 @@ namespace MatrixIO.IO
             _baseStream.Flush();
         }
 
-        public override long Length => Math.Min(_baseStream.Length, _CurrentConstraint.End);
+        public override long Length => Math.Min(_baseStream.Length, _currentConstraint.End);
 
-        public long _Count;
+        public long _count;
         public override long Position
         {
-            get
-            {
-                if (CanSeek) return _baseStream.Position;
-                else return _Count;
-            }
-            set
-            {
-                _baseStream.Position = value;
-            }
+            get => CanSeek ? _baseStream.Position : _count;
+            set => _baseStream.Position = value;
         }
 
         public override int Read(byte[] buffer, int offset, int count)
         {
             long position = Position;
-            if (position + count > _CurrentConstraint.End)
+            if (position + count > _currentConstraint.End)
             {
-                int availableCount = checked((int)(_CurrentConstraint.End - position));
+                int availableCount = checked((int)(_currentConstraint.End - position));
                 Trace.WriteLine(string.Format("Attempt to read {0} bytes past end of constrained region.", count - availableCount), "WARNING");
                 if (availableCount > 0)
                 {
                     Trace.WriteLine("Returning partial result.", "WARNING");
                     int actualCount = _baseStream.Read(buffer, offset, availableCount);
-                    if (!CanSeek) _Count += actualCount;
+                    if (!CanSeek) _count += actualCount;
                     return actualCount;
                 }
                 else return 0;
@@ -108,17 +109,19 @@ namespace MatrixIO.IO
             else
             {
                 int actualCount = _baseStream.Read(buffer, offset, count);
-                if (!CanSeek) _Count += actualCount;
+                if (!CanSeek) _count += actualCount;
                 return actualCount;
             }
         }
 
         public override long Seek(long offset, SeekOrigin origin)
         {
-           if ((origin == SeekOrigin.Begin && !_CurrentConstraint.Contains(offset)) ||
-               (origin == SeekOrigin.Current && !_CurrentConstraint.Contains(Position + offset)) ||
-               (origin == SeekOrigin.End && !_CurrentConstraint.Contains(Length - 1 - Math.Abs(offset)))) 
-               throw new EndOfStreamException("Attempt to seek beyond constrained region.");
+            if ((origin == SeekOrigin.Begin && !_currentConstraint.Contains(offset)) ||
+                (origin == SeekOrigin.Current && !_currentConstraint.Contains(Position + offset)) ||
+                (origin == SeekOrigin.End && !_currentConstraint.Contains(Length - 1 - Math.Abs(offset))))
+            {
+                throw new EndOfStreamException("Attempt to seek beyond constrained region.");
+            }
 
             return _baseStream.Seek(offset, origin);
         }
@@ -130,8 +133,16 @@ namespace MatrixIO.IO
 
         public override void Write(byte[] buffer, int offset, int count)
         {
-            if (Position + count > _CurrentConstraint.End) throw new IOException("Attempt to write past end of constrained region.");
-            if (!CanSeek) _Count += count;
+            if (Position + count > _currentConstraint.End)
+            {
+                throw new IOException("Attempt to write past end of constrained region.");
+            }
+
+            if (!CanSeek)
+            {
+                _count += count;
+            }
+
             _baseStream.Write(buffer, offset, count);
         }
     }
