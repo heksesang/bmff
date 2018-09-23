@@ -79,14 +79,14 @@ namespace MatrixIO.IO.Bmff
 
         public override bool Equals(object obj)
         {
-            return base.Equals(obj) && ((BoxType)obj).UserType == UserType;
+            return obj is BoxType other && other.UserType == UserType;
         }
 
         public override int GetHashCode() => UserType.GetHashCode();
 
         public override string ToString()
         {
-            return FourCC == UUID_FOURCC ? string.Format("uuid({0})", UserType.ToString()) : FourCC.ToString();
+            return FourCC == UUID_FOURCC ? $"uuid({UserType})" : FourCC.ToString();
         }
     }
 }
