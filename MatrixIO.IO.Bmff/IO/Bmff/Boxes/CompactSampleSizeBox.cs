@@ -10,15 +10,51 @@ namespace MatrixIO.IO.Bmff.Boxes
     [Box("stz2", "Compact Sample Size Box")]
     public sealed class CompactSampleSizeBox : FullBox, ITableBox<CompactSampleSizeBox.CompactSampleSizeEntry>
     {
-        public CompactSampleSizeBox() : base() { }
-        public CompactSampleSizeBox(Stream stream) : base(stream) { }
+        public CompactSampleSizeBox() 
+            : base() { }
+
+        public CompactSampleSizeBox(Stream stream) 
+            : base(stream) { }
+
+        public IList<CompactSampleSizeEntry> Entries { get; } = new List<CompactSampleSizeEntry>();
+
+        private uint Reserved { get; set; }
+
+        private byte _fieldSize;
+
+        public byte FieldSize
+        {
+            get => _fieldSize;
+            set
+            {
+                if (_fieldSize != 4 && _fieldSize != 8 && _fieldSize != 16)
+                {
+                    throw new ArgumentOutOfRangeException("FieldSize must be 4, 8 or 16.");
+                }
+
+                _fieldSize = value;
+            }
+        }
+
+        public int EntryCount => Entries.Count;
 
         internal override ulong CalculateSize()
         {
             ulong calculatedSize = base.CalculateSize() + 3 + 1;
-            if (FieldSize == 4) calculatedSize += (ulong)Math.Ceiling((double)Entries.Count / 2D);
-            else if (FieldSize == 8) calculatedSize += (ulong)Entries.Count;
-            else if (FieldSize == 16) calculatedSize += (ulong)Entries.Count * 2;
+
+            if (FieldSize == 4)
+            {
+                calculatedSize += (ulong)Math.Ceiling((double)Entries.Count / 2D);
+            }
+            else if (FieldSize == 8)
+            {
+                calculatedSize += (ulong)Entries.Count;
+            }
+            else if (FieldSize == 16)
+            {
+                calculatedSize += (ulong)Entries.Count * 2;
+            }
+
             return calculatedSize;
         }
 
@@ -26,7 +62,7 @@ namespace MatrixIO.IO.Bmff.Boxes
         {
             base.LoadFromStream(stream);
 
-            _reserved = stream.ReadBEUInt24();
+            Reserved = stream.ReadBEUInt24();
             _fieldSize = stream.ReadOneByte();
             uint entryCount = stream.ReadBEUInt32();
 
@@ -35,16 +71,22 @@ namespace MatrixIO.IO.Bmff.Boxes
                 if (FieldSize == 4)
                 {
                     byte twoFieldSizes = stream.ReadOneByte();
+
                     Entries.Add(new CompactSampleSizeEntry((ushort)(twoFieldSizes & 0xFF00 >> 4)));
+
                     if (i < entryCount)
                     {
                         Entries.Add(new CompactSampleSizeEntry((ushort)(twoFieldSizes & 0x00FF)));
                     }
                 }
                 else if (FieldSize == 8)
+                {
                     Entries.Add(new CompactSampleSizeEntry(stream.ReadOneByte()));
+                }
                 else if (FieldSize == 16)
+                {
                     Entries.Add(new CompactSampleSizeEntry(stream.ReadBEUInt16()));
+                }
             }
         }
 
@@ -52,7 +94,7 @@ namespace MatrixIO.IO.Bmff.Boxes
         {
             base.SaveToStream(stream);
 
-            stream.WriteBEUInt24(_reserved);
+            stream.WriteBEUInt24(Reserved);
             stream.WriteByte(FieldSize);
             stream.WriteBEUInt32((uint)Entries.Count);
 
@@ -85,27 +127,6 @@ namespace MatrixIO.IO.Bmff.Boxes
                 }
             }
         }
-
-        public IList<CompactSampleSizeEntry> Entries { get; } = new List<CompactSampleSizeEntry>();
-
-        private uint _reserved;
-
-        private byte _fieldSize;
-        public byte FieldSize
-        {
-            get => _fieldSize;
-            set
-            {
-                if (_fieldSize != 4 && _fieldSize != 8 && _fieldSize != 16)
-                {
-                    throw new ArgumentOutOfRangeException("FieldSize must be 4, 8 or 16.");
-                }
-
-                _fieldSize = value;
-            }
-        }
-
-        public int EntryCount => Entries.Count;
 
         public readonly struct CompactSampleSizeEntry
         {
