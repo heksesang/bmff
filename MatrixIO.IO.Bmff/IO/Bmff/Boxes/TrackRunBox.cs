@@ -101,8 +101,8 @@ namespace MatrixIO.IO.Bmff.Boxes
 
         private new TrackRunFlags Flags
         {
-            get => (TrackRunFlags)_Flags;
-            set => _Flags = (uint)value;
+            get => (TrackRunFlags)_flags;
+            set => _flags = (uint)value;
         }
 
         public int? DataOffset { get; set; }
