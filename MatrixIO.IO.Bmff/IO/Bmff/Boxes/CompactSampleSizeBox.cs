@@ -26,8 +26,8 @@ namespace MatrixIO.IO.Bmff.Boxes
         {
             base.LoadFromStream(stream);
 
-            _Reserved = stream.ReadBEUInt24();
-            _FieldSize = stream.ReadOneByte();
+            _reserved = stream.ReadBEUInt24();
+            _fieldSize = stream.ReadOneByte();
             uint entryCount = stream.ReadBEUInt32();
 
             for (uint i = 0; i < entryCount; i++)
@@ -37,7 +37,9 @@ namespace MatrixIO.IO.Bmff.Boxes
                     byte twoFieldSizes = stream.ReadOneByte();
                     Entries.Add(new CompactSampleSizeEntry((ushort)(twoFieldSizes & 0xFF00 >> 4)));
                     if (i < entryCount)
+                    {
                         Entries.Add(new CompactSampleSizeEntry((ushort)(twoFieldSizes & 0x00FF)));
+                    }
                 }
                 else if (FieldSize == 8)
                     Entries.Add(new CompactSampleSizeEntry(stream.ReadOneByte()));
@@ -50,7 +52,7 @@ namespace MatrixIO.IO.Bmff.Boxes
         {
             base.SaveToStream(stream);
 
-            stream.WriteBEUInt24(_Reserved);
+            stream.WriteBEUInt24(_reserved);
             stream.WriteByte(FieldSize);
             stream.WriteBEUInt32((uint)Entries.Count);
 
@@ -78,16 +80,20 @@ namespace MatrixIO.IO.Bmff.Boxes
 
         public IList<CompactSampleSizeEntry> Entries { get; } = new List<CompactSampleSizeEntry>();
 
-        private uint _Reserved;
+        private uint _reserved;
 
-        private byte _FieldSize;
+        private byte _fieldSize;
         public byte FieldSize
         {
-            get => _FieldSize;
+            get => _fieldSize;
             set
             {
-                if (_FieldSize != 4 && _FieldSize != 8 && _FieldSize != 16) throw new ArgumentOutOfRangeException("FieldSize must be 4, 8 or 16.");
-                _FieldSize = value;
+                if (_fieldSize != 4 && _fieldSize != 8 && _fieldSize != 16)
+                {
+                    throw new ArgumentOutOfRangeException("FieldSize must be 4, 8 or 16.");
+                }
+
+                _fieldSize = value;
             }
         }
 
