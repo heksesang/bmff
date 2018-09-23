@@ -37,6 +37,7 @@ namespace MatrixIO.IO.Bmff.Boxes
         }
 
         public string Name { get; set; }
+
         public string Location { get; set; }
     }
 }
