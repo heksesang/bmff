@@ -9,8 +9,13 @@ namespace MatrixIO.IO.Bmff.Boxes
     [Box("sdtp", "Simple Dependency Type Box")]
     public sealed class SampleDependencyTypeBox : FullBox, ITableBox<SampleDependencyTypeBox.SampleDependencyEntry>
     {
-        public SampleDependencyTypeBox() : base() { }
-        public SampleDependencyTypeBox(Stream stream) : base(stream) { }
+        public SampleDependencyTypeBox() 
+            : base() { }
+
+        public SampleDependencyTypeBox(Stream stream) 
+            : base(stream) { }
+
+        public IList<SampleDependencyEntry> Entries { get; } = new List<SampleDependencyEntry>();
 
         internal override ulong CalculateSize()
         {
@@ -38,8 +43,6 @@ namespace MatrixIO.IO.Bmff.Boxes
             }
         }
 
-        public IList<SampleDependencyEntry> Entries { get; } = new List<SampleDependencyEntry>();
-
         public readonly struct SampleDependencyEntry
         {
             public SampleDependencyEntry(byte sampleDependency)
@@ -53,6 +56,7 @@ namespace MatrixIO.IO.Bmff.Boxes
             {
                 return entry.SampleDependency;
             }
+
             public static implicit operator SampleDependencyEntry(byte sampleDependency)
             {
                 return new SampleDependencyEntry(sampleDependency);
