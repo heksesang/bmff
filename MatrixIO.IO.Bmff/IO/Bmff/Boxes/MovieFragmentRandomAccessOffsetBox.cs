@@ -8,8 +8,13 @@ namespace MatrixIO.IO.Bmff.Boxes
     [Box("mfro", "Movie Fragment Random Access Offset Box")]
     public sealed class MovieFragmentRandomAccessOffsetBox : FullBox
     {
-        public MovieFragmentRandomAccessOffsetBox() : base() { }
-        public MovieFragmentRandomAccessOffsetBox(Stream stream) : base(stream) { }
+        public MovieFragmentRandomAccessOffsetBox() 
+            : base() { }
+
+        public MovieFragmentRandomAccessOffsetBox(Stream stream) 
+            : base(stream) { }
+
+        public uint MfraSize { get; set; }
 
         internal override ulong CalculateSize()
         {
@@ -29,7 +34,5 @@ namespace MatrixIO.IO.Bmff.Boxes
 
             stream.WriteBEUInt32(MfraSize);
         }
-
-        public uint MfraSize { get; set; }
     }
 }
