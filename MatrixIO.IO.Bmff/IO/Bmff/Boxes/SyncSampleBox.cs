@@ -9,8 +9,15 @@ namespace MatrixIO.IO.Bmff.Boxes
     [Box("stss", "Sync Sample Box")]
     public sealed class SyncSampleBox : FullBox, ITableBox<SyncSampleBox.SyncSampleEntry>
     {
-        public SyncSampleBox() : base() { }
-        public SyncSampleBox(Stream stream) : base(stream) { }
+        public SyncSampleBox() 
+            : base() { }
+
+        public SyncSampleBox(Stream stream) 
+            : base(stream) { }
+
+        public IList<SyncSampleEntry> Entries { get; } = new List<SyncSampleEntry>();
+
+        public int EntryCount => Entries.Count;
 
         internal override ulong CalculateSize()
         {
@@ -40,10 +47,6 @@ namespace MatrixIO.IO.Bmff.Boxes
                 stream.WriteBEUInt32(SyncSampleEntry.SampleNumber);
             }
         }
-
-        public IList<SyncSampleEntry> Entries { get; } = new List<SyncSampleEntry>();
-
-        public int EntryCount => Entries.Count;
 
         public readonly struct SyncSampleEntry
         {
