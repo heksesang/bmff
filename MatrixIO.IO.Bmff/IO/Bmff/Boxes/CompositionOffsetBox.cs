@@ -9,8 +9,15 @@ namespace MatrixIO.IO.Bmff.Boxes
     [Box("ctts", "Composition Offset Box")]
     public sealed class CompositionOffsetBox : FullBox, ITableBox<CompositionOffsetBox.CompositionOffsetEntry>
     {
-        public CompositionOffsetBox() : base() { }
-        public CompositionOffsetBox(Stream stream) : base(stream) { }
+        public CompositionOffsetBox()
+            : base() { }
+
+        public CompositionOffsetBox(Stream stream) 
+            : base(stream) { }
+
+        public IList<CompositionOffsetEntry> Entries { get; } = new List<CompositionOffsetEntry>();
+
+        public int EntryCount => Entries.Count;
 
         internal override ulong CalculateSize()
         {
@@ -44,10 +51,6 @@ namespace MatrixIO.IO.Bmff.Boxes
                 stream.WriteBEUInt32(CompositionOffsetEntry.SampleOffset);
             }
         }
-
-        public IList<CompositionOffsetEntry> Entries { get; } = new List<CompositionOffsetEntry>();
-
-        public int EntryCount => Entries.Count;
 
         public readonly struct CompositionOffsetEntry
         {
