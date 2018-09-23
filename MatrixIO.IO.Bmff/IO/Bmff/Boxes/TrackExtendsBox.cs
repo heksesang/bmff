@@ -9,6 +9,8 @@ namespace MatrixIO.IO.Bmff.Boxes
     [Box("trex", "Track Extends Box")]
     public sealed class TrackExtendsBox : FullBox
     {
+        private SampleFlags _defaultSampleFlags = new SampleFlags();
+
         public TrackExtendsBox() : base() { }
         public TrackExtendsBox(Stream stream) : base(stream) { }
 
@@ -25,7 +27,7 @@ namespace MatrixIO.IO.Bmff.Boxes
             DefaultSampleDescriptionIndex = stream.ReadBEUInt32();
             DefaultSampleDuration = stream.ReadBEUInt32();
             DefaultSampleSize = stream.ReadBEUInt32();
-            DefaultSampleFlags._flags = stream.ReadBEUInt32();
+            _defaultSampleFlags._flags = stream.ReadBEUInt32();
         }
 
         protected override void SaveToStream(Stream stream)
@@ -36,64 +38,51 @@ namespace MatrixIO.IO.Bmff.Boxes
             stream.WriteBEUInt32(DefaultSampleDescriptionIndex);
             stream.WriteBEUInt32(DefaultSampleDuration);
             stream.WriteBEUInt32(DefaultSampleSize);
-            stream.WriteBEUInt32(DefaultSampleFlags._flags);
+            stream.WriteBEUInt32(_defaultSampleFlags._flags);
         }
 
         public uint TrackID { get; set; }
+
         public uint DefaultSampleDescriptionIndex { get; set; }
+
         public uint DefaultSampleDuration { get; set; }
+
         public uint DefaultSampleSize { get; set; }
-        private SampleFlags DefaultSampleFlags = new SampleFlags();
 
         public byte DefaultSampleDependsOn
         {
-            get => DefaultSampleFlags.SampleDependsOn;
-            set
-            {
-                DefaultSampleFlags.SampleDependsOn = value;
-            }
+            get => _defaultSampleFlags.SampleDependsOn;
+            set => _defaultSampleFlags.SampleDependsOn = value;
         }
 
         public byte DefaultSampleIsDependedOn
         {
-            get => DefaultSampleFlags.SampleIsDependedOn;
-            set
-            {
-                DefaultSampleFlags.SampleIsDependedOn = value;
-            }
+            get => _defaultSampleFlags.SampleIsDependedOn;
+            set => _defaultSampleFlags.SampleIsDependedOn = value;
         }
 
         public byte DefaultSampleHasRedundancy
         {
-            get => DefaultSampleFlags.SampleHasRedundancy;
-            set
-            {
-                DefaultSampleFlags.SampleHasRedundancy = value;
-            }
+            get => _defaultSampleFlags.SampleHasRedundancy;
+            set => _defaultSampleFlags.SampleHasRedundancy = value;
         }
 
         public byte DefaultSamplePaddingValue
         {
-            get => DefaultSampleFlags.SamplePaddingValue;
-            set => DefaultSampleFlags.SamplePaddingValue = value;
+            get => _defaultSampleFlags.SamplePaddingValue;
+            set => _defaultSampleFlags.SamplePaddingValue = value;
         }
 
         public bool DefaultSampleIsDifferenceValue
         {
-            get => DefaultSampleFlags.SampleIsDifferenceValue;
-            set
-            {
-                DefaultSampleFlags.SampleIsDifferenceValue = value;
-            }
+            get => _defaultSampleFlags.SampleIsDifferenceValue;
+            set => _defaultSampleFlags.SampleIsDifferenceValue = value;
         }
 
         public ushort DefaultDegredationPriority
         {
-            get => DefaultSampleFlags.DegredationPriority;
-            set
-            {
-                DefaultSampleFlags.DegredationPriority = value;
-            }
+            get => _defaultSampleFlags.DegredationPriority;
+            set => _defaultSampleFlags.DegredationPriority = value;
         }
     }
 
