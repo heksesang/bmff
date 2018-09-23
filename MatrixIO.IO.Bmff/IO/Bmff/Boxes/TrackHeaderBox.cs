@@ -9,15 +9,10 @@ namespace MatrixIO.IO.Bmff.Boxes
     [Box("tkhd", "Track Header Box")]
     public sealed class TrackHeaderBox : FullBox
     {
-        private readonly int[] _matrix = new int[9] { 0x00010000, 0, 0, 0, 0x00010000, 0, 0, 0, 0x40000000 }; // Unity Matrix
-        private uint _reserved1;
-        private readonly uint[] _reserved2 = new uint[2];
-        private ushort _reserved3;
-
-        public TrackHeaderBox() 
+        public TrackHeaderBox()
             : base() { }
 
-        public TrackHeaderBox(Stream stream) 
+        public TrackHeaderBox(Stream stream)
             : base(stream) { }
 
         public DateTime CreationTime { get; set; }
@@ -26,7 +21,11 @@ namespace MatrixIO.IO.Bmff.Boxes
 
         public uint TrackID { get; set; }
 
+        private uint Reserved1 { get; set; }
+
         public ulong Duration { get; set; }
+
+        private uint[] Reserved2 { get; set; } = new uint[2];
 
         public short Layer { get; set; }
 
@@ -34,8 +33,9 @@ namespace MatrixIO.IO.Bmff.Boxes
 
         public short Volume { get; set; }
 
+        private ushort Reserved3 { get; set; }
 
-        public int[] Matrix => _matrix;
+        public int[] Matrix { get; set; } = new int[9] { 0x00010000, 0, 0, 0, 0x00010000, 0, 0, 0, 0x40000000 };  // Unity Matrix
 
         public uint Width { get; set; }
 
@@ -56,7 +56,7 @@ namespace MatrixIO.IO.Bmff.Boxes
                 CreationTime = MovieHeaderBox.Convert1904Time(stream.ReadBEUInt64());
                 ModificationTime = MovieHeaderBox.Convert1904Time(stream.ReadBEUInt64());
                 TrackID = stream.ReadBEUInt32();
-                _reserved1 = stream.ReadBEUInt32();
+                Reserved1 = stream.ReadBEUInt32();
                 Duration = stream.ReadBEUInt64();
             }
             else // if (Version == 0)
@@ -64,22 +64,22 @@ namespace MatrixIO.IO.Bmff.Boxes
                 CreationTime = MovieHeaderBox.Convert1904Time(stream.ReadBEUInt32());
                 ModificationTime = MovieHeaderBox.Convert1904Time(stream.ReadBEUInt32());
                 TrackID = stream.ReadBEUInt32();
-                _reserved1 = stream.ReadBEUInt32();
+                Reserved1 = stream.ReadBEUInt32();
                 Duration = stream.ReadBEUInt32();
             }
             for (int i = 0; i < 2; i++)
             {
-                _reserved2[0] = stream.ReadBEUInt32();
+                Reserved2[0] = stream.ReadBEUInt32();
             }
 
             Layer = stream.ReadBEInt16();
             AlternateGroup = stream.ReadBEInt16();
             Volume = stream.ReadBEInt16();
-            _reserved3 = stream.ReadBEUInt16();
+            Reserved3 = stream.ReadBEUInt16();
 
             for (int i = 0; i < 9; i++)
             {
-                _matrix[i] = stream.ReadBEInt32();
+                Matrix[i] = stream.ReadBEInt32();
             }
 
             Width = stream.ReadBEUInt32();
@@ -95,7 +95,7 @@ namespace MatrixIO.IO.Bmff.Boxes
                 stream.WriteBEUInt64(MovieHeaderBox.Convert1904Time(CreationTime));
                 stream.WriteBEUInt64(MovieHeaderBox.Convert1904Time(ModificationTime));
                 stream.WriteBEUInt32(TrackID);
-                stream.WriteBEUInt32(_reserved1);
+                stream.WriteBEUInt32(Reserved1);
                 stream.WriteBEUInt64(Duration);
             }
             else // if (Version == 0)
@@ -103,23 +103,23 @@ namespace MatrixIO.IO.Bmff.Boxes
                 stream.WriteBEUInt32((uint)MovieHeaderBox.Convert1904Time(CreationTime));
                 stream.WriteBEUInt32((uint)MovieHeaderBox.Convert1904Time(ModificationTime));
                 stream.WriteBEUInt32(TrackID);
-                stream.WriteBEUInt32(_reserved1);
+                stream.WriteBEUInt32(Reserved1);
                 stream.WriteBEUInt32((uint)Duration);
             }
 
             for (int i = 0; i < 2; i++)
             {
-                stream.WriteBEUInt32(_reserved2[i]);
+                stream.WriteBEUInt32(Reserved2[i]);
             }
 
             stream.WriteBEInt16(Layer);
             stream.WriteBEInt16(AlternateGroup);
             stream.WriteBEInt16(Volume);
-            stream.WriteBEUInt16(_reserved3);
+            stream.WriteBEUInt16(Reserved3);
 
             for (int i = 0; i < 9; i++)
             {
-                stream.WriteBEInt32(_matrix[i]);
+                stream.WriteBEInt32(Matrix[i]);
             }
 
             stream.WriteBEUInt32(Width);
