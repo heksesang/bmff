@@ -8,8 +8,13 @@ namespace MatrixIO.IO.Bmff.Boxes
     [Box("mfhd", "Movie Fragment Header Box")]
     public sealed class MovieFragmentHeaderBox : FullBox
     {
-        public MovieFragmentHeaderBox() : base() { }
-        public MovieFragmentHeaderBox(Stream stream) : base(stream) { }
+        public MovieFragmentHeaderBox() 
+            : base() { }
+
+        public MovieFragmentHeaderBox(Stream stream) 
+            : base(stream) { }
+
+        public uint SequenceNumber { get; set; }
 
         internal override ulong CalculateSize()
         {
@@ -29,6 +34,5 @@ namespace MatrixIO.IO.Bmff.Boxes
 
             stream.WriteBEUInt32(SequenceNumber);
         }
-        public uint SequenceNumber { get; set; }
     }
 }
