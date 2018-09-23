@@ -8,8 +8,13 @@ namespace MatrixIO.IO.Bmff.Boxes
     [Box("frma", "Original Format Box")]
     public sealed class OriginalFormatBox : Box
     {
-        public OriginalFormatBox() : base() { }
-        public OriginalFormatBox(Stream stream) : base(stream) { }
+        public OriginalFormatBox() 
+            : base() { }
+
+        public OriginalFormatBox(Stream stream) 
+            : base(stream) { }
+
+        public FourCC DataFormat { get; set; }
 
         protected override void LoadFromStream(Stream stream)
         {
@@ -24,7 +29,5 @@ namespace MatrixIO.IO.Bmff.Boxes
 
             stream.WriteBEUInt32(DataFormat);
         }
-
-        public FourCC DataFormat { get; set; }
     }
 }
