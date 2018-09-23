@@ -26,7 +26,7 @@ namespace MatrixIO.IO.Bmff.Boxes
 
             for (uint i = 0; i < entryCount; i++)
             {
-                EditListEntry entry = new EditListEntry();
+                var entry = new EditListEntry();
                 if (Version == 1)
                 {
                     entry.SegmentDuration = stream.ReadBEUInt64();
