@@ -61,8 +61,12 @@ namespace MatrixIO.IO.Bmff.Boxes
                 for (int i = 0; i < Entries.Count; i += 2)
                 {
                     byte twoFieldSizes = (byte)((Entries[i].EntrySize & 0x00FF) << 4);
+
                     if (i + 1 < Entries.Count)
+                    {
                         twoFieldSizes |= (byte)(Entries[i].EntrySize & 0x00FF);
+                    }
+
                     stream.WriteByte(twoFieldSizes);
                 }
             }
@@ -71,9 +75,13 @@ namespace MatrixIO.IO.Bmff.Boxes
                 foreach (CompactSampleSizeEntry compactSampleSizeEntry in Entries)
                 {
                     if (FieldSize == 8)
+                    {
                         stream.WriteByte((byte)compactSampleSizeEntry.EntrySize);
+                    }
                     else if (FieldSize == 16)
+                    {
                         stream.WriteBEUInt16(compactSampleSizeEntry.EntrySize);
+                    }
                 }
             }
         }
