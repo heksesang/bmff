@@ -11,8 +11,15 @@ namespace MatrixIO.IO.Bmff.Boxes
     [Box("dref", "Data Reference Box")]
     public sealed class DataReferenceBox : FullBox, ISuperBox
     {
-        public DataReferenceBox() : base() { }
-        public DataReferenceBox(Stream stream) : base(stream) { }
+        private uint _entryCount;
+
+        public DataReferenceBox()
+            : base() { }
+
+        public DataReferenceBox(Stream stream)
+            : base(stream) { }
+
+        public IList<Box> Children { get; } = new List<Box>();
 
         internal override ulong CalculateSize()
         {
@@ -23,7 +30,7 @@ namespace MatrixIO.IO.Bmff.Boxes
         {
             base.LoadFromStream(stream);
 
-            _EntryCount = stream.ReadBEUInt32();
+            _entryCount = stream.ReadBEUInt32();
         }
 
         protected override void SaveToStream(Stream stream)
@@ -37,15 +44,11 @@ namespace MatrixIO.IO.Bmff.Boxes
         {
             base.LoadChildrenFromStream(stream);
 
-            if (_EntryCount != Children.Count)
+            if (_entryCount != Children.Count)
             {
                 Trace.WriteLine("DataReferenceBox's EntryCount didn't match the number of children we read.", "WARNING");
             }
         }
-
-        private uint _EntryCount;
-
-        public IList<Box> Children { get; } = new List<Box>();
 
         public IEnumerator<Box> GetEnumerator() => Children.GetEnumerator();
 
