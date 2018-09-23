@@ -25,12 +25,11 @@ namespace MatrixIO.IO.Bmff.Boxes
 
             for (uint i = 0; i < entryCount; i++)
             {
-                Entries.Add(new SampleToChunkEntry()
-                {
-                    FirstChunk = stream.ReadBEUInt32(),
-                    SamplesPerChunk = stream.ReadBEUInt32(),
-                    SampleDescriptionIndex = stream.ReadBEUInt32(),
-                });
+                Entries.Add(new SampleToChunkEntry(
+                    firstChunk: stream.ReadBEUInt32(),
+                    samplesPerChunk: stream.ReadBEUInt32(),
+                    sampleDescriptionIndex: stream.ReadBEUInt32()
+                ));
             }
         }
 
@@ -52,19 +51,20 @@ namespace MatrixIO.IO.Bmff.Boxes
 
         public int EntryCount => Entries.Count;
 
-        public class SampleToChunkEntry
+        public readonly struct SampleToChunkEntry
         {
-            public uint FirstChunk { get; set; }
-            public uint SamplesPerChunk { get; set; }
-            public uint SampleDescriptionIndex { get; set; }
-
-            public SampleToChunkEntry() { }
             public SampleToChunkEntry(uint firstChunk, uint samplesPerChunk, uint sampleDescriptionIndex)
             {
                 FirstChunk = firstChunk;
                 SamplesPerChunk = samplesPerChunk;
                 SampleDescriptionIndex = sampleDescriptionIndex;
             }
+
+            public uint FirstChunk { get; }
+
+            public uint SamplesPerChunk { get; }
+
+            public uint SampleDescriptionIndex { get; }
         }
     }
 }
