@@ -11,8 +11,19 @@ namespace MatrixIO.IO.Bmff.Boxes
     {
         private uint _sampleCount;
 
-        public SampleSizeBox() : base() { }
-        public SampleSizeBox(Stream stream) : base(stream) { }
+        public SampleSizeBox() 
+            : base() { }
+
+        public SampleSizeBox(Stream stream) 
+            : base(stream) { }
+
+        public uint SampleSize { get; set; }
+
+        public uint SampleCount => (SampleSize == 0) ? (uint)Entries.Count : _sampleCount;
+
+        public IList<SampleSizeEntry> Entries { get; } = new List<SampleSizeEntry>();
+
+        public uint EntryCount => (uint)Entries.Count;
 
         internal override ulong CalculateSize()
         {
@@ -47,14 +58,6 @@ namespace MatrixIO.IO.Bmff.Boxes
                 stream.WriteBEUInt32(SampleSizeEntry.EntrySize);
             }
         }
-
-        public IList<SampleSizeEntry> Entries { get; } = new List<SampleSizeEntry>();
-
-        public uint SampleSize { get; set; }
-
-        public uint SampleCount => (SampleSize == 0) ? (uint)Entries.Count : _sampleCount;
-
-        public uint EntryCount => (uint)Entries.Count;
 
         public readonly struct SampleSizeEntry
         {
