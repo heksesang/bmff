@@ -9,8 +9,15 @@ namespace MatrixIO.IO.Bmff.Boxes
     [Box("stsc", "Sample To Chunk Box")]
     public sealed class SampleToChunkBox : FullBox, ITableBox<SampleToChunkBox.SampleToChunkEntry>
     {
-        public SampleToChunkBox() : base() { }
-        public SampleToChunkBox(Stream stream) : base(stream) { }
+        public SampleToChunkBox() 
+            : base() { }
+
+        public SampleToChunkBox(Stream stream) 
+            : base(stream) { }
+
+        public IList<SampleToChunkEntry> Entries { get; } = new List<SampleToChunkEntry>();
+
+        public int EntryCount => Entries.Count;
 
         internal override ulong CalculateSize()
         {
@@ -46,10 +53,6 @@ namespace MatrixIO.IO.Bmff.Boxes
                 stream.WriteBEUInt32(SampleToChunkEntry.SampleDescriptionIndex);
             }
         }
-
-        public IList<SampleToChunkEntry> Entries { get; } = new List<SampleToChunkEntry>();
-
-        public int EntryCount => Entries.Count;
 
         public readonly struct SampleToChunkEntry
         {
