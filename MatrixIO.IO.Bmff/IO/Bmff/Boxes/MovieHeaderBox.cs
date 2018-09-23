@@ -9,6 +9,11 @@ namespace MatrixIO.IO.Bmff.Boxes
     [Box("mvhd", "Movie Header Box")]
     public sealed class MovieHeaderBox : FullBox
     {
+        private ulong _creationTime;
+        private ulong _modificationTime;
+        private int _rate;
+        private short _volume;
+
         public MovieHeaderBox()
             : base()
         {
@@ -19,6 +24,42 @@ namespace MatrixIO.IO.Bmff.Boxes
 
         public MovieHeaderBox(Stream stream)
             : base(stream) { }
+
+        public DateTime CreationTime
+        {
+            get => Convert1904Time(_creationTime);
+            set => _creationTime = Convert1904Time(value);
+        }
+
+        public DateTime ModificationTime
+        {
+            get => Convert1904Time(_modificationTime);
+            set => _modificationTime = Convert1904Time(value);
+        }
+
+        public uint TimeScale { get; set; }
+
+        public ulong Duration { get; set; }
+
+        public double Rate
+        {
+            get => (double)_rate / ((int)ushort.MaxValue + 1);
+            set => _rate = checked((int)Math.Round(value * ((int)short.MaxValue + 1)));
+        }
+
+        public double Volume
+        {
+            get => (double)_volume / ((int)byte.MaxValue + 1);
+            set => _volume = checked((short)Math.Round(value * ((int)byte.MaxValue + 1)));
+        }
+
+        public byte[] Reserved { get; private set; }
+
+        public int[] Matrix { get; private set; }
+
+        public byte[] PreDefined { get; private set; }
+
+        public uint NextTrackID { get; set; }
 
         internal override ulong CalculateSize()
         {
@@ -86,46 +127,6 @@ namespace MatrixIO.IO.Bmff.Boxes
             stream.WriteBytes(PreDefined);
             stream.WriteBEUInt32(NextTrackID);
         }
-
-        private ulong _creationTime;
-        public DateTime CreationTime
-        {
-            get => Convert1904Time(_creationTime);
-            set => _creationTime = Convert1904Time(value);
-        }
-
-        private ulong _modificationTime;
-        public DateTime ModificationTime
-        {
-            get => Convert1904Time(_modificationTime);
-            set => _modificationTime = Convert1904Time(value);
-        }
-
-        public uint TimeScale { get; set; }
-
-        public ulong Duration { get; set; }
-
-        private int _rate;
-        public double Rate
-        {
-            get => (double)_rate / ((int)ushort.MaxValue + 1);
-            set => _rate = checked((int)Math.Round(value * ((int)short.MaxValue + 1)));
-        }
-
-        private short _volume;
-        public double Volume
-        {
-            get => (double)_volume / ((int)byte.MaxValue + 1);
-            set => _volume = checked((short)Math.Round(value * ((int)byte.MaxValue + 1)));
-        }
-
-        public byte[] Reserved { get; private set; }
-
-        public int[] Matrix { get; private set; }
-
-        public byte[] PreDefined { get; private set; }
-
-        public uint NextTrackID { get; set; }
 
         internal static readonly DateTime _1904BaseTime = new DateTime(1904, 1, 1);
 

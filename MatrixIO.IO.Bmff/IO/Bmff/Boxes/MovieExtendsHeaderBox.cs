@@ -8,8 +8,13 @@ namespace MatrixIO.IO.Bmff.Boxes
     [Box("mehd", "Movie Extends Header Box")]
     public sealed class MovieExtendsHeaderBox : FullBox
     {
-        public MovieExtendsHeaderBox() : base() { }
-        public MovieExtendsHeaderBox(Stream stream) : base(stream) { }
+        public MovieExtendsHeaderBox()
+            : base() { }
+
+        public MovieExtendsHeaderBox(Stream stream) 
+            : base(stream) { }
+
+        public ulong FragmentDuration { get; set; }
 
         internal override ulong CalculateSize()
         {
@@ -41,7 +46,5 @@ namespace MatrixIO.IO.Bmff.Boxes
                 stream.WriteBEUInt32((uint)FragmentDuration);
             }
         }
-
-        public ulong FragmentDuration { get; set; }
     }
 }
