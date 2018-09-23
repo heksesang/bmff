@@ -9,13 +9,16 @@ namespace MatrixIO.IO.Bmff.Boxes
     [Box("mvhd", "Movie Header Box")]
     public sealed class MovieHeaderBox : FullBox
     {
-        public MovieHeaderBox() : base()
+        public MovieHeaderBox()
+            : base()
         {
             _rate = 0x00010000; // 1.0 normal rate
             _volume = 0x0100; // 1.0 full volume
             Matrix = new int[] { 0x00010000, 0, 0, 0, 0x00010000, 0, 0, 0, 0x40000000 }; // Unity Matrix
         }
-        public MovieHeaderBox(Stream stream) : base(stream) { }
+
+        public MovieHeaderBox(Stream stream)
+            : base(stream) { }
 
         internal override ulong CalculateSize()
         {
@@ -29,15 +32,15 @@ namespace MatrixIO.IO.Bmff.Boxes
 
             if (Version == 1)
             {
-                _CreationTime = stream.ReadBEUInt64();
-                _ModificationTime = stream.ReadBEUInt64();
+                _creationTime = stream.ReadBEUInt64();
+                _modificationTime = stream.ReadBEUInt64();
                 TimeScale = stream.ReadBEUInt32();
                 Duration = stream.ReadBEUInt64();
             }
             else // if(Version == 0)
             {
-                _CreationTime = stream.ReadBEUInt32();
-                _ModificationTime = stream.ReadBEUInt32();
+                _creationTime = stream.ReadBEUInt32();
+                _modificationTime = stream.ReadBEUInt32();
                 TimeScale = stream.ReadBEUInt32();
                 Duration = stream.ReadBEUInt32();
             }
@@ -53,8 +56,8 @@ namespace MatrixIO.IO.Bmff.Boxes
         protected override void SaveToStream(Stream stream)
         {
             if (Version == 0 &&
-                (_CreationTime > uint.MaxValue ||
-                _ModificationTime > uint.MaxValue ||
+                (_creationTime > uint.MaxValue ||
+                _modificationTime > uint.MaxValue ||
                 Duration > uint.MaxValue))
             {
                 Version = 1;
@@ -64,15 +67,15 @@ namespace MatrixIO.IO.Bmff.Boxes
 
             if (Version == 1)
             {
-                stream.WriteBEUInt64(_CreationTime);
-                stream.WriteBEUInt64(_ModificationTime);
+                stream.WriteBEUInt64(_creationTime);
+                stream.WriteBEUInt64(_modificationTime);
                 stream.WriteBEUInt32(TimeScale);
                 stream.WriteBEUInt64(Duration);
             }
             else // if(Version == 0)
             {
-                stream.WriteBEUInt32(checked((uint)_CreationTime));
-                stream.WriteBEUInt32(checked((uint)_ModificationTime));
+                stream.WriteBEUInt32(checked((uint)_creationTime));
+                stream.WriteBEUInt32(checked((uint)_modificationTime));
                 stream.WriteBEUInt32(TimeScale);
                 stream.WriteBEUInt32(checked((uint)Duration));
             }
@@ -84,18 +87,18 @@ namespace MatrixIO.IO.Bmff.Boxes
             stream.WriteBEUInt32(NextTrackID);
         }
 
-        private ulong _CreationTime;
+        private ulong _creationTime;
         public DateTime CreationTime
         {
-            get => Convert1904Time(_CreationTime);
-            set => _CreationTime = Convert1904Time(value);
+            get => Convert1904Time(_creationTime);
+            set => _creationTime = Convert1904Time(value);
         }
 
-        private ulong _ModificationTime;
+        private ulong _modificationTime;
         public DateTime ModificationTime
         {
-            get => Convert1904Time(_ModificationTime);
-            set => _ModificationTime = Convert1904Time(value);
+            get => Convert1904Time(_modificationTime);
+            set => _modificationTime = Convert1904Time(value);
         }
 
         public uint TimeScale { get; set; }
