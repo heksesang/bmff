@@ -9,7 +9,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Protection Scheme Info Box ("sinf")
     /// </summary>
     [Box("sinf", "Protection Scheme Info Box")]
-    public class ProtectionSchemeInfoBox : Box, ISuperBox
+    public sealed class ProtectionSchemeInfoBox : Box, ISuperBox
     {
         public ProtectionSchemeInfoBox() : base() { }
         public ProtectionSchemeInfoBox(Stream stream) : base(stream) { }
@@ -18,36 +18,22 @@ namespace MatrixIO.IO.Bmff.Boxes
 
         public IEnumerator<Box> GetEnumerator() => Children.GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator()=> Children.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => Children.GetEnumerator();
 
         public OriginalFormatBox OriginalFormat
         {
-            get
-            {
-                return (from c in Children
-                       where c is OriginalFormatBox
-                       select (OriginalFormatBox)c).FirstOrDefault();
-            }
+            get => Children.OfType<OriginalFormatBox>().FirstOrDefault();
         }
 
         /*
         public SchemeTypeBox SchemeType
         {
-            get
-            {
-                return (from c in Children
-                        where c is SchemeTypeBox
-                        select (SchemeTypeBox)c).FirstOrDefault();
-            }
+            get => Children.OfType<SchemeTypeBox>().FirstOrDefault();
         }
+
         public SchemeInformationBox Info
         {
-            get
-            {
-                return (from c in Children
-                        where c is SchemeInformationBox
-                        select (SchemeInformationBox)c).FirstOrDefault();
-            }
+            get => Children.OfType<SchemeInformationBox>().FirstOrDefault();
         }
         */
     }
