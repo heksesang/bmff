@@ -9,8 +9,15 @@ namespace MatrixIO.IO.Bmff.Boxes
     [Box("stts", "Time To Sample Box")]
     public sealed class TimeToSampleBox : FullBox, ITableBox<TimeToSampleBox.TimeToSampleEntry>
     {
-        public TimeToSampleBox() : base() { }
-        public TimeToSampleBox(Stream stream) : base(stream) { }
+        public TimeToSampleBox()
+            : base() { }
+
+        public TimeToSampleBox(Stream stream) 
+            : base(stream) { }
+
+        public IList<TimeToSampleEntry> Entries { get; } = new List<TimeToSampleEntry>();
+
+        public int EntryCount => Entries.Count;
 
         internal override ulong CalculateSize()
         {
@@ -23,17 +30,14 @@ namespace MatrixIO.IO.Bmff.Boxes
 
             uint entryCount = stream.ReadBEUInt32();
 
-            var entries = new TimeToSampleEntry[entryCount];
-
             for (uint i = 0; i < entryCount; i++)
             {
-                entries[i] = new TimeToSampleEntry(
+                Entries.Add(new TimeToSampleEntry(
                     sampleCount: stream.ReadBEUInt32(),
                     sampleDelta: stream.ReadBEUInt32()
-                );
+                ));
             }
 
-            Entries = entries;
         }
 
         protected override void SaveToStream(Stream stream)
@@ -48,10 +52,6 @@ namespace MatrixIO.IO.Bmff.Boxes
                 stream.WriteBEUInt32(TimeToSampleEntry.SampleDelta);
             }
         }
-
-        public IList<TimeToSampleEntry> Entries { get; private set; }
-
-        public int EntryCount => Entries.Count;
 
         public readonly struct TimeToSampleEntry
         {
