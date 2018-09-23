@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 
 namespace MatrixIO.IO.Bmff.Boxes
 {
@@ -21,18 +20,26 @@ namespace MatrixIO.IO.Bmff.Boxes
         {
             base.LoadFromStream(stream);
 
-            if (Version == 1) FragmentDuration = stream.ReadBEUInt64();
-            else FragmentDuration = (ulong)stream.ReadBEInt32();
+            FragmentDuration = (Version == 1) ? stream.ReadBEUInt64() : (ulong)stream.ReadBEInt32();
         }
 
         protected override void SaveToStream(Stream stream)
         {
-            if(FragmentDuration > UInt32.MaxValue) Version = 1;
+            if (FragmentDuration > uint.MaxValue)
+            {
+                Version = 1;
+            }
 
             base.SaveToStream(stream);
 
-            if (Version == 1) stream.WriteBEUInt64(FragmentDuration);
-            else stream.WriteBEUInt32((uint)FragmentDuration);
+            if (Version == 1)
+            {
+                stream.WriteBEUInt64(FragmentDuration);
+            }
+            else
+            {
+                stream.WriteBEUInt32((uint)FragmentDuration);
+            }
         }
 
         public ulong FragmentDuration { get; set; }
