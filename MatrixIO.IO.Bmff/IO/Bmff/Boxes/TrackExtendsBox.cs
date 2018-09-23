@@ -11,35 +11,10 @@ namespace MatrixIO.IO.Bmff.Boxes
     {
         private SampleFlags _defaultSampleFlags = new SampleFlags();
 
-        public TrackExtendsBox() : base() { }
-        public TrackExtendsBox(Stream stream) : base(stream) { }
-
-        internal override ulong CalculateSize()
-        {
-            return base.CalculateSize() + (5 * 4);
-        }
-
-        protected override void LoadFromStream(Stream stream)
-        {
-            base.LoadFromStream(stream);
-
-            TrackID = stream.ReadBEUInt32();
-            DefaultSampleDescriptionIndex = stream.ReadBEUInt32();
-            DefaultSampleDuration = stream.ReadBEUInt32();
-            DefaultSampleSize = stream.ReadBEUInt32();
-            _defaultSampleFlags._flags = stream.ReadBEUInt32();
-        }
-
-        protected override void SaveToStream(Stream stream)
-        {
-            base.SaveToStream(stream);
-
-            stream.WriteBEUInt32(TrackID);
-            stream.WriteBEUInt32(DefaultSampleDescriptionIndex);
-            stream.WriteBEUInt32(DefaultSampleDuration);
-            stream.WriteBEUInt32(DefaultSampleSize);
-            stream.WriteBEUInt32(_defaultSampleFlags._flags);
-        }
+        public TrackExtendsBox()
+            : base() { }
+        public TrackExtendsBox(Stream stream) 
+            : base(stream) { }
 
         public uint TrackID { get; set; }
 
@@ -83,6 +58,33 @@ namespace MatrixIO.IO.Bmff.Boxes
         {
             get => _defaultSampleFlags.DegredationPriority;
             set => _defaultSampleFlags.DegredationPriority = value;
+        }
+
+        internal override ulong CalculateSize()
+        {
+            return base.CalculateSize() + (5 * 4);
+        }
+
+        protected override void LoadFromStream(Stream stream)
+        {
+            base.LoadFromStream(stream);
+
+            TrackID = stream.ReadBEUInt32();
+            DefaultSampleDescriptionIndex = stream.ReadBEUInt32();
+            DefaultSampleDuration = stream.ReadBEUInt32();
+            DefaultSampleSize = stream.ReadBEUInt32();
+            _defaultSampleFlags._flags = stream.ReadBEUInt32();
+        }
+
+        protected override void SaveToStream(Stream stream)
+        {
+            base.SaveToStream(stream);
+
+            stream.WriteBEUInt32(TrackID);
+            stream.WriteBEUInt32(DefaultSampleDescriptionIndex);
+            stream.WriteBEUInt32(DefaultSampleDuration);
+            stream.WriteBEUInt32(DefaultSampleSize);
+            stream.WriteBEUInt32(_defaultSampleFlags._flags);
         }
     }
 
