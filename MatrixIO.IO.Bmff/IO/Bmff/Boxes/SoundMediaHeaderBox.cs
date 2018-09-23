@@ -10,8 +10,13 @@ namespace MatrixIO.IO.Bmff.Boxes
     {
         private ushort _reserved;
 
-        public SoundMediaHeaderBox() : base() { }
-        public SoundMediaHeaderBox(Stream stream) : base(stream) { }
+        public SoundMediaHeaderBox() 
+            : base() { }
+
+        public SoundMediaHeaderBox(Stream stream) 
+            : base(stream) { }
+
+        public short Balance { get; set; }
 
         internal override ulong CalculateSize()
         {
@@ -33,7 +38,5 @@ namespace MatrixIO.IO.Bmff.Boxes
             stream.WriteBEInt16(Balance);
             stream.WriteBEUInt16(_reserved);
         }
-
-        public short Balance { get; set; }
     }
 }
