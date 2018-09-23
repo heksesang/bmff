@@ -8,7 +8,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Movie Extends Box ("mvex")
     /// </summary>
     [Box("mvex", "Movie Extends Box")]
-    public class MovieExtendsBox : Box, ISuperBox
+    public sealed class MovieExtendsBox : Box, ISuperBox
     {
         public MovieExtendsBox() : base() { }
         public MovieExtendsBox(Stream stream) : base(stream) { }

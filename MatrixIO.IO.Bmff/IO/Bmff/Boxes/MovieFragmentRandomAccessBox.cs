@@ -9,7 +9,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Movie Fragment Random Access Box ("mfra")
     /// </summary>
     [Box("mfra", "Movie Fragment Random Access Box")]
-    public class MovieFragmentRandomAccessBox : Box, ISuperBox
+    public sealed class MovieFragmentRandomAccessBox : Box, ISuperBox
     {
         public MovieFragmentRandomAccessBox() : base() { }
         public MovieFragmentRandomAccessBox(Stream stream) : base(stream) { }

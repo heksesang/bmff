@@ -28,14 +28,7 @@ namespace MatrixIO.IO.Bmff.Boxes
 
         public FECReservoirBox FECSymbolLocations
         {
-             get => Children.OfType<FilePartitionBox>().FirstOrDefault();
-
-            get
-            {
-                return (from c in Children
-                        where c is FECReservoirBox
-                        select (FECReservoirBox)c).FirstOrDefault();
-            }
+            get => Children.OfType<FECReservoirBox>().FirstOrDefault();
         }
         */
     }

@@ -7,7 +7,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Sample To Chunk Box ("stsc")
     /// </summary>
     [Box("stsc", "Sample To Chunk Box")]
-    public class SampleToChunkBox : FullBox, ITableBox<SampleToChunkBox.SampleToChunkEntry>
+    public sealed class SampleToChunkBox : FullBox, ITableBox<SampleToChunkBox.SampleToChunkEntry>
     {
         public SampleToChunkBox() : base() { }
         public SampleToChunkBox(Stream stream) : base(stream) { }

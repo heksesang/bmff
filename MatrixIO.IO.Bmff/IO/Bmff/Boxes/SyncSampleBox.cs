@@ -7,7 +7,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Sync Sample Box ("stss")
     /// </summary>
     [Box("stss", "Sync Sample Box")]
-    public class SyncSampleBox : FullBox, ITableBox<SyncSampleBox.SyncSampleEntry>
+    public sealed class SyncSampleBox : FullBox, ITableBox<SyncSampleBox.SyncSampleEntry>
     {
         public SyncSampleBox() : base() { }
         public SyncSampleBox(Stream stream) : base(stream) { }

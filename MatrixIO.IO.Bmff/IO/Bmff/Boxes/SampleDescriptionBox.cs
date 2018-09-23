@@ -31,7 +31,7 @@ namespace MatrixIO.IO.Bmff.Boxes
 
             stream.WriteBEUInt32((uint)Children.Count);
         }
-        
+
         private uint _EntryCount;
 
         public IList<Box> Children { get; } = new List<Box>();

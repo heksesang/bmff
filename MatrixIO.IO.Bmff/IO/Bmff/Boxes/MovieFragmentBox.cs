@@ -8,7 +8,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Movie Fragment Box ("moof")
     /// </summary>
     [Box("moof", "Movie Fragment Box")]
-    public class MovieFragmentBox : Box, ISuperBox
+    public sealed class MovieFragmentBox : Box, ISuperBox
     {
         public MovieFragmentBox() : base() { }
         public MovieFragmentBox(Stream stream) : base(stream) { }
