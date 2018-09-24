@@ -9,7 +9,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// A common base structure is used to contain general metadata, called the meta box.
     /// </summary>
     [Box("mdia", "Media Box")]
-    public class MediaBox : Box, ISuperBox
+    public sealed class MediaBox : Box, ISuperBox
     {
         public MediaBox() : base() { }
         public MediaBox(Stream stream) : base(stream) { }

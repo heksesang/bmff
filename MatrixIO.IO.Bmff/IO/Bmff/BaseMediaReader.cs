@@ -15,7 +15,7 @@ namespace MatrixIO.IO.Bmff
 
         public BaseMediaReader(Stream stream, BaseMediaOptions options = BaseMediaOptions.None)
         {
-            if (stream.CanSeek && stream.Position!=0) stream.Seek(0, SeekOrigin.Begin);
+            if (stream.CanSeek && stream.Position != 0) stream.Seek(0, SeekOrigin.Begin);
             BaseStream = stream;
             Options = options;
         }
@@ -27,9 +27,13 @@ namespace MatrixIO.IO.Bmff
             get
             {
                 var path = new StringBuilder();
-                foreach(var box in _boxStack) 
+                foreach (var box in _boxStack)
                 {
-                    if(path.Length > 0) path.Append("|");
+                    if (path.Length > 0)
+                    {
+                        path.Append('|');
+                    }
+
                     path.Append(box.ToString());
                 }
                 return path.ToString();
@@ -42,7 +46,11 @@ namespace MatrixIO.IO.Bmff
         {
             get
             {
-                if(_boxStack.Count == 0) _boxStack.Push(Box.FromStream(BaseStream, BaseMediaOptions.None));
+                if (_boxStack.Count == 0)
+                {
+                    _boxStack.Push(Box.FromStream(BaseStream, BaseMediaOptions.None));
+                }
+
                 return _boxStack.Peek();
             }
         }
@@ -52,6 +60,7 @@ namespace MatrixIO.IO.Bmff
         public void NextSibling()
         {
             CurrentBox.Sync(BaseStream, false);
+
             if (Depth > 1)
             {
                 _boxStack.Pop();
@@ -67,7 +76,8 @@ namespace MatrixIO.IO.Bmff
                 //if (currentSuperBox.Children != null & currentSuperBox.Children.Count > 0) ;
                 throw new NotImplementedException();
             }
-            else NextSibling();
+            
+            NextSibling();
         }
     }
 }

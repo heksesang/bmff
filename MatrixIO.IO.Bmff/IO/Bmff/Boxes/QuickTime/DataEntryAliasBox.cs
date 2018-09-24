@@ -9,8 +9,13 @@ namespace MatrixIO.IO.Bmff.Boxes
     [Box("alis", "Data Entry Alias Atom")]
     public sealed class DataEntryAliasBox : FullBox
     {
-        public DataEntryAliasBox() : base() { }
-        public DataEntryAliasBox(Stream stream) : base(stream) { }
+        public DataEntryAliasBox()
+            : base() { }
+
+        public DataEntryAliasBox(Stream stream)
+            : base(stream) { }
+
+        public string Alias { get; set; }
 
         internal override ulong CalculateSize()
         {
@@ -30,7 +35,5 @@ namespace MatrixIO.IO.Bmff.Boxes
 
             stream.WriteUTF8String(Alias);
         }
-
-        public string Alias { get; set; }
     }
 }

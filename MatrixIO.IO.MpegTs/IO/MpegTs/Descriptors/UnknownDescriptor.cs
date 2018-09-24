@@ -2,18 +2,12 @@
 
 namespace MatrixIO.IO.MpegTs.Descriptors
 {
-    public class UnknownDescriptor : TsDescriptor
+    public sealed class UnknownDescriptor : TsDescriptor
     {
         public override int Length
         {
-            get
-            {
-                return 2 + Data.Length;
-            }
-            protected set
-            {
-                base.Length = value;
-            }
+            get => 2 + Data.Length;
+            protected set => base.Length = value;
         }
 
         public byte[] Data { get; set; }

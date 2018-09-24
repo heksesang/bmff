@@ -8,8 +8,15 @@ namespace MatrixIO.IO.Bmff.Boxes
     [Box("vmhd", "Video Media Header Box")]
     public sealed class VideoMediaHeaderBox : FullBox
     {
-        public VideoMediaHeaderBox() : base() { }
-        public VideoMediaHeaderBox(Stream stream) : base(stream) { }
+        public VideoMediaHeaderBox()
+            : base() { }
+
+        public VideoMediaHeaderBox(Stream stream) 
+            : base(stream) { }
+
+        public CompositionMode GraphicsMode { get; set; }
+
+        public Colour OpColour { get; set; }
 
         internal override ulong CalculateSize()
         {
@@ -34,20 +41,13 @@ namespace MatrixIO.IO.Bmff.Boxes
             stream.WriteBEUInt16(OpColour.Blue);
         }
 
-        public CompositionMode GraphicsMode { get; set; }
-        public Colour OpColour { get; set; }
-
         public enum CompositionMode : ushort
         {
             Copy = 0,
         }
 
-        public class Colour
+        public readonly struct Colour
         {
-            public ushort Red { get; private set; }
-            public ushort Green { get; private set; }
-            public ushort Blue { get; private set; }
-
             public Colour(ushort red, ushort green, ushort blue)
             {
                 Red = red;
@@ -55,9 +55,15 @@ namespace MatrixIO.IO.Bmff.Boxes
                 Blue = blue;
             }
 
+            public ushort Red { get; }
+
+            public ushort Green { get; }
+
+            public ushort Blue { get; }
+
             public override string ToString()
             {
-                return string.Format("[0x{0:X4}, 0x{1:X4}, 0x{2:X4}]", Red, Green, Blue);
+                return $"[0x{Red:X4}, 0x{Green:X4}, 0x{Blue:X4}]";
             }
         }
     }

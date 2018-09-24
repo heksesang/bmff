@@ -7,7 +7,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Chunk Offset Box ("stco")
     /// </summary>
     [Box("stco", "Chunk Offset Box")]
-    public class ChunkOffsetBox : FullBox, ITableBox<ChunkOffsetBox.ChunkOffsetEntry>
+    public sealed class ChunkOffsetBox : FullBox, ITableBox<ChunkOffsetBox.ChunkOffsetEntry>
     {
         public ChunkOffsetBox() : base() { }
         public ChunkOffsetBox(Stream stream) : base(stream) { }
@@ -45,20 +45,20 @@ namespace MatrixIO.IO.Bmff.Boxes
 
         public int EntryCount => Entries.Count;
 
-        public class ChunkOffsetEntry
+        public readonly struct ChunkOffsetEntry
         {
-            public uint ChunkOffset { get; set; }
-
-            public ChunkOffsetEntry() { }
             public ChunkOffsetEntry(uint chunkOffset)
             {
                 ChunkOffset = chunkOffset;
             }
 
+            public uint ChunkOffset { get; }
+
             public static implicit operator uint(ChunkOffsetEntry entry)
             {
                 return entry.ChunkOffset;
             }
+
             public static implicit operator ChunkOffsetEntry(uint chunkOffset)
             {
                 return new ChunkOffsetEntry(chunkOffset);

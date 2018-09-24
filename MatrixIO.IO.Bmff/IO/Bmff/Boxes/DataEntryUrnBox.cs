@@ -10,12 +10,18 @@ namespace MatrixIO.IO.Bmff.Boxes
     public sealed class DataEntryUrnBox : FullBox
     {
         public DataEntryUrnBox() : base() { }
-        public DataEntryUrnBox(Stream stream) : base(stream) { }
+
+        public DataEntryUrnBox(Stream stream) 
+            : base(stream) { }
+
+        public string Name { get; set; }
+
+        public string Location { get; set; }
 
         internal override ulong CalculateSize()
         {
-            return base.CalculateSize() + 
-                (string.IsNullOrEmpty(Name) ? 0 : (ulong)Encoding.UTF8.GetByteCount(Name)) + 1 + 
+            return base.CalculateSize() +
+                (string.IsNullOrEmpty(Name) ? 0 : (ulong)Encoding.UTF8.GetByteCount(Name)) + 1 +
                 (string.IsNullOrEmpty(Location) ? 0 : (ulong)Encoding.UTF8.GetByteCount(Location));
         }
 
@@ -32,11 +38,11 @@ namespace MatrixIO.IO.Bmff.Boxes
             base.SaveToStream(stream);
 
             stream.WriteNullTerminatedUTF8String(Name);
-            if(Location.Length > 0)
-                stream.WriteUTF8String(Location);
-        }
 
-        public string Name { get; set; }
-        public string Location { get; set; }
+            if (Location.Length > 0)
+            {
+                stream.WriteUTF8String(Location);
+            }
+        }
     }
 }

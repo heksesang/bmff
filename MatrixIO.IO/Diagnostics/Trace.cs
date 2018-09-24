@@ -7,7 +7,7 @@ namespace System.Diagnostics
         public static void WriteLine(object value, string category = null)
         {
             if (PortabilityFactory.Current != null) PortabilityFactory.Current.TraceWriteLine(value, category);
-            else Debug.WriteLine(new String(' ', _indentLevel * 2) + (category == null ? value : category + ": " + value));
+            else Debug.WriteLine(new string(' ', _indentLevel * 2) + (category == null ? value : category + ": " + value));
         }
 
         public static void Assert(bool condition, string message = null)
@@ -19,10 +19,7 @@ namespace System.Diagnostics
         private static int _indentLevel = 0;
         public static int IndentLevel
         {
-            get
-            {
-                return PortabilityFactory.Current != null ? PortabilityFactory.Current.TraceIndentLevel : _indentLevel;
-            }
+            get => PortabilityFactory.Current != null ? PortabilityFactory.Current.TraceIndentLevel : _indentLevel;
             set
             {
                 if (PortabilityFactory.Current != null) PortabilityFactory.Current.TraceIndentLevel = value < 0 ? 0 : value;
@@ -34,6 +31,7 @@ namespace System.Diagnostics
         {
             IndentLevel++;
         }
+
         public static void Unindent()
         {
             IndentLevel--;

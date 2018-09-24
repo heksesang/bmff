@@ -9,8 +9,12 @@ namespace MatrixIO.IO.Bmff.Boxes
     [Box("ftyp", "File Type Box")]
     public sealed class FileTypeBox : Box
     {
-        public FileTypeBox() : base() { }
-        public FileTypeBox(Stream stream) : base(stream) { }
+        public FileTypeBox()
+            : base() { }
+
+        public FileTypeBox(Stream stream)
+            : base(stream) { }
+
         public FileTypeBox(FourCC majorBrand, uint minorVersion, FourCC[] compatibleBrands)
             : this()
         {
@@ -21,6 +25,12 @@ namespace MatrixIO.IO.Bmff.Boxes
                 CompatibleBrands.Add(fourCC);
             }
         }
+
+        public FourCC MajorBrand { get; set; }
+
+        public uint MinorVersion { get; set; }
+
+        public IList<FourCC> CompatibleBrands { get; } = new List<FourCC>();
 
         internal override ulong CalculateSize()
         {
@@ -36,6 +46,7 @@ namespace MatrixIO.IO.Bmff.Boxes
 
             ulong remainingBytes = EffectiveSize - CalculateSize();
             ulong numBrands = remainingBytes / 4;
+
             for (ulong i = 0; i < numBrands; i++)
             {
                 CompatibleBrands.Add(new FourCC(stream.ReadBEUInt32()));
@@ -54,36 +65,17 @@ namespace MatrixIO.IO.Bmff.Boxes
             }
         }
 
-        public FourCC MajorBrand { get; set; }
-        public uint MinorVersion { get; set; }
-
-        public IList<FourCC> CompatibleBrands { get; } = new List<FourCC>();
-
         public bool IsCompatibleWith(FourCC brand)
         {
-            if (MajorBrand == brand) return true;
-            if (CompatibleBrands.Contains(brand)) return true;
-            return false;
+            return MajorBrand == brand || CompatibleBrands.Contains(brand);
         }
 
-        public bool IsCompatibleWith(int brand)
-        {
-            return IsCompatibleWith(new FourCC(brand));
-        }
+        public bool IsCompatibleWith(int brand) => IsCompatibleWith(new FourCC(brand));
 
-        public bool IsCompatibleWith(uint brand)
-        {
-            return IsCompatibleWith(new FourCC(brand));
-        }
+        public bool IsCompatibleWith(uint brand) => IsCompatibleWith(new FourCC(brand));
 
-        public bool IsCompatibleWith(string brand)
-        {
-            return IsCompatibleWith(new FourCC(brand));
-        }
+        public bool IsCompatibleWith(string brand) => IsCompatibleWith(new FourCC(brand));
 
-        public bool IsCompatibleWith(byte[] brand)
-        {
-            return IsCompatibleWith(new FourCC(brand));
-        }
+        public bool IsCompatibleWith(byte[] brand) => IsCompatibleWith(new FourCC(brand));
     }
 }

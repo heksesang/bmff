@@ -8,11 +8,11 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Track Fragment Box ("traf")
     /// </summary>
     [Box("traf", "Track Fragment Box")]
-    public class TrackFragmentBox : Box, ISuperBox
+    public sealed class TrackFragmentBox : Box, ISuperBox
     {
         public TrackFragmentBox() : base() { }
         public TrackFragmentBox(Stream stream) : base(stream) { }
-        
+
         public IList<Box> Children { get; } = new List<Box>();
 
         public IEnumerator<Box> GetEnumerator() => Children.GetEnumerator();

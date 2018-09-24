@@ -8,7 +8,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Track Box ("trak")
     /// </summary>
     [Box("trak", "Track Box")]
-    public class TrackBox : Box, ISuperBox
+    public sealed class TrackBox : Box, ISuperBox
     {
         public TrackBox() : base() { }
         public TrackBox(Stream stream) : base(stream) { }

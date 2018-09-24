@@ -43,19 +43,19 @@ namespace MatrixIO.IO.MpegTs
 
         public bool TransportErrorIndicator
         {
-            get { return (_header1 & 0x8000) != 0; }
+            get => (_header1 & 0x8000) != 0;
             set { if (value) _header1 |= 0x8000; else _header1 &= 0x7FFF; }
         }
 
         public bool PayloadUnitStartIndicator
         {
-            get { return (_header1 & 0x4000) != 0; }
+            get => (_header1 & 0x4000) != 0;
             set { if (value) _header1 |= 0x4000; else _header1 &= 0xBFFF; }
         }
 
         public bool TransportPriority
         {
-            get { return (_header1 & 0x2000) != 0; }
+            get => (_header1 & 0x2000) != 0;
             set { if (value) _header1 |= 0x2000; else _header1 &= 0xDFFF; }
         }
 
@@ -64,7 +64,7 @@ namespace MatrixIO.IO.MpegTs
         /// </summary>
         public ushort PacketIdentifier
         {
-            get { return (ushort)(_header1 & 0x1FFF); }
+            get => (ushort)(_header1 & 0x1FFF);
             set
             {
                 Debug.Assert(value < 8192, "PacketIdentifier must be in the range of 0 to 8191.");
@@ -74,9 +74,9 @@ namespace MatrixIO.IO.MpegTs
 
         public ScramblingControl ScramblingControl
         {
-            get { return (ScramblingControl)((_header2 & 0xC0) >> 6); }
-            set 
-            { 
+            get => (ScramblingControl)((_header2 & 0xC0) >> 6);
+            set
+            {
                 Debug.Assert((int)value < 4, "ScramblingControl must be in the range of 0 to 3.");
                 _header2 = (byte)((_header2 & 0x3F) | (((byte)value << 6) & 0xC0));
             }
@@ -84,12 +84,12 @@ namespace MatrixIO.IO.MpegTs
 
         private bool HasAdaptationField
         {
-            get { return (_header2 & 0x20) != 0; }
+            get => (_header2 & 0x20) != 0;
             set { if (value) _header2 |= 0x20; else _header2 &= 0xDF; }
         }
         private bool HasPayload
         {
-            get { return (_header2 & 0x10) != 0; }
+            get => (_header2 & 0x10) != 0;
             set { if (value) _header2 |= 0x10; else _header2 &= 0xEF; }
         }
 
@@ -98,10 +98,10 @@ namespace MatrixIO.IO.MpegTs
         /// </summary>
         public byte ContinuityCounter
         {
-            get { return (byte)(_header2 & 0x0F); }
+            get => (byte)(_header2 & 0x0F);
             set
             {
-                Debug.Assert((int) value < 16, "ContinuityCounter must be in the range of 0 to 15.");
+                Debug.Assert((int)value < 16, "ContinuityCounter must be in the range of 0 to 15.");
                 _header2 = (byte)((_header2 & 0xF0) | (value & 0x0F));
             }
         }
@@ -109,10 +109,7 @@ namespace MatrixIO.IO.MpegTs
         private AdaptationField _adaptationField;
         public AdaptationField AdaptationField
         {
-            get
-            {
-                return HasAdaptationField ? _adaptationField : null;    
-            }
+            get => HasAdaptationField ? _adaptationField : null;
             set
             {
                 _adaptationField = value;
@@ -123,7 +120,7 @@ namespace MatrixIO.IO.MpegTs
         private byte[] _payload;
         public byte[] Payload
         {
-            get { return HasPayload ? _payload : null; }
+            get => HasPayload ? _payload : null;
             set
             {
                 _payload = value;

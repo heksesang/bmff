@@ -8,10 +8,31 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Media Header Box ("mdhd")
     /// </summary>
     [Box("mdhd", "Media Header Box")]
-    public class MediaHeaderBox : FullBox
+    public sealed class MediaHeaderBox : FullBox
     {
-        public MediaHeaderBox() : base() { }
-        public MediaHeaderBox(Stream stream) : base(stream) { }
+        private const ushort CHARBASE = 0x0060;
+        private const ushort CHARMASK1 = 0x7C00;
+        private const ushort CHARMASK2 = 0x03E0;
+        private const ushort CHARMASK3 = 0x001F;
+
+        public MediaHeaderBox()
+            : base() { }
+
+        public MediaHeaderBox(Stream stream)
+            : base(stream) { }
+
+        public DateTime CreationTime { get; set; }
+
+        public DateTime ModificationTime { get; set; }
+
+        public uint TimeScale { get; set; }
+
+        public ulong Duration { get; set; }
+
+        // TODO: Validate this on set.
+        public string Language { get; set; }
+
+        public ushort Predefined { get; set; }
 
         internal override ulong CalculateSize()
         {
@@ -64,34 +85,30 @@ namespace MatrixIO.IO.Bmff.Boxes
             stream.WriteBEUInt16(Predefined);
         }
 
-        public DateTime CreationTime { get; set; }
-        public DateTime ModificationTime { get; set; }
-        public uint TimeScale { get; set; }
-        public ulong Duration { get; set; }
 
-        // TODO: Validate this on set.
-        public string Language { get; set; }
-        public ushort Predefined { get; set; }
-
-        private const ushort CHARBASE = 0x0060;
-        private const ushort CHARMASK1 = 0x7C00;
-        private const ushort CHARMASK2 = 0x03E0;
-        private const ushort CHARMASK3 = 0x001F;
-
-        internal ushort ConvertThreeLetterLanguageCode(string language)
+        internal static ushort ConvertThreeLetterLanguageCode(string language)
         {
             byte[] langBytes = Encoding.UTF8.GetBytes(language);
-            if (langBytes.Length != 3) throw new ArgumentOutOfRangeException();
-            return (ushort)((((langBytes[0]-CHARBASE) << 10) & CHARMASK1) | (((langBytes[1]-CHARBASE) << 5) & CHARMASK2) | (((langBytes[2]-CHARBASE) & CHARMASK3)));
-        }
-        internal string ConvertThreeLetterLanguageCode(ushort language)
-        {
-            byte[] langBytes = new byte[3];
-            langBytes[0] = (byte)(((language & CHARMASK1) >> 10) + CHARBASE);
-            langBytes[1] = (byte)(((language & CHARMASK2) >> 5) + CHARBASE);
-            langBytes[2] = (byte)((language & CHARMASK3) + CHARBASE);
-            return Encoding.UTF8.GetString(langBytes, 0, langBytes.Length);
+
+            if (langBytes.Length != 3)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+
+            return (ushort)((((langBytes[0] - CHARBASE) << 10) & CHARMASK1)
+                | (((langBytes[1] - CHARBASE) << 5) & CHARMASK2)
+                | (((langBytes[2] - CHARBASE) & CHARMASK3)));
         }
 
+        internal static string ConvertThreeLetterLanguageCode(ushort language)
+        {
+            byte[] langBytes = new byte[3] {
+                (byte)(((language & CHARMASK1) >> 10) + CHARBASE),
+                (byte)(((language & CHARMASK2) >> 5) + CHARBASE),
+                (byte)((language & CHARMASK3) + CHARBASE)
+            };
+
+            return Encoding.UTF8.GetString(langBytes, 0, langBytes.Length);
+        }
     }
 }

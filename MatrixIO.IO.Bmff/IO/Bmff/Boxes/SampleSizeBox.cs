@@ -9,8 +9,21 @@ namespace MatrixIO.IO.Bmff.Boxes
     [Box("stsz", "Sample Size Box")]
     public sealed class SampleSizeBox : FullBox, ITableBox<SampleSizeBox.SampleSizeEntry>
     {
-        public SampleSizeBox() : base() { }
-        public SampleSizeBox(Stream stream) : base(stream) { }
+        private uint _sampleCount;
+
+        public SampleSizeBox() 
+            : base() { }
+
+        public SampleSizeBox(Stream stream) 
+            : base(stream) { }
+
+        public uint SampleSize { get; set; }
+
+        public uint SampleCount => (SampleSize == 0) ? (uint)Entries.Count : _sampleCount;
+
+        public IList<SampleSizeEntry> Entries { get; } = new List<SampleSizeEntry>();
+
+        public uint EntryCount => (uint)Entries.Count;
 
         internal override ulong CalculateSize()
         {
@@ -22,11 +35,11 @@ namespace MatrixIO.IO.Bmff.Boxes
             base.LoadFromStream(stream);
 
             SampleSize = stream.ReadBEUInt32();
-            _SampleCount = stream.ReadBEUInt32();
+            _sampleCount = stream.ReadBEUInt32();
 
             if (SampleSize == 0)
             {
-                for (uint i = 0; i < _SampleCount; i++)
+                for (uint i = 0; i < _sampleCount; i++)
                 {
                     Entries.Add(new SampleSizeEntry(stream.ReadBEUInt32()));
                 }
@@ -46,37 +59,14 @@ namespace MatrixIO.IO.Bmff.Boxes
             }
         }
 
-        public IList<SampleSizeEntry> Entries { get; } = new List<SampleSizeEntry>();
-
-
-        public uint SampleSize { get; set; }
-        private uint _SampleCount;
-        public uint SampleCount
+        public readonly struct SampleSizeEntry
         {
-            get
-            {
-                if (SampleSize == 0) return (uint)Entries.Count;
-                return _SampleCount;
-            }
-        }
-
-        public uint EntryCount
-        {
-            get
-            {
-                return (uint)Entries.Count;
-            }
-        }
-
-        public class SampleSizeEntry
-        {
-            public uint EntrySize { get; set; }
-
-            public SampleSizeEntry() { }
             public SampleSizeEntry(uint entrySize)
             {
                 EntrySize = entrySize;
             }
+
+            public uint EntrySize { get; }
 
             public static implicit operator uint(SampleSizeEntry entry)
             {

@@ -84,14 +84,23 @@ namespace MatrixIO.IO.Bmff
         {
             try
             {
-                string fourcc = Encoding.UTF8.GetString(GetBytes(), 0, 4);
+                string fourcc = Encoding.ASCII.GetString(GetBytes(), 0, 4);
+
                 bool hasControlChars = false;
-                foreach (char c in fourcc) if (char.IsControl(c)) hasControlChars = true;
+
+                foreach (char c in fourcc)
+                {
+                    if (char.IsControl(c))
+                    {
+                        hasControlChars = true;
+                    }
+                }
+
                 if (!hasControlChars) return fourcc;
             }
             catch (ArgumentException) { } // UTF8 conversion failed
 
-            return string.Format("0x{0:x8}", _FourCC);
+            return $"0x{_FourCC:x8}";
         }
     }
 }

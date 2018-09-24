@@ -7,7 +7,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Chunk Large Offset Box ("co64")
     /// </summary>
     [Box("co64", "Chunk Large Offset Box")]
-    public class ChunkLargeOffsetBox : FullBox, ITableBox<ChunkLargeOffsetBox.ChunkLargeOffsetEntry>
+    public sealed class ChunkLargeOffsetBox : FullBox, ITableBox<ChunkLargeOffsetBox.ChunkLargeOffsetEntry>
     {
         public ChunkLargeOffsetBox() : base() { }
         public ChunkLargeOffsetBox(Stream stream) : base(stream) { }
@@ -45,15 +45,14 @@ namespace MatrixIO.IO.Bmff.Boxes
 
         public int EntryCount => Entries.Count;
 
-        public class ChunkLargeOffsetEntry
+        public readonly struct ChunkLargeOffsetEntry
         {
-            public ulong ChunkOffset { get; set; }
-
-            public ChunkLargeOffsetEntry() { }
             public ChunkLargeOffsetEntry(ulong chunkOffset)
             {
                 ChunkOffset = chunkOffset;
             }
+
+            public ulong ChunkOffset { get; }
 
             public static implicit operator ulong(ChunkLargeOffsetEntry entry)
             {

@@ -13,7 +13,7 @@ namespace MatrixIO.IO.Bmff.Boxes
         {
             this.Offset = 0;
             this.EffectiveSize = size;
-            this._SourceStream = Stream.Null;
+            this._sourceStream = Stream.Null;
             ContentOffset = this.CalculateSize();
         }
         public FreeSpaceBox(Stream stream) : base(stream) { }

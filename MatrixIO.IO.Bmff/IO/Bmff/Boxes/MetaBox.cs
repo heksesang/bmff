@@ -25,71 +25,41 @@ namespace MatrixIO.IO.Bmff.Boxes
         /* TODO: Support standard sub-boxes!
         public HandlerBox TheHandler
         {
-            get
-            {
-                return (from c in _Children
-                        where c is HandlerBox
-                        select (HandlerBox)c).FirstOrDefault();
-            }
+            get => Children.OfType<HandlerBox>().FirstOrDefault();
         }
+
         public PrimaryItemBox PrimaryResource
         {
-            get
-            {
-                return (from c in _Children
-                        where c is PrimaryItemBox
-                        select (PrimaryItemBox)c).FirstOrDefault();
-            }
+            get => Children.OfType<PrimaryItemBox>().FirstOrDefault();
         }
         */
+
         public DataInformationBox FileLocations
         {
-            get
-            {
-                return (from c in Children
-                        where c is DataInformationBox
-                        select (DataInformationBox)c).FirstOrDefault();
-            }
+            get => Children.OfType<DataInformationBox>().FirstOrDefault();
         }
+
         /*
         public ItemLocationBox ItemLocations
         {
-            get
-            {
-                return (from c in _Children
-                        where c is ItemLocationBox
-                        select (ItemLocationBox)c).FirstOrDefault();
-            }
+            get => Children.OfType<ItemLocationBox>().FirstOrDefault();
         }
         */
+
         public ItemProtectionBox Protections
         {
-            get
-            {
-                return (from c in Children
-                        where c is ItemProtectionBox
-                        select (ItemProtectionBox)c).FirstOrDefault();
-            }
+            get => Children.OfType<ItemProtectionBox>().FirstOrDefault();
         }
+
         /*
         public ItemInfoBox ItemInfos
         {
-            get
-            {
-                return (from c in _Children
-                        where c is ItemInfonBox
-                        select (ItemInfoBox)c).FirstOrDefault();
-            }
+            get => Children.OfType<ItemInfoBox>().FirstOrDefault();      
         }
 
         public IPMPControlBox IPMPControl
         {
-            get
-            {
-                return (from c in _Children
-                        where c is IPMPControlBox
-                        select (IPMPControlBox)c).FirstOrDefault();
-            }
+            get => Children.OfType<IPMPControlBox>().FirstOrDefault();
         }
         */
 

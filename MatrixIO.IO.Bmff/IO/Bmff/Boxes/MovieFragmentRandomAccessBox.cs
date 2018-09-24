@@ -9,7 +9,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Movie Fragment Random Access Box ("mfra")
     /// </summary>
     [Box("mfra", "Movie Fragment Random Access Box")]
-    public class MovieFragmentRandomAccessBox : Box, ISuperBox
+    public sealed class MovieFragmentRandomAccessBox : Box, ISuperBox
     {
         public MovieFragmentRandomAccessBox() : base() { }
         public MovieFragmentRandomAccessBox(Stream stream) : base(stream) { }
@@ -22,22 +22,12 @@ namespace MatrixIO.IO.Bmff.Boxes
 
         public IEnumerable<TrackFragmentRandomAccessBox> TrackFragmentRandomAccessBoxes
         {
-            get
-            {
-                return from c in Children
-                        where c is TrackFragmentRandomAccessBox
-                        select (TrackFragmentRandomAccessBox)c;
-            }
+            get => Children.OfType<TrackFragmentRandomAccessBox>();
         }
 
         public MovieFragmentRandomAccessOffsetBox MovieFragmentRandomAccessOffsetBox
         {
-            get
-            {
-                return (from c in Children
-                        where c is MovieFragmentRandomAccessOffsetBox
-                        select (MovieFragmentRandomAccessOffsetBox) c).LastOrDefault();
-            }
+            get => Children.OfType<MovieFragmentRandomAccessOffsetBox>().LastOrDefault();
         }
     }
 }

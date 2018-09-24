@@ -9,12 +9,19 @@ namespace MatrixIO.IO.Bmff.Boxes
     [Box("bpcc", "Bits Per Component Box")]
     public sealed class BitsPerComponentBox : Box, ITableBox<BitsPerComponentBox.ComponentBitsEntry>
     {
-        public BitsPerComponentBox() : base() { }
-        public BitsPerComponentBox(Stream stream) : base(stream) { }
+        public BitsPerComponentBox() 
+            : base() { }
+
+        public BitsPerComponentBox(Stream stream) 
+            : base(stream) { }
+
+        public IList<ComponentBitsEntry> Entries { get; } = new List<ComponentBitsEntry>();
+
+        public int EntryCount => Entries.Count;
 
         internal override ulong CalculateSize()
         {
-            return base.CalculateSize() + (ulong)_Entries.Count;
+            return base.CalculateSize() + (ulong)Entries.Count;
         }
 
         protected override void LoadFromStream(Stream stream)
@@ -25,7 +32,7 @@ namespace MatrixIO.IO.Bmff.Boxes
             while (stream.Position < (long)(Offset + EffectiveSize))
             {
                 byte b = stream.ReadOneByte();
-                _Entries.Add(new ComponentBitsEntry(b));
+                Entries.Add(new ComponentBitsEntry(b));
             }
         }
 
@@ -34,32 +41,26 @@ namespace MatrixIO.IO.Bmff.Boxes
             base.SaveToStream(stream);
 
             // TODO: Convert to byte[] and write all at once.
-            foreach (ComponentBitsEntry entry in _Entries)
+            foreach (ComponentBitsEntry entry in Entries)
             {
                 stream.WriteOneByte(entry.ComponentBits);
             }
         }
 
-        private IList<ComponentBitsEntry> _Entries = new List<ComponentBitsEntry>();
-
-        public IList<ComponentBitsEntry> Entries => _Entries;
-
-        public int EntryCount => _Entries.Count;
-
-        public class ComponentBitsEntry
+        public readonly struct ComponentBitsEntry
         {
-            public byte ComponentBits { get; set; }
-
-            public ComponentBitsEntry() { }
             public ComponentBitsEntry(byte componentBits)
             {
                 ComponentBits = componentBits;
             }
 
+            public byte ComponentBits { get; }
+
             public static implicit operator byte(ComponentBitsEntry entry)
             {
                 return entry.ComponentBits;
             }
+
             public static implicit operator ComponentBitsEntry(byte componentBits)
             {
                 return new ComponentBitsEntry(componentBits);

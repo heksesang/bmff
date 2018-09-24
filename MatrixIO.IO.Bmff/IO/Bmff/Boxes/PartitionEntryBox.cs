@@ -8,7 +8,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Partition Entry Box ("paen")
     /// </summary>
     [Box("paen", "Partition Entry Box")]
-    public class PartitionEntryBox : Box, ISuperBox
+    public sealed class PartitionEntryBox : Box, ISuperBox
     {
         public PartitionEntryBox() : base() { }
         public PartitionEntryBox(Stream stream) : base(stream) { }
@@ -23,22 +23,12 @@ namespace MatrixIO.IO.Bmff.Boxes
         /*
         public FilePartitionBox BlocksAndSymbols
         {
-            get
-            {
-                return (from c in Children
-                        where c is FilePartitionBox
-                        select (FilePartitionBox)c).FirstOrDefault();
-            }
+             get => Children.OfType<FilePartitionBox>().FirstOrDefault();
         }
 
         public FECReservoirBox FECSymbolLocations
         {
-            get
-            {
-                return (from c in Children
-                        where c is FECReservoirBox
-                        select (FECReservoirBox)c).FirstOrDefault();
-            }
+            get => Children.OfType<FECReservoirBox>().FirstOrDefault();
         }
         */
     }

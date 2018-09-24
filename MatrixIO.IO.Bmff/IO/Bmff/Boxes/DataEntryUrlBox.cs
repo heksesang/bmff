@@ -9,8 +9,13 @@ namespace MatrixIO.IO.Bmff.Boxes
     [Box("url ", "Data Entry Url Box")]
     public sealed class DataEntryUrlBox : FullBox
     {
-        public DataEntryUrlBox() : base() { }
-        public DataEntryUrlBox(Stream stream) : base(stream) { }
+        public DataEntryUrlBox() 
+            : base() { }
+
+        public DataEntryUrlBox(Stream stream) 
+            : base(stream) { }
+
+        public string Location { get; set; }
 
         internal override ulong CalculateSize()
         {
@@ -28,10 +33,10 @@ namespace MatrixIO.IO.Bmff.Boxes
         {
             base.SaveToStream(stream);
 
-            if(!string.IsNullOrEmpty(Location))
+            if (!string.IsNullOrEmpty(Location))
+            {
                 stream.WriteUTF8String(Location);
+            }
         }
-
-        public string Location { get; set; }
     }
 }

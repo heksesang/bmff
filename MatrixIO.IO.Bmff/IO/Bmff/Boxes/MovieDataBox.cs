@@ -7,7 +7,7 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Movie Data Box ("mdat")
     /// </summary>
     [Box("mdat", "Movie Data Box")]
-    public class MovieDataBox : Box, IContentBox
+    public sealed class MovieDataBox : Box, IContentBox
     {
         public MovieDataBox() : base() { }
         /// <summary>
@@ -42,7 +42,7 @@ namespace MatrixIO.IO.Bmff.Boxes
             }
 
             this.ContentOffset = contentOffset;
-            this._SourceStream = contentStream;
+            this._sourceStream = contentStream;
         }
     }
 }

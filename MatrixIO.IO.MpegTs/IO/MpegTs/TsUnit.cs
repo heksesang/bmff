@@ -99,18 +99,9 @@ namespace MatrixIO.IO.MpegTs
                 }
             }
 
-            public int Count
-            {
-                get
-                {
-                    return _packets.Sum(packet => packet.Payload != null ? packet.Payload.Length : 0);
-                }
-            }
+            public int Count => _packets.Sum(packet => packet.Payload != null ? packet.Payload.Length : 0);
 
-            public bool IsReadOnly
-            {
-                get { return true; }
-            }
+            public bool IsReadOnly => true;
 
             public bool Remove(byte item)
             {

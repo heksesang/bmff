@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 
@@ -15,7 +16,7 @@ namespace MatrixIO.IO.Bmff
             get
             {
 #pragma warning disable 612,618
-                if (_rootBoxes == null) return _rootBoxes = new List<Box>(GetBoxes());
+                if (_rootBoxes is null) return _rootBoxes = new List<Box>(GetBoxes());
 #pragma warning restore 612,618
                 return _rootBoxes;
             }
@@ -24,37 +25,20 @@ namespace MatrixIO.IO.Bmff
         public bool RandomAccess => _baseStream.CanSeek;
 
         #region Navigation
+
         private readonly Stack<Box> _boxStack = new Stack<Box>();
 
-        public int Depth
-        {
-            get
-            {
-                return _boxStack.Count;
-            }
-        }
+        public int Depth => _boxStack.Count;
 
-        public Box CurrentBox
-        {
-            get
-            {
-                return _boxStack.Peek();
-            }
-        }
+        public Box CurrentBox => _boxStack.Peek();
 
-        public bool HasChildren
-        {
-            get
-            {
-                if (CurrentBox is ISuperBox) return true;
-                else return false;
-            }
-        }
+        public bool HasChildren => CurrentBox is ISuperBox;
+
         #endregion
 
         public BmffReader(Stream stream)
         {
-            if (stream.CanSeek && stream.Position!=0) stream.Seek(0, SeekOrigin.Begin);
+            if (stream.CanSeek && stream.Position != 0) stream.Seek(0, SeekOrigin.Begin);
             _baseStream = stream;
         }
 
@@ -78,6 +62,7 @@ namespace MatrixIO.IO.Bmff
                 if (box != null) yield return box;
             } while (box != null);
         }
+
         /// <summary>
         /// Seeks to the beginning of the file and reads the "ftyp" Box.
         /// </summary>
@@ -85,7 +70,10 @@ namespace MatrixIO.IO.Bmff
         [Obsolete]
         public Boxes.FileTypeBox GetFileTypeBox()
         {
-            if (_baseStream.CanSeek && _baseStream.Position!=0) _baseStream.Seek(0, SeekOrigin.Begin);
+            if (_baseStream.CanSeek && _baseStream.Position != 0)
+            {
+                _baseStream.Seek(0, SeekOrigin.Begin);
+            }
 
             // TODO: Support files where "ftyp" is not the first FourCC like JPEG2000.
             return Box.FromStream<Boxes.FileTypeBox>(_baseStream);
@@ -109,7 +97,10 @@ namespace MatrixIO.IO.Bmff
             {
                 mfraOffset = BitConverter.ToUInt32(mfrobuf, 20).NetworkToHostOrder();
             }
-            else return null;
+            else
+            {
+                return null;
+            }
 
             _baseStream.Seek(-mfraOffset, SeekOrigin.End);
 
@@ -120,15 +111,9 @@ namespace MatrixIO.IO.Bmff
         IList<Box> ISuperBox.Children => RootBoxes;
 
         [Obsolete("Use the BaseMedia class instead.")]
-        IEnumerator<Box> IEnumerable<Box>.GetEnumerator()
-        {
-            return RootBoxes.GetEnumerator();
-        }
+        IEnumerator<Box> IEnumerable<Box>.GetEnumerator() => RootBoxes.GetEnumerator();
 
         [Obsolete("Use the BaseMedia class instead.")]
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-        {
-            return RootBoxes.GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => RootBoxes.GetEnumerator();
     }
 }

@@ -10,8 +10,13 @@ namespace MatrixIO.IO.Bmff.Boxes
     [Box("dcom", "Data Compression Atom")]
     public sealed class DataCompressionBox : Box
     {
-        public DataCompressionBox() : base() { }
-        public DataCompressionBox(Stream stream) : base(stream) { }
+        public DataCompressionBox()
+            : base() { }
+
+        public DataCompressionBox(Stream stream)
+            : base(stream) { }
+
+        public FourCC Format { get; set; }
 
         internal override ulong CalculateSize()
         {
@@ -31,7 +36,5 @@ namespace MatrixIO.IO.Bmff.Boxes
 
             stream.WriteBytes(Format.GetBytes());
         }
-
-        public FourCC Format { get; set; }
     }
 }

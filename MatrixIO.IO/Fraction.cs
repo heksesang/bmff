@@ -167,10 +167,10 @@ namespace MatrixIO
         }
 
         #region Object overrides
+
         public override bool Equals(object obj)
         {
-            if (obj == null || !(obj is Fraction)) return false;
-            return Equals((Fraction)obj);
+            return obj is Fraction other && Equals(other);
         }
 
         public override int GetHashCode()

@@ -11,6 +11,10 @@ namespace MatrixIO.IO.Bmff.Boxes
     [Box("tfra", "Track Fragment Random Access Box")]
     public sealed class TrackFragmentRandomAccessBox : FullBox, ITableBox<TrackFragmentRandomAccessBox.TrackFragmentEntry>
     {
+        private byte[] _reserved = new byte[4];
+        private byte _sizeOf;
+        private readonly List<TrackFragmentEntry> _entries = new List<TrackFragmentEntry>();
+
         public TrackFragmentRandomAccessBox() : base() { }
         public TrackFragmentRandomAccessBox(Stream stream) : base(stream) { }
 
@@ -30,13 +34,15 @@ namespace MatrixIO.IO.Bmff.Boxes
             base.LoadFromStream(stream);
 
             TrackID = stream.ReadBEUInt32();
-            Reserved = stream.ReadBytes(3);
-            _SizeOf = stream.ReadOneByte();
+            _reserved = stream.ReadBytes(3);
+            _sizeOf = stream.ReadOneByte();
 
-            uint NumberOfEntries = stream.ReadBEUInt32();
-            for (uint i = 0; i < NumberOfEntries; i++)
+            uint entryCount = stream.ReadBEUInt32();
+
+            for (uint i = 0; i < entryCount; i++)
             {
-                TrackFragmentEntry entry = new TrackFragmentEntry();
+                var entry = new TrackFragmentEntry();
+
                 if (Version == 0x01)
                 {
                     entry.Time = stream.ReadBEUInt64();
@@ -48,56 +54,70 @@ namespace MatrixIO.IO.Bmff.Boxes
                     entry.MoofOffset = stream.ReadBEUInt32();
                 }
 
-                if (SizeOfTrafNumber == 1) entry.TrafNumber = stream.ReadOneByte();
-                else if (SizeOfTrafNumber == 2) entry.TrafNumber = stream.ReadBEUInt16();
-                else if (SizeOfTrafNumber == 3) entry.TrafNumber = stream.ReadBEUInt24();
-                else entry.TrafNumber = stream.ReadBEUInt32();
+                switch (SizeOfTrafNumber)
+                {
+                    case 1: entry.TrafNumber = stream.ReadOneByte(); break;
+                    case 2: entry.TrafNumber = stream.ReadBEUInt16(); break;
+                    case 3: entry.TrafNumber = stream.ReadBEUInt24(); break;
+                    default: entry.TrafNumber = stream.ReadBEUInt32(); break;
+                }
 
-                if (SizeOfTrunNumber == 1) entry.TrunNumber = stream.ReadOneByte();
-                else if (SizeOfTrunNumber == 2) entry.TrunNumber = stream.ReadBEUInt16();
-                else if (SizeOfTrunNumber == 3) entry.TrunNumber = stream.ReadBEUInt24();
-                else entry.TrunNumber = stream.ReadBEUInt32();
+                switch (SizeOfTrunNumber)
+                {
+                    case 1: entry.TrunNumber = stream.ReadOneByte(); break;
+                    case 2: entry.TrunNumber = stream.ReadBEUInt16(); break;
+                    case 3: entry.TrunNumber = stream.ReadBEUInt24(); break;
+                    default: entry.TrunNumber = stream.ReadBEUInt32(); break;
+                }
 
-                if (SizeOfSampleNumber == 1) entry.SampleNumber = stream.ReadOneByte();
-                else if (SizeOfSampleNumber == 2) entry.SampleNumber = stream.ReadBEUInt16();
-                else if (SizeOfSampleNumber == 3) entry.SampleNumber = stream.ReadBEUInt24();
-                else entry.SampleNumber = stream.ReadBEUInt32();
+                switch (SizeOfSampleNumber)
+                {
+                    case 1: entry.SampleNumber = stream.ReadOneByte(); break;
+                    case 2: entry.SampleNumber = stream.ReadBEUInt16(); break;
+                    case 3: entry.SampleNumber = stream.ReadBEUInt24(); break;
+                    default: entry.SampleNumber = stream.ReadBEUInt32(); break;
+                }
 
-                _Entries.Add(entry);
+                _entries.Add(entry);
             }
         }
 
         protected override void SaveToStream(Stream stream)
         {
-            if ((from entry in _Entries select Math.Max(entry.Time, entry.MoofOffset)).Max() > UInt32.MaxValue) Version = 1;
-            else Version = 0;
+            sbyte GetIntSize(uint value)
+            {
+                if (value > 16777215) return 4;
+                else if (value > ushort.MaxValue) return 3;
+                else if (value > byte.MaxValue) return 2;
+                else return 1;
+            }
 
-            uint MaxTrafNumber = (from entry in _Entries select entry.TrafNumber).Max();
-            if (MaxTrafNumber > 16777215) SizeOfTrafNumber = 4;
-            else if (MaxTrafNumber > UInt16.MaxValue) SizeOfTrafNumber = 3;
-            else if (MaxTrafNumber > Byte.MaxValue) SizeOfTrafNumber = 2;
-            else SizeOfTrafNumber = 1;
+            bool has64BitEntry = false;
 
-            uint MaxTrunNumber = (from entry in _Entries select entry.TrunNumber).Max();
-            if (MaxTrunNumber > 16777215) SizeOfTrunNumber = 4;
-            else if (MaxTrunNumber > UInt16.MaxValue) SizeOfTrunNumber = 3;
-            else if (MaxTrunNumber > Byte.MaxValue) SizeOfTrunNumber = 2;
-            else SizeOfTrunNumber = 1;
+            foreach (var entry in _entries)
+            {
+                if (entry.Time > uint.MaxValue || entry.MoofOffset > uint.MaxValue)
+                {
+                    has64BitEntry = true;
 
-            uint MaxSampleNumber = (from entry in _Entries select entry.SampleNumber).Max();
-            if (MaxSampleNumber > 16777215) SizeOfSampleNumber = 4;
-            else if (MaxSampleNumber > UInt16.MaxValue) SizeOfSampleNumber = 3;
-            else if (MaxSampleNumber > Byte.MaxValue) SizeOfSampleNumber = 2;
-            else SizeOfSampleNumber = 1;
+                    break;
+                }
+            }            
+
+            SizeOfTrafNumber   = GetIntSize(_entries.Max(e => e.TrafNumber));
+            SizeOfTrunNumber   = GetIntSize(_entries.Max(e => e.TrunNumber));
+            SizeOfSampleNumber = GetIntSize(_entries.Max(e => e.SampleNumber));
+            Version            = has64BitEntry ? (byte)1 : (byte)0;
 
             base.SaveToStream(stream);
 
             stream.WriteBEUInt32(TrackID);
-            stream.Write(Reserved, 0, 3);
-            stream.WriteOneByte(_SizeOf);
+            stream.Write(_reserved, 0, 3);
+            stream.WriteOneByte(_sizeOf);
 
-            stream.WriteBEUInt32((uint)_Entries.Count);
-            foreach (var entry in _Entries)
+            stream.WriteBEUInt32((uint)_entries.Count);
+
+            foreach (var entry in _entries)
             {
                 if (Version == 0x01)
                 {
@@ -110,61 +130,71 @@ namespace MatrixIO.IO.Bmff.Boxes
                     stream.WriteBEUInt32((uint)entry.MoofOffset);
                 }
 
-                if (SizeOfTrafNumber == 1) stream.WriteOneByte((byte)entry.TrafNumber);
-                else if (SizeOfTrafNumber == 2) stream.WriteBEUInt16((ushort)entry.TrafNumber);
-                else if (SizeOfTrafNumber == 3) stream.WriteBEUInt24((uint)entry.TrafNumber);
-                else stream.WriteBEUInt32((uint)entry.TrafNumber);
+                switch (SizeOfTrafNumber)
+                {
+                    case 1: stream.WriteOneByte((byte)entry.TrafNumber); break;
+                    case 2: stream.WriteBEUInt16((ushort)entry.TrafNumber); break;
+                    case 3: stream.WriteBEUInt24((uint)entry.TrafNumber); break;
+                    default: stream.WriteBEUInt32((uint)entry.TrafNumber); break;
+                }
 
-                if (SizeOfTrunNumber == 1) stream.WriteOneByte((byte)entry.TrunNumber);
-                else if (SizeOfTrunNumber == 2) stream.WriteBEUInt16((ushort)entry.TrunNumber);
-                else if (SizeOfTrunNumber == 3) stream.WriteBEUInt24((uint)entry.TrunNumber);
-                else stream.WriteBEUInt32((uint)entry.TrunNumber);
+                switch (SizeOfTrunNumber)
+                {
+                    case 1: stream.WriteOneByte((byte)entry.TrunNumber); break;
+                    case 2: stream.WriteBEUInt16((ushort)entry.TrunNumber); break;
+                    case 3: stream.WriteBEUInt24((uint)entry.TrunNumber); break;
+                    default: stream.WriteBEUInt32((uint)entry.TrunNumber); break;
+                }
 
-                if (SizeOfSampleNumber == 1) stream.WriteOneByte((byte)entry.SampleNumber);
-                else if (SizeOfSampleNumber == 2) stream.WriteBEUInt16((ushort)entry.SampleNumber);
-                else if (SizeOfSampleNumber == 3) stream.WriteBEUInt24((uint)entry.SampleNumber);
-                else stream.WriteBEUInt32((uint)entry.SampleNumber);
+                switch (SizeOfSampleNumber)
+                {
+                    case 1: stream.WriteOneByte((byte)entry.SampleNumber); break;
+                    case 2: stream.WriteBEUInt16((ushort)entry.SampleNumber); break;
+                    case 3: stream.WriteBEUInt24((uint)entry.SampleNumber); break;
+                    default: stream.WriteBEUInt32((uint)entry.SampleNumber); break;
+                }
             }
         }
 
         public uint TrackID { get; set; }
-        private byte[] Reserved = new byte[4];
-
-        private byte _SizeOf;
+        
         public sbyte SizeOfTrafNumber
         {
-            get
-            {
-                return (sbyte)(((_SizeOf & 0x30) >> 4) + 1);
-            }
+            get => (sbyte)(((_sizeOf & 0x30) >> 4) + 1);
             private set
             {
-                if (value < 1 || value > 4) throw new OverflowException("SizeOfTrafNumber must be a value between 1 and 4.");
-                _SizeOf = (byte)((_SizeOf & 0xCF) | (((SizeOfTrafNumber - 1) & 0x30) << 4));
+                if (value < 1 || value > 4)
+                {
+                    throw new OverflowException("SizeOfTrafNumber must be a value between 1 and 4.");
+                }
+
+                _sizeOf = (byte)((_sizeOf & 0xCF) | (((SizeOfTrafNumber - 1) & 0x30) << 4));
             }
         }
         public sbyte SizeOfTrunNumber
         {
-            get
-            {
-                return (sbyte)(((_SizeOf & 0x30) >> 4) + 1);
-            }
+            get => (sbyte)(((_sizeOf & 0x30) >> 4) + 1);
             private set
             {
-                if (value < 1 || value > 4) throw new OverflowException("SizeOfTrunNumber must be a value between 1 and 4.");
-                _SizeOf = (byte)((_SizeOf & 0xF3) | ((SizeOfSampleNumber - 1) & 0x03));
+                if (value < 1 || value > 4)
+                {
+                    throw new OverflowException("SizeOfTrunNumber must be a value between 1 and 4.");
+                }
+
+                _sizeOf = (byte)((_sizeOf & 0xF3) | ((SizeOfSampleNumber - 1) & 0x03));
             }
         }
         public sbyte SizeOfSampleNumber
         {
-            get
-            {
-                return (sbyte)(((_SizeOf & 0x30) >> 4) + 1);
-            }
+            get => (sbyte)(((_sizeOf & 0x30) >> 4) + 1);
             private set
             {
-                if (value < 1 || value > 4) throw new OverflowException("SizeOfSampleNumber must be a value between 1 and 4.");
-                _SizeOf = (byte)((_SizeOf & 0xFC) | ((SizeOfTrunNumber - 1) & 0x0C << 2));
+                if (value < 1 || value > 4)
+                {
+                    throw new OverflowException("SizeOfSampleNumber must be a value between 1 and 4.");
+                }
+
+                _sizeOf = (byte)((_sizeOf & 0xFC) | ((SizeOfTrunNumber - 1) & 0x0C << 2));
             }
         }
 
@@ -173,19 +203,16 @@ namespace MatrixIO.IO.Bmff.Boxes
             public TrackFragmentEntry() { }
 
             public ulong Time { get; set; }
+
             public ulong MoofOffset { get; set; }
+
             public uint TrafNumber { get; set; }
+
             public uint TrunNumber { get; set; }
+
             public uint SampleNumber { get; set; }
         }
 
-        private IList<TrackFragmentEntry> _Entries = new List<TrackFragmentEntry>();
-        public IList<TrackFragmentEntry> Entries
-        {
-            get
-            {
-                return _Entries;
-            }
-        }
+        public IList<TrackFragmentEntry> Entries => _entries;
     }
 }

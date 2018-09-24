@@ -6,10 +6,17 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Sound Media Header Box ("smhd")
     /// </summary>
     [Box("smhd", "Sound Media Header Box")]
-    public class SoundMediaHeaderBox : FullBox
+    public sealed class SoundMediaHeaderBox : FullBox
     {
-        public SoundMediaHeaderBox() : base() { }
-        public SoundMediaHeaderBox(Stream stream) : base(stream) { }
+        public SoundMediaHeaderBox()
+            : base() { }
+
+        public SoundMediaHeaderBox(Stream stream)
+            : base(stream) { }
+
+        public short Balance { get; set; }
+
+        private ushort Reserved { get; set; }
 
         internal override ulong CalculateSize()
         {
@@ -21,7 +28,7 @@ namespace MatrixIO.IO.Bmff.Boxes
             base.LoadFromStream(stream);
 
             Balance = stream.ReadBEInt16();
-            _Reserved = stream.ReadBEUInt16();
+            Reserved = stream.ReadBEUInt16();
         }
 
         protected override void SaveToStream(Stream stream)
@@ -29,10 +36,7 @@ namespace MatrixIO.IO.Bmff.Boxes
             base.SaveToStream(stream);
 
             stream.WriteBEInt16(Balance);
-            stream.WriteBEUInt16(_Reserved);
+            stream.WriteBEUInt16(Reserved);
         }
-
-        public short Balance { get; set; }
-        private ushort _Reserved;
     }
 }
