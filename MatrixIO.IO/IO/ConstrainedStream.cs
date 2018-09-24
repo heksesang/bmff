@@ -7,7 +7,9 @@ namespace MatrixIO.IO
 {
     public sealed class ConstrainedStream : Stream
     {
+        private long _count;
         private Stream _baseStream;
+
         private ByteRange _currentConstraint = ByteRange.MaxValue;
 
         private Stack<ByteRange> _ConstraintStack = new Stack<ByteRange>();
@@ -83,7 +85,6 @@ namespace MatrixIO.IO
 
         public override long Length => Math.Min(_baseStream.Length, _currentConstraint.End);
 
-        public long _count;
         public override long Position
         {
             get => CanSeek ? _baseStream.Position : _count;
@@ -93,10 +94,13 @@ namespace MatrixIO.IO
         public override int Read(byte[] buffer, int offset, int count)
         {
             long position = Position;
+
             if (position + count > _currentConstraint.End)
             {
                 int availableCount = checked((int)(_currentConstraint.End - position));
+
                 Trace.WriteLine(string.Format("Attempt to read {0} bytes past end of constrained region.", count - availableCount), "WARNING");
+
                 if (availableCount > 0)
                 {
                     Trace.WriteLine("Returning partial result.", "WARNING");
@@ -104,6 +108,7 @@ namespace MatrixIO.IO
                     if (!CanSeek) _count += actualCount;
                     return actualCount;
                 }
+
                 else return 0;
             }
             else
