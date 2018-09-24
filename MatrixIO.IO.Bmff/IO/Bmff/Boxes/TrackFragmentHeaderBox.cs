@@ -9,18 +9,41 @@ namespace MatrixIO.IO.Bmff.Boxes
     [Box("tfhd", "Track Fragment Header Box")]
     public sealed class TrackFragmentHeaderBox : FullBox
     {
-        public TrackFragmentHeaderBox() : base() { }
-        public TrackFragmentHeaderBox(Stream stream) : base(stream) { }
+        public TrackFragmentHeaderBox()
+            : base() { }
+
+        public TrackFragmentHeaderBox(Stream stream)
+            : base(stream) { }
+
+        public uint TrackID { get; set; }
+
+        public ulong? BaseDataOffset { get; set; }
+
+        public uint? SampleDescriptionIndex { get; set; }
+
+        public uint? DefaultSampleDuration { get; set; }
+
+        public uint? DefaultSampleSize { get; set; }
+
+        public SampleFlags DefaultSampleFlags { get; set; }
+
+        bool DurationIsEmpty { get; set; }
+
+        private new TrackFragmentFlags Flags
+        {
+            get => (TrackFragmentFlags)_flags;
+            set => _flags = (uint)value;
+        }
 
         internal override ulong CalculateSize()
         {
             ulong calculatedSize = base.CalculateSize() + 4;
 
-            if (BaseDataOffset.HasValue) calculatedSize += 8;
+            if (BaseDataOffset.HasValue)         calculatedSize += 8;
             if (SampleDescriptionIndex.HasValue) calculatedSize += 4;
-            if (DefaultSampleDuration.HasValue) calculatedSize += 4;
-            if (DefaultSampleSize.HasValue) calculatedSize += 4;
-            if (DefaultSampleFlags != null) calculatedSize += 4;
+            if (DefaultSampleDuration.HasValue)  calculatedSize += 4;
+            if (DefaultSampleSize.HasValue)      calculatedSize += 4;
+            if (DefaultSampleFlags != null)      calculatedSize += 4;
 
             return calculatedSize;
         }
@@ -32,56 +55,59 @@ namespace MatrixIO.IO.Bmff.Boxes
             TrackID = stream.ReadBEUInt32();
 
             if ((Flags & TrackFragmentFlags.BaseDataOffsetPresent) == TrackFragmentFlags.BaseDataOffsetPresent)
+            {
                 BaseDataOffset = stream.ReadBEUInt64();
+            }
+
             if ((Flags & TrackFragmentFlags.SampleDrescriptionIndexPresent) == TrackFragmentFlags.SampleDrescriptionIndexPresent)
+            {
                 SampleDescriptionIndex = stream.ReadBEUInt32();
+            }
+
             if ((Flags & TrackFragmentFlags.DefaultSampleDurationPresent) == TrackFragmentFlags.DefaultSampleDurationPresent)
+            {
                 DefaultSampleDuration = stream.ReadBEUInt32();
+            }
+
             if ((Flags & TrackFragmentFlags.DefaultSampleSizePresent) == TrackFragmentFlags.DefaultSampleSizePresent)
+            {
                 DefaultSampleSize = stream.ReadBEUInt32();
+            }
+
             if ((Flags & TrackFragmentFlags.DefaultSampleFlagsPresent) == TrackFragmentFlags.DefaultSampleFlagsPresent)
+            {
                 DefaultSampleFlags = new SampleFlags(stream.ReadBEUInt32());
+            }
 
             if ((Flags & TrackFragmentFlags.DurationIsEmpty) == TrackFragmentFlags.DurationIsEmpty)
+            {
                 DurationIsEmpty = true;
+            }
         }
 
         protected override void SaveToStream(Stream stream)
         {
-            TrackFragmentFlags newFlags = 0;
-            if (BaseDataOffset.HasValue) newFlags |= TrackFragmentFlags.BaseDataOffsetPresent;
+            TrackFragmentFlags newFlags = default;
+
+            if (BaseDataOffset.HasValue)         newFlags |= TrackFragmentFlags.BaseDataOffsetPresent;
             if (SampleDescriptionIndex.HasValue) newFlags |= TrackFragmentFlags.SampleDrescriptionIndexPresent;
-            if (DefaultSampleDuration.HasValue) newFlags |= TrackFragmentFlags.DefaultSampleDurationPresent;
-            if (DefaultSampleSize.HasValue) newFlags |= TrackFragmentFlags.DefaultSampleSizePresent;
-            if (DefaultSampleFlags != null) newFlags |= TrackFragmentFlags.DefaultSampleFlagsPresent;
-            if (DurationIsEmpty) newFlags |= TrackFragmentFlags.DurationIsEmpty;
+            if (DefaultSampleDuration.HasValue)  newFlags |= TrackFragmentFlags.DefaultSampleDurationPresent;
+            if (DefaultSampleSize.HasValue)      newFlags |= TrackFragmentFlags.DefaultSampleSizePresent;
+            if (DefaultSampleFlags != null)      newFlags |= TrackFragmentFlags.DefaultSampleFlagsPresent;
+            if (DurationIsEmpty)                 newFlags |= TrackFragmentFlags.DurationIsEmpty;
 
             Flags = newFlags;
 
             base.SaveToStream(stream);
 
             stream.WriteBEUInt32(TrackID);
-            if (BaseDataOffset.HasValue) stream.WriteBEUInt64(BaseDataOffset.Value);
+
+            if (BaseDataOffset.HasValue)         stream.WriteBEUInt64(BaseDataOffset.Value);
             if (SampleDescriptionIndex.HasValue) stream.WriteBEUInt32(SampleDescriptionIndex.Value);
-            if (DefaultSampleDuration.HasValue) stream.WriteBEUInt32(DefaultSampleDuration.Value);
-            if (DefaultSampleSize.HasValue) stream.WriteBEUInt32(DefaultSampleSize.Value);
-            if (DefaultSampleFlags != null) stream.WriteBEUInt32(DefaultSampleFlags._flags);
+            if (DefaultSampleDuration.HasValue)  stream.WriteBEUInt32(DefaultSampleDuration.Value);
+            if (DefaultSampleSize.HasValue)      stream.WriteBEUInt32(DefaultSampleSize.Value);
+            if (DefaultSampleFlags != null)      stream.WriteBEUInt32(DefaultSampleFlags._flags);
         }
-
-
-        private new TrackFragmentFlags Flags
-        {
-            get => (TrackFragmentFlags)_Flags;
-            set => _Flags = (uint)value;
-        }
-
-        public uint TrackID { get; set; }
-        public ulong? BaseDataOffset { get; set; }
-        public uint? SampleDescriptionIndex { get; set; }
-        public uint? DefaultSampleDuration { get; set; }
-        public uint? DefaultSampleSize { get; set; }
-        public SampleFlags DefaultSampleFlags { get; set; }
-        bool DurationIsEmpty { get; set; }
 
         [Flags]
         public enum TrackFragmentFlags : int
