@@ -123,7 +123,7 @@ namespace MatrixIO.IO.Bmff.Boxes
 
                 if (entry.SampleNumber > maxSampleNumber)
                 {
-                    maxFrafNumber = entry.SampleNumber;
+                    maxSampleNumber = entry.SampleNumber;
                 }
 
                 if (entry.Time > uint.MaxValue || entry.MoofOffset > uint.MaxValue)
