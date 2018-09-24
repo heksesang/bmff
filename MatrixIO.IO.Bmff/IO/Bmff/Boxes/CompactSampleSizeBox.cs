@@ -16,7 +16,7 @@ namespace MatrixIO.IO.Bmff.Boxes
         public CompactSampleSizeBox(Stream stream) 
             : base(stream) { }
 
-        public IList<CompactSampleSizeEntry> Entries { get; } = new List<CompactSampleSizeEntry>();
+        public CompactSampleSizeEntry[] Entries { get; set; }
 
         private uint Reserved { get; set; }
 
@@ -36,7 +36,7 @@ namespace MatrixIO.IO.Bmff.Boxes
             }
         }
 
-        public int EntryCount => Entries.Count;
+        public int EntryCount => Entries.Length;
 
         internal override ulong CalculateSize()
         {
@@ -44,15 +44,15 @@ namespace MatrixIO.IO.Bmff.Boxes
 
             if (FieldSize == 4)
             {
-                calculatedSize += (ulong)Math.Ceiling((double)Entries.Count / 2D);
+                calculatedSize += (ulong)Math.Ceiling((double)Entries.Length / 2D);
             }
             else if (FieldSize == 8)
             {
-                calculatedSize += (ulong)Entries.Count;
+                calculatedSize += (ulong)Entries.Length;
             }
             else if (FieldSize == 16)
             {
-                calculatedSize += (ulong)Entries.Count * 2;
+                calculatedSize += (ulong)Entries.Length * 2;
             }
 
             return calculatedSize;
@@ -66,28 +66,32 @@ namespace MatrixIO.IO.Bmff.Boxes
             _fieldSize = stream.ReadOneByte();
             uint entryCount = stream.ReadBEUInt32();
 
+            var entries = new List<CompactSampleSizeEntry>();
+
             for (uint i = 0; i < entryCount; i++)
             {
                 if (FieldSize == 4)
                 {
                     byte twoFieldSizes = stream.ReadOneByte();
 
-                    Entries.Add(new CompactSampleSizeEntry((ushort)(twoFieldSizes & 0xFF00 >> 4)));
+                    entries.Add(new CompactSampleSizeEntry((ushort)(twoFieldSizes & 0xFF00 >> 4)));
 
                     if (i < entryCount)
                     {
-                        Entries.Add(new CompactSampleSizeEntry((ushort)(twoFieldSizes & 0x00FF)));
+                        entries.Add(new CompactSampleSizeEntry((ushort)(twoFieldSizes & 0x00FF)));
                     }
                 }
                 else if (FieldSize == 8)
                 {
-                    Entries.Add(new CompactSampleSizeEntry(stream.ReadOneByte()));
+                    entries.Add(new CompactSampleSizeEntry(stream.ReadOneByte()));
                 }
                 else if (FieldSize == 16)
                 {
-                    Entries.Add(new CompactSampleSizeEntry(stream.ReadBEUInt16()));
+                    entries.Add(new CompactSampleSizeEntry(stream.ReadBEUInt16()));
                 }
             }
+
+            Entries = entries.ToArray();
         }
 
         protected override void SaveToStream(Stream stream)
@@ -96,15 +100,15 @@ namespace MatrixIO.IO.Bmff.Boxes
 
             stream.WriteBEUInt24(Reserved);
             stream.WriteByte(FieldSize);
-            stream.WriteBEUInt32((uint)Entries.Count);
+            stream.WriteBEUInt32((uint)Entries.Length);
 
             if (FieldSize == 4)
             {
-                for (int i = 0; i < Entries.Count; i += 2)
+                for (int i = 0; i < Entries.Length; i += 2)
                 {
                     byte twoFieldSizes = (byte)((Entries[i].EntrySize & 0x00FF) << 4);
 
-                    if (i + 1 < Entries.Count)
+                    if (i + 1 < Entries.Length)
                     {
                         twoFieldSizes |= (byte)(Entries[i].EntrySize & 0x00FF);
                     }

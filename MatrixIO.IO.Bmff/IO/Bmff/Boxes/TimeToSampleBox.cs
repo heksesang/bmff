@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 
 namespace MatrixIO.IO.Bmff.Boxes
 {
@@ -12,16 +11,16 @@ namespace MatrixIO.IO.Bmff.Boxes
         public TimeToSampleBox()
             : base() { }
 
-        public TimeToSampleBox(Stream stream) 
+        public TimeToSampleBox(Stream stream)
             : base(stream) { }
 
-        public IList<TimeToSampleEntry> Entries { get; } = new List<TimeToSampleEntry>();
+        public TimeToSampleEntry[] Entries { get; set; }
 
-        public int EntryCount => Entries.Count;
+        public int EntryCount => Entries.Length;
 
         internal override ulong CalculateSize()
         {
-            return base.CalculateSize() + 4 + ((ulong)Entries.Count * (4 + 4));
+            return base.CalculateSize() + 4 + ((ulong)Entries.Length * (4 + 4));
         }
 
         protected override void LoadFromStream(Stream stream)
@@ -30,26 +29,29 @@ namespace MatrixIO.IO.Bmff.Boxes
 
             uint entryCount = stream.ReadBEUInt32();
 
+            this.Entries = new TimeToSampleEntry[entryCount];
+
             for (uint i = 0; i < entryCount; i++)
             {
-                Entries.Add(new TimeToSampleEntry(
+                Entries[i] = new TimeToSampleEntry(
                     sampleCount: stream.ReadBEUInt32(),
                     sampleDelta: stream.ReadBEUInt32()
-                ));
+                );
             }
-
         }
 
         protected override void SaveToStream(Stream stream)
         {
             base.SaveToStream(stream);
 
-            stream.WriteBEUInt32((uint)Entries.Count);
+            stream.WriteBEUInt32((uint)Entries.Length);
 
-            foreach (TimeToSampleEntry TimeToSampleEntry in Entries)
+            for (var i = 0; i < Entries.Length; i++)
             {
-                stream.WriteBEUInt32(TimeToSampleEntry.SampleCount);
-                stream.WriteBEUInt32(TimeToSampleEntry.SampleDelta);
+                ref TimeToSampleEntry entry = ref Entries[i];
+
+                stream.WriteBEUInt32(entry.SampleCount);
+                stream.WriteBEUInt32(entry.SampleDelta);
             }
         }
 

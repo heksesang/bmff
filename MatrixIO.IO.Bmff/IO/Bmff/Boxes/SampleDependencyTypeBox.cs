@@ -15,22 +15,26 @@ namespace MatrixIO.IO.Bmff.Boxes
         public SampleDependencyTypeBox(Stream stream) 
             : base(stream) { }
 
-        public IList<SampleDependencyEntry> Entries { get; } = new List<SampleDependencyEntry>();
+        public SampleDependencyEntry[] Entries { get; set; }
 
         internal override ulong CalculateSize()
         {
-            return base.CalculateSize() + (ulong)Entries.Count;
+            return base.CalculateSize() + (ulong)Entries.Length;
         }
 
         protected override void LoadFromStream(Stream stream)
         {
             base.LoadFromStream(stream);
 
+            var entries = new List<SampleDependencyEntry>();
+
             while (stream.Position < (long)(Offset + EffectiveSize))
             {
                 byte b = stream.ReadOneByte();
-                Entries.Add(new SampleDependencyEntry(b));
+                entries.Add(new SampleDependencyEntry(b));
             }
+
+            Entries = entries.ToArray();
         }
 
         protected override void SaveToStream(Stream stream)

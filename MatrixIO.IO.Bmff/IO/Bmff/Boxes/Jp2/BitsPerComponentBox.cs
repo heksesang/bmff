@@ -15,36 +15,44 @@ namespace MatrixIO.IO.Bmff.Boxes
         public BitsPerComponentBox(Stream stream) 
             : base(stream) { }
 
-        public IList<ComponentBitsEntry> Entries { get; } = new List<ComponentBitsEntry>();
+        public ComponentBitsEntry[] Entries { get; set; }
 
-        public int EntryCount => Entries.Count;
+        public int EntryCount => Entries.Length;
 
         internal override ulong CalculateSize()
         {
-            return base.CalculateSize() + (ulong)Entries.Count;
+            return base.CalculateSize() + (ulong)Entries.Length;
         }
 
         protected override void LoadFromStream(Stream stream)
         {
             base.LoadFromStream(stream);
 
+            var entries = new List<ComponentBitsEntry>();
+
             // TODO: Read in as a byte array and convert to List<ComponentBitsEntry>
             while (stream.Position < (long)(Offset + EffectiveSize))
             {
                 byte b = stream.ReadOneByte();
-                Entries.Add(new ComponentBitsEntry(b));
+
+                entries.Add(new ComponentBitsEntry(b));
             }
+
+            Entries = entries.ToArray();
         }
 
         protected override void SaveToStream(Stream stream)
         {
             base.SaveToStream(stream);
 
-            // TODO: Convert to byte[] and write all at once.
-            foreach (ComponentBitsEntry entry in Entries)
+            var data = new byte[Entries.Length];
+
+            for (var i = 0; i < Entries.Length; i++)
             {
-                stream.WriteOneByte(entry.ComponentBits);
+                data[i] = Entries[i].ComponentBits;
             }
+
+            stream.Write(data, 0, data.Length);
         }
 
         public readonly struct ComponentBitsEntry

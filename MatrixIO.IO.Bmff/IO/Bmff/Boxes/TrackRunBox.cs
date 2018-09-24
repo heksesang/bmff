@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 
 namespace MatrixIO.IO.Bmff.Boxes
@@ -26,7 +25,7 @@ namespace MatrixIO.IO.Bmff.Boxes
 
         public SampleFlags FirstSampleFlags { get; set; }
         
-        public IList<TrackRunEntry> Entries { get; } = new List<TrackRunEntry>();
+        public TrackRunEntry[] Entries { get; set; }
 
         internal override ulong CalculateSize()
         {
@@ -39,16 +38,28 @@ namespace MatrixIO.IO.Bmff.Boxes
                 calculatedSize += 4;
 
             ulong entryLength = 0;
-            if ((Flags & TrackRunFlags.SampleDurationPresent) == TrackRunFlags.SampleDurationPresent)
-                entryLength += 4;
-            if ((Flags & TrackRunFlags.SampleSizePresent) == TrackRunFlags.SampleSizePresent)
-                entryLength += 4;
-            if ((Flags & TrackRunFlags.SampleFlagsPresent) == TrackRunFlags.SampleFlagsPresent)
-                entryLength += 4;
-            if ((Flags & TrackRunFlags.SampleCompositionTimeOffsetsPresent) == TrackRunFlags.SampleCompositionTimeOffsetsPresent)
-                entryLength += 4;
 
-            return calculatedSize + (entryLength * (ulong)Entries.Count);
+            if ((Flags & TrackRunFlags.SampleDurationPresent) == TrackRunFlags.SampleDurationPresent)
+            {
+                entryLength += 4;
+            }
+
+            if ((Flags & TrackRunFlags.SampleSizePresent) == TrackRunFlags.SampleSizePresent)
+            {
+                entryLength += 4;
+            }
+
+            if ((Flags & TrackRunFlags.SampleFlagsPresent) == TrackRunFlags.SampleFlagsPresent)
+            {
+                entryLength += 4;
+            }
+
+            if ((Flags & TrackRunFlags.SampleCompositionTimeOffsetsPresent) == TrackRunFlags.SampleCompositionTimeOffsetsPresent)
+            {
+                entryLength += 4;
+            }
+
+            return calculatedSize + (entryLength * (ulong)Entries.Length);
         }
 
         protected override void LoadFromStream(Stream stream)
@@ -63,6 +74,8 @@ namespace MatrixIO.IO.Bmff.Boxes
             if ((Flags & TrackRunFlags.FirstSampleFlagsPresent) == TrackRunFlags.FirstSampleFlagsPresent)
                 FirstSampleFlags = new SampleFlags(stream.ReadBEUInt32());
 
+            Entries = new TrackRunEntry[sampleCount];
+
             for (uint i = 0; i < sampleCount; i++)
             {
                 TrackRunEntry entry = new TrackRunEntry();
@@ -75,7 +88,7 @@ namespace MatrixIO.IO.Bmff.Boxes
                 if ((Flags & TrackRunFlags.SampleCompositionTimeOffsetsPresent) == TrackRunFlags.SampleCompositionTimeOffsetsPresent)
                     entry.SampleCompositionTimeOffset = stream.ReadBEUInt32();
 
-                Entries.Add(entry);
+                Entries[i] = entry;
             }
         }
 
@@ -83,6 +96,7 @@ namespace MatrixIO.IO.Bmff.Boxes
         {
             if (DataOffset.HasValue) Flags |= TrackRunFlags.DataOffsetPresent;
             if (FirstSampleFlags != null) Flags |= TrackRunFlags.FirstSampleFlagsPresent;
+
             foreach (var entry in Entries)
             {
                 // TODO: There must be a better way... probably involves changing TrackRunEntry
@@ -91,9 +105,10 @@ namespace MatrixIO.IO.Bmff.Boxes
                 if (entry.SampleFlags != null) Flags |= TrackRunFlags.SampleFlagsPresent;
                 if (entry.SampleCompositionTimeOffset.HasValue) Flags |= TrackRunFlags.SampleCompositionTimeOffsetsPresent;
             }
+
             base.SaveToStream(stream);
 
-            stream.WriteBEUInt32((uint)Entries.Count);
+            stream.WriteBEUInt32((uint)Entries.Length);
 
             if (DataOffset.HasValue)
                 stream.WriteBEInt32(DataOffset.Value);

@@ -9,12 +9,19 @@ namespace MatrixIO.IO.Bmff.Boxes
     [Box("co64", "Chunk Large Offset Box")]
     public sealed class ChunkLargeOffsetBox : FullBox, ITableBox<ChunkLargeOffsetBox.ChunkLargeOffsetEntry>
     {
-        public ChunkLargeOffsetBox() : base() { }
-        public ChunkLargeOffsetBox(Stream stream) : base(stream) { }
+        public ChunkLargeOffsetBox()
+            : base() { }
+
+        public ChunkLargeOffsetBox(Stream stream) 
+            : base(stream) { }
+
+        public ChunkLargeOffsetEntry[] Entries { get; set; }
+
+        public int EntryCount => Entries.Length;
 
         internal override ulong CalculateSize()
         {
-            return base.CalculateSize() + 4 + ((ulong)Entries.Count * 8);
+            return base.CalculateSize() + 4 + ((ulong)Entries.Length * 8);
         }
 
         protected override void LoadFromStream(Stream stream)
@@ -23,9 +30,11 @@ namespace MatrixIO.IO.Bmff.Boxes
 
             uint entryCount = stream.ReadBEUInt32();
 
+            Entries = new ChunkLargeOffsetEntry[entryCount];
+
             for (uint i = 0; i < entryCount; i++)
             {
-                Entries.Add(new ChunkLargeOffsetEntry(stream.ReadBEUInt64()));
+                Entries[i] = new ChunkLargeOffsetEntry(stream.ReadBEUInt64());
             }
         }
 
@@ -33,17 +42,15 @@ namespace MatrixIO.IO.Bmff.Boxes
         {
             base.SaveToStream(stream);
 
-            stream.WriteBEUInt32((uint)Entries.Count);
+            stream.WriteBEUInt32((uint)Entries.Length);
 
-            foreach (ChunkLargeOffsetEntry chunkLargeOffsetEntry in Entries)
+            for (int i = 0; i < Entries.Length; i++)
             {
-                stream.WriteBEUInt64(chunkLargeOffsetEntry.ChunkOffset);
+                ref ChunkLargeOffsetEntry entry = ref Entries[i];
+
+                stream.WriteBEUInt64(entry.ChunkOffset);
             }
         }
-
-        public IList<ChunkLargeOffsetEntry> Entries { get; } = new List<ChunkLargeOffsetEntry>();
-
-        public int EntryCount => Entries.Count;
 
         public readonly struct ChunkLargeOffsetEntry
         {
@@ -58,6 +65,7 @@ namespace MatrixIO.IO.Bmff.Boxes
             {
                 return entry.ChunkOffset;
             }
+
             public static implicit operator ChunkLargeOffsetEntry(ulong sampleDependency)
             {
                 return new ChunkLargeOffsetEntry(sampleDependency);
