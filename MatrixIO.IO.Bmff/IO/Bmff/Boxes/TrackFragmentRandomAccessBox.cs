@@ -126,11 +126,9 @@ namespace MatrixIO.IO.Bmff.Boxes
                     maxSampleNumber = entry.SampleNumber;
                 }
 
-                if (entry.Time > uint.MaxValue || entry.MoofOffset > uint.MaxValue)
+                if (!has64BitEntry && (entry.Time > uint.MaxValue || entry.MoofOffset > uint.MaxValue))
                 {
                     has64BitEntry = true;
-
-                    break;
                 }
             }
 
