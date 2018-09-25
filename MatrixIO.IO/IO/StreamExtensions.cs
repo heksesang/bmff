@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -17,11 +18,13 @@ namespace MatrixIO.IO
         {
             byte[] buffer = new byte[count];
             int len = stream.Read(buffer, 0, count);
+
             if (len < count)
             {
                 if (!partial || len == 0) throw new EndOfStreamException();
                 Array.Resize(ref buffer, len);
             }
+
             return buffer;
         }
 
@@ -30,19 +33,22 @@ namespace MatrixIO.IO
             byte[] buffer = new byte[] { b };
             stream.Write(buffer, 0, 1);
         }
+
         public static void WriteBytes(this Stream stream, byte[] bytes)
         {
             stream.Write(bytes, 0, bytes.Length);
         }
 
         #region BigEndian Read
+
         public static short ReadBEInt16(this Stream stream)
         {
-            return BitConverter.ToInt16(stream.ReadBytes(2, false), 0).NetworkToHostOrder();
+            return BinaryPrimitives.ReadInt16BigEndian(stream.ReadBytes(2, false));
         }
+
         public static ushort ReadBEUInt16(this Stream stream)
         {
-            return (ushort)ReadBEInt16(stream);
+            return BinaryPrimitives.ReadUInt16BigEndian(stream.ReadBytes(2, false));
         }
 
         public static int ReadBEInt24(this Stream stream)
@@ -50,6 +56,7 @@ namespace MatrixIO.IO
             byte[] buffer = new byte[4];
             int len = stream.Read(buffer, 0, 3);
             if (len < 3) throw new EndOfStreamException();
+
             return BitConverter.ToInt32(buffer, 0).NetworkToHostOrder();
         }
         
@@ -57,34 +64,40 @@ namespace MatrixIO.IO
         {
             byte[] buffer = new byte[4];
             stream.Read(buffer, 1, 3);
+
             return BitConverter.ToUInt32(buffer, 0).NetworkToHostOrder();
         }
         
         public static int ReadBEInt32(this Stream stream)
         {
-            return BitConverter.ToInt32(stream.ReadBytes(4, false), 0).NetworkToHostOrder();
+            return BinaryPrimitives.ReadInt32BigEndian(stream.ReadBytes(4, false));
         }
+
         public static uint ReadBEUInt32(this Stream stream)
         {
-            return (uint)ReadBEInt32(stream);
+            return BinaryPrimitives.ReadUInt32BigEndian(stream.ReadBytes(4, false));
         }
 
         public static long ReadBEInt64(this Stream stream)
         {
-            return BitConverter.ToInt64(stream.ReadBytes(8, false), 0).NetworkToHostOrder();
+            return BinaryPrimitives.ReadInt64BigEndian(stream.ReadBytes(8, false));
         }
+
         public static ulong ReadBEUInt64(this Stream stream)
         {
-            return (ulong)ReadBEInt64(stream);
+            return BinaryPrimitives.ReadUInt64BigEndian(stream.ReadBytes(8, false));
         }
+
         #endregion
 
         #region BigEndian Write
+
         public static void WriteBEInt16(this Stream stream, short value)
         {
             byte[] buffer = BitConverter.GetBytes(value.HostToNetworkOrder());
             stream.Write(buffer, 0, buffer.Length);
         }
+
         public static void WriteBEUInt16(this Stream stream, ushort value)
         {
             byte[] buffer = BitConverter.GetBytes(value.HostToNetworkOrder());
@@ -95,6 +108,7 @@ namespace MatrixIO.IO
         {
             WriteBEUInt24(stream, (uint)value);
         }
+
         public static void WriteBEUInt24(this Stream stream, uint value)
         {
             if (value > 16777215) throw new OverflowException();
@@ -107,6 +121,7 @@ namespace MatrixIO.IO
             byte[] buffer = BitConverter.GetBytes(value.HostToNetworkOrder());
             stream.Write(buffer, 0, buffer.Length);
         }
+
         public static void WriteBEUInt32(this Stream stream, uint value)
         {
             byte[] buffer = BitConverter.GetBytes(value.HostToNetworkOrder());
@@ -118,16 +133,19 @@ namespace MatrixIO.IO
             byte[] buffer = BitConverter.GetBytes(value.HostToNetworkOrder());
             stream.Write(buffer, 0, buffer.Length);
         }
+
         public static void WriteBEUInt64(this Stream stream, ulong value)
         {
             byte[] buffer = BitConverter.GetBytes(value.HostToNetworkOrder());
             stream.Write(buffer, 0, buffer.Length);
         }
+
         #endregion
 
         public static string ReadNullTerminatedUTF8String(this Stream stream)
         {
-            List<byte> bytes = new List<byte>();
+            var bytes = new List<byte>();
+
             byte b;
             try
             {
@@ -166,9 +184,12 @@ namespace MatrixIO.IO
                 stream.WriteOneByte(0);
                 return 1;
             }
+
             byte[] bytes = Encoding.UTF8.GetBytes(text);
+
             stream.Write(bytes, 0, bytes.Length);
             stream.WriteOneByte(0);
+
             return bytes.Length + 1;
         }
 
