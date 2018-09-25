@@ -10,8 +10,17 @@ namespace MatrixIO.IO.Bmff.Boxes
     [Box("rsrc", "Data Entry Resource Atom")]
     public sealed class DataEntryResourceBox : FullBox
     {
-        public DataEntryResourceBox() : base() { }
-        public DataEntryResourceBox(Stream stream) : base(stream) { }
+        public DataEntryResourceBox() 
+            : base() { }
+
+        public DataEntryResourceBox(Stream stream) 
+            : base(stream) { }
+
+        public string Alias { get; set; }
+
+        public uint ResourceType { get; set; }
+
+        public short Id { get; set; }
 
         internal override ulong CalculateSize()
         {
@@ -35,9 +44,5 @@ namespace MatrixIO.IO.Bmff.Boxes
             stream.WriteBEUInt32(ResourceType);
             stream.WriteBEInt16(Id);
         }
-
-        public string Alias { get; set; }
-        public uint ResourceType { get; set; }
-        public short Id { get; set; }
     }
 }
