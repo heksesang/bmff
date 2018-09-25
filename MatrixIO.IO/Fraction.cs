@@ -183,21 +183,9 @@ namespace MatrixIO
             // TODO: Call ToString(string format) instead once it's written.
             return string.Format("{0}/{1}", _numerator, _denominator);
         }
+        
         #endregion
-
-        public byte[] GetBytes()
-        {
-            var bytes = new byte[8];
-
-            var numerator = BitConverter.GetBytes(_numerator);
-            Buffer.BlockCopy(numerator, 0, bytes, 0, numerator.Length);
-
-            var denominator = BitConverter.GetBytes(_isInLowestTerms ? -_denominator : _denominator);
-            Buffer.BlockCopy(denominator, 0, bytes, numerator.Length, denominator.Length);
-
-            return bytes;
-        }
-
+        
         public static Fraction FromBytes(byte[] buffer, int offset)
         {
             throw new NotImplementedException();
@@ -207,6 +195,7 @@ namespace MatrixIO
         {
             return LeastCommonMultiple(a, b, GreatestCommonDivisor(a, b));
         }
+
         public static int LeastCommonMultiple(int a, int b, int gcd)
         {
             return (a * b) / gcd;
@@ -215,6 +204,7 @@ namespace MatrixIO
         public static int GreatestCommonDivisor(int dividend, int divisor)
         {
             var remainder = -1;
+
             while (remainder != 0)
             {
                 int quotient = dividend / divisor;
