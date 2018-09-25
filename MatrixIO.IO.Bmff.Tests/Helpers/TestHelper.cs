@@ -21,6 +21,14 @@ namespace MatrixIO.IO.Bmff
                 return Box.FromStream(ms);
             }
         }
+
+
+        public static string GetTestFilePath(string name)
+        {
+            var basePath = new DirectoryInfo(Directory.GetCurrentDirectory()).Parent.Parent.Parent.Parent;
+
+            return Path.Combine(basePath.FullName, "TestData", "chicago.mp4");
+        }
     }
 
 }
