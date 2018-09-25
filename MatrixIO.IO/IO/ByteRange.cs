@@ -28,21 +28,17 @@ namespace MatrixIO.IO
 
         public bool Contains(long offset)
         {
-            if (offset >= Start && offset <= End) return true;
-            else return false;
+            return (offset >= Start && offset <= End);
         }
 
         public bool Contains(ByteRange range)
         {
-            if (range.Start >= Start && range.End <= End) return true;
-            return false;
+            return (range.Start >= Start && range.End <= End);
         }
 
         public bool Contains(long start, long end)
         {
-            if (start >= Start && end <= End) return true;
-
-            else return false;
+            return (start >= Start && end <= End);
         }
 
         public bool Overlaps(ByteRange range)
