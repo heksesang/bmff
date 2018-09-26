@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using MatrixIO.IO.MpegTs.Tables;
 
 namespace MatrixIO.IO.MpegTs.Streams
 {
-    public class TableStream : TsStream<TsTable>
+    public sealed class TableStream : TsStream<TsTable>
     {
         protected override TsTable ProcessUnit(TsUnit unit)
         {
