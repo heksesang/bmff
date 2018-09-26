@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using MatrixIO.IO.MpegTs.Descriptors;
 
 namespace MatrixIO.IO.MpegTs.Tables
