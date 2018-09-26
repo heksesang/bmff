@@ -16,15 +16,7 @@ namespace MatrixIO.IO.MpegTs
     public class TsProgram
     {
         private readonly object _syncObject = new object();
-
-        public ushort ProgramNumber { get; private set; }
-        public TsProgramStatus Status { get; internal set; }
-        public TableStream ProgramMapStream { get; internal set; }
-        public IList<TsStream> Streams { get; private set; }
-        public IList<TsDescriptor> Info { get; private set; }
-
-        public event EventHandler<ProgramStreamEventArgs> StreamAdded;
-
+        
         public TsProgram(ushort programNumber, TableStream programMapStream)
         {
             ProgramNumber = programNumber;
@@ -32,6 +24,18 @@ namespace MatrixIO.IO.MpegTs
             ProgramMapStream.UnitReceived += ProgramMapTableReceived;
             Streams = new List<TsStream>();
         }
+
+        public ushort ProgramNumber { get; private set; }
+
+        public TsProgramStatus Status { get; internal set; }
+
+        public TableStream ProgramMapStream { get; internal set; }
+
+        public IList<TsStream> Streams { get; private set; }
+
+        public IList<TsDescriptor> Info { get; private set; }
+
+        public event EventHandler<ProgramStreamEventArgs> StreamAdded;
 
         void ProgramMapTableReceived(object sender, TsStreamEventArgs eventArgs)
         {
@@ -88,7 +92,7 @@ namespace MatrixIO.IO.MpegTs
         }
     }
 
-    public class ProgramStreamEventArgs : EventArgs
+    public sealed class ProgramStreamEventArgs : EventArgs
     {
         public TsStream Stream { get; set; }
     }
