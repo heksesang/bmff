@@ -10,7 +10,6 @@ namespace MatrixIO.Collections
     /// </summary>
     public class ConcurrentPriorityQueue<TPriority, TItem> : IEnumerable<TItem>
     {
-        #region Private Members
         private readonly object _syncRoot = new object();
 
         private readonly IComparer<TPriority> _comparer;
@@ -26,20 +25,22 @@ namespace MatrixIO.Collections
 
         // NOTE: Better implemented with a semaphore but that's not available on all platforms
         private readonly AutoResetEvent _itemReady = new AutoResetEvent(false);
-        #endregion
 
-        public int Count => _count; 
-        public bool IsEmpty => _count <= 0; 
-        public bool IsSynchronized => true;
-        public object SyncRoot => _syncRoot; 
+        public ConcurrentPriorityQueue()
+            : this(Comparer<TPriority>.Default) { }
 
-        #region Constructors
-        public ConcurrentPriorityQueue() : this(Comparer<TPriority>.Default) { }
-        public ConcurrentPriorityQueue(int maxLevel) : this(Comparer<TPriority>.Default, maxLevel) { }
-        public ConcurrentPriorityQueue(int maxLevel, double bias) : this(Comparer<TPriority>.Default, maxLevel, bias) { }
+        public ConcurrentPriorityQueue(int maxLevel)
+            : this(Comparer<TPriority>.Default, maxLevel) { }
 
-        public ConcurrentPriorityQueue(IComparer<TPriority> keyComparer) : this(keyComparer, 32) { }
-        public ConcurrentPriorityQueue(IComparer<TPriority> keyComparer, int maxLevel) : this(keyComparer, maxLevel, 0.5D) { }
+        public ConcurrentPriorityQueue(int maxLevel, double bias) 
+            : this(Comparer<TPriority>.Default, maxLevel, bias) { }
+
+        public ConcurrentPriorityQueue(IComparer<TPriority> keyComparer) 
+            : this(keyComparer, 32) { }
+
+        public ConcurrentPriorityQueue(IComparer<TPriority> keyComparer, int maxLevel)
+            : this(keyComparer, maxLevel, 0.5D) { }
+
         public ConcurrentPriorityQueue(IComparer<TPriority> keyComparer, int maxLevel, double bias)
         {
             _comparer = keyComparer;
@@ -48,9 +49,19 @@ namespace MatrixIO.Collections
             _head = new Node(_maxLevel);
             _foot = new Node(0);
 
-            for (var i = 0; i < _head.Forward.Length; i++) _head.Forward[i] = _foot;
+            for (var i = 0; i < _head.Forward.Length; i++)
+            {
+                _head.Forward[i] = _foot;
+            }
         }
-        #endregion
+
+        public int Count => _count;
+
+        public bool IsEmpty => _count <= 0;
+
+        public bool IsSynchronized => true;
+
+        public object SyncRoot => _syncRoot;
 
         public void Enqueue(TPriority priority, TItem value)
         {
@@ -164,6 +175,7 @@ namespace MatrixIO.Collections
         }
 
         #region IEnumerable Implementation
+
         public IEnumerator<TItem> GetEnumerator()
         {
             lock (_syncRoot)
@@ -181,9 +193,11 @@ namespace MatrixIO.Collections
         {
             return GetEnumerator();
         }
+
         #endregion
 
         #region Node Class
+
         private class Node
         {
             public readonly TPriority Key;
@@ -192,14 +206,16 @@ namespace MatrixIO.Collections
 
             public Node(int level)
             {
-                Forward = new Node[level];   
+                Forward = new Node[level];
             }
+
             public Node(int level, TPriority key, TItem item) : this(level)
             {
                 Key = key;
                 Item = item;
             }
         }
+
         #endregion
     }
 }

@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace MatrixIO.IO.Bmff.Boxes
 {
@@ -13,14 +11,19 @@ namespace MatrixIO.IO.Bmff.Boxes
     {
         private byte[] _reserved = new byte[4];
         private byte _sizeOf;
-        private readonly List<TrackFragmentEntry> _entries = new List<TrackFragmentEntry>();
 
-        public TrackFragmentRandomAccessBox() : base() { }
-        public TrackFragmentRandomAccessBox(Stream stream) : base(stream) { }
+        public TrackFragmentRandomAccessBox()
+            : base() { }
+
+        public TrackFragmentRandomAccessBox(Stream stream)
+            : base(stream) { }
+
+        public TrackFragmentEntry[] Entries { get; set; }
 
         internal override ulong CalculateSize()
         {
-            ulong entries = (ulong)Entries.Count;
+            ulong entries = (ulong)Entries.Length;
+
             return base.CalculateSize()
                 + 4 + 4 + 4
                 + (entries * (ulong)(Version == 0x01 ? 16 : 8))
@@ -39,46 +42,52 @@ namespace MatrixIO.IO.Bmff.Boxes
 
             uint entryCount = stream.ReadBEUInt32();
 
+            Entries = new TrackFragmentEntry[entryCount];
+
             for (uint i = 0; i < entryCount; i++)
             {
-                var entry = new TrackFragmentEntry();
+                ulong time;
+                ulong moofOffset;
+                uint trafNumber;
+                uint trunNumber;
+                uint sampleNumber;
 
                 if (Version == 0x01)
                 {
-                    entry.Time = stream.ReadBEUInt64();
-                    entry.MoofOffset = stream.ReadBEUInt64();
+                    time = stream.ReadBEUInt64();
+                    moofOffset = stream.ReadBEUInt64();
                 }
                 else
                 {
-                    entry.Time = stream.ReadBEUInt32();
-                    entry.MoofOffset = stream.ReadBEUInt32();
+                    time = stream.ReadBEUInt32();
+                    moofOffset = stream.ReadBEUInt32();
                 }
 
                 switch (SizeOfTrafNumber)
                 {
-                    case 1: entry.TrafNumber = stream.ReadOneByte(); break;
-                    case 2: entry.TrafNumber = stream.ReadBEUInt16(); break;
-                    case 3: entry.TrafNumber = stream.ReadBEUInt24(); break;
-                    default: entry.TrafNumber = stream.ReadBEUInt32(); break;
+                    case 1: trafNumber = stream.ReadOneByte(); break;
+                    case 2: trafNumber = stream.ReadBEUInt16(); break;
+                    case 3: trafNumber = stream.ReadBEUInt24(); break;
+                    default: trafNumber = stream.ReadBEUInt32(); break;
                 }
 
                 switch (SizeOfTrunNumber)
                 {
-                    case 1: entry.TrunNumber = stream.ReadOneByte(); break;
-                    case 2: entry.TrunNumber = stream.ReadBEUInt16(); break;
-                    case 3: entry.TrunNumber = stream.ReadBEUInt24(); break;
-                    default: entry.TrunNumber = stream.ReadBEUInt32(); break;
+                    case 1: trunNumber = stream.ReadOneByte(); break;
+                    case 2: trunNumber = stream.ReadBEUInt16(); break;
+                    case 3: trunNumber = stream.ReadBEUInt24(); break;
+                    default: trunNumber = stream.ReadBEUInt32(); break;
                 }
 
                 switch (SizeOfSampleNumber)
                 {
-                    case 1: entry.SampleNumber = stream.ReadOneByte(); break;
-                    case 2: entry.SampleNumber = stream.ReadBEUInt16(); break;
-                    case 3: entry.SampleNumber = stream.ReadBEUInt24(); break;
-                    default: entry.SampleNumber = stream.ReadBEUInt32(); break;
+                    case 1: sampleNumber = stream.ReadOneByte(); break;
+                    case 2: sampleNumber = stream.ReadBEUInt16(); break;
+                    case 3: sampleNumber = stream.ReadBEUInt24(); break;
+                    default: sampleNumber = stream.ReadBEUInt32(); break;
                 }
 
-                _entries.Add(entry);
+                Entries[i] = new TrackFragmentEntry(time, moofOffset, trafNumber, trunNumber, sampleNumber);
             }
         }
 
@@ -94,20 +103,39 @@ namespace MatrixIO.IO.Bmff.Boxes
 
             bool has64BitEntry = false;
 
-            foreach (var entry in _entries)
+            uint maxFrafNumber = 0;
+            uint maxTrunNumber = 0;
+            uint maxSampleNumber = 0;
+
+            for (int i = 0; i < Entries.Length; i++)
             {
-                if (entry.Time > uint.MaxValue || entry.MoofOffset > uint.MaxValue)
+                ref TrackFragmentEntry entry = ref Entries[i];
+
+                if (entry.TrafNumber > maxFrafNumber)
+                {
+                    maxFrafNumber = entry.TrafNumber;
+                }
+
+                if (entry.TrunNumber > maxTrunNumber)
+                {
+                    maxTrunNumber = entry.TrunNumber;
+                }
+
+                if (entry.SampleNumber > maxSampleNumber)
+                {
+                    maxSampleNumber = entry.SampleNumber;
+                }
+
+                if (!has64BitEntry && (entry.Time > uint.MaxValue || entry.MoofOffset > uint.MaxValue))
                 {
                     has64BitEntry = true;
-
-                    break;
                 }
-            }            
+            }
 
-            SizeOfTrafNumber   = GetIntSize(_entries.Max(e => e.TrafNumber));
-            SizeOfTrunNumber   = GetIntSize(_entries.Max(e => e.TrunNumber));
-            SizeOfSampleNumber = GetIntSize(_entries.Max(e => e.SampleNumber));
-            Version            = has64BitEntry ? (byte)1 : (byte)0;
+            SizeOfTrafNumber = GetIntSize(maxFrafNumber);
+            SizeOfTrunNumber = GetIntSize(maxTrunNumber);
+            SizeOfSampleNumber = GetIntSize(maxSampleNumber);
+            Version = has64BitEntry ? (byte)1 : (byte)0;
 
             base.SaveToStream(stream);
 
@@ -115,10 +143,12 @@ namespace MatrixIO.IO.Bmff.Boxes
             stream.Write(_reserved, 0, 3);
             stream.WriteOneByte(_sizeOf);
 
-            stream.WriteBEUInt32((uint)_entries.Count);
+            stream.WriteBEUInt32((uint)Entries.Length);
 
-            foreach (var entry in _entries)
+            for (int i = 0; i < Entries.Length; i++)
             {
+                ref TrackFragmentEntry entry = ref Entries[i];
+
                 if (Version == 0x01)
                 {
                     stream.WriteBEUInt64(entry.Time);
@@ -157,7 +187,7 @@ namespace MatrixIO.IO.Bmff.Boxes
         }
 
         public uint TrackID { get; set; }
-        
+
         public sbyte SizeOfTrafNumber
         {
             get => (sbyte)(((_sizeOf & 0x30) >> 4) + 1);
@@ -171,6 +201,7 @@ namespace MatrixIO.IO.Bmff.Boxes
                 _sizeOf = (byte)((_sizeOf & 0xCF) | (((SizeOfTrafNumber - 1) & 0x30) << 4));
             }
         }
+
         public sbyte SizeOfTrunNumber
         {
             get => (sbyte)(((_sizeOf & 0x30) >> 4) + 1);
@@ -184,6 +215,7 @@ namespace MatrixIO.IO.Bmff.Boxes
                 _sizeOf = (byte)((_sizeOf & 0xF3) | ((SizeOfSampleNumber - 1) & 0x03));
             }
         }
+
         public sbyte SizeOfSampleNumber
         {
             get => (sbyte)(((_sizeOf & 0x30) >> 4) + 1);
@@ -198,21 +230,26 @@ namespace MatrixIO.IO.Bmff.Boxes
             }
         }
 
-        public class TrackFragmentEntry
+        public readonly struct TrackFragmentEntry
         {
-            public TrackFragmentEntry() { }
+            public TrackFragmentEntry(ulong time, ulong moofOffset, uint trafNumber, uint trunNumber, uint sampleNumber)
+            {
+                Time = time;
+                MoofOffset = moofOffset;
+                TrafNumber = trafNumber;
+                TrunNumber = trunNumber;
+                SampleNumber = sampleNumber;
+            }
 
-            public ulong Time { get; set; }
+            public ulong Time { get; }
 
-            public ulong MoofOffset { get; set; }
+            public ulong MoofOffset { get; }
 
-            public uint TrafNumber { get; set; }
+            public uint TrafNumber { get; }
 
-            public uint TrunNumber { get; set; }
+            public uint TrunNumber { get; }
 
-            public uint SampleNumber { get; set; }
+            public uint SampleNumber { get; }
         }
-
-        public IList<TrackFragmentEntry> Entries => _entries;
     }
 }

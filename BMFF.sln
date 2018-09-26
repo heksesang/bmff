@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.27004.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MatrixIO.IO.Bmff", "MatrixIO.IO.Bmff\MatrixIO.IO.Bmff.csproj", "{4A565C90-1850-4A15-816D-E332981735AB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MatrixIO.IO.MpegTs", "MatrixIO.IO.MpegTs\MatrixIO.IO.MpegTs.csproj", "{B2B26824-21F0-4576-BD4A-104EDD61E180}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MatrixIO.IO.MpegTs", "MatrixIO.IO.MpegTs\MatrixIO.IO.MpegTs.csproj", "{B2B26824-21F0-4576-BD4A-104EDD61E180}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MatrixIO.IO.Ebml", "MatrixIO.IO.Ebml\MatrixIO.IO.Ebml.csproj", "{74FCBCE0-CF0D-49A4-9EB7-A172D4865E94}"
 EndProject
@@ -27,6 +27,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Specifications", "Specifica
 		MatrixIO.IO.Bmff\Specifications\qtff.pdf = MatrixIO.IO.Bmff\Specifications\qtff.pdf
 		MatrixIO.IO.Bmff\Specifications\video_file_format_spec_v10_1.pdf = MatrixIO.IO.Bmff\Specifications\video_file_format_spec_v10_1.pdf
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{E42E2C99-B793-430E-9FF6-E4861A427A99}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MatrixIO.IO.Bmff.Tests", "MatrixIO.IO.Bmff.Tests\MatrixIO.IO.Bmff.Tests.csproj", "{CB82E742-9DBD-40C0-BFED-069B41515C70}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -78,9 +82,24 @@ Global
 		{EDC16014-ECA3-4B93-A849-B81EAC369DD2}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{EDC16014-ECA3-4B93-A849-B81EAC369DD2}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{EDC16014-ECA3-4B93-A849-B81EAC369DD2}.Release|x86.ActiveCfg = Release|Any CPU
+		{CB82E742-9DBD-40C0-BFED-069B41515C70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CB82E742-9DBD-40C0-BFED-069B41515C70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CB82E742-9DBD-40C0-BFED-069B41515C70}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{CB82E742-9DBD-40C0-BFED-069B41515C70}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{CB82E742-9DBD-40C0-BFED-069B41515C70}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{CB82E742-9DBD-40C0-BFED-069B41515C70}.Debug|x86.Build.0 = Debug|Any CPU
+		{CB82E742-9DBD-40C0-BFED-069B41515C70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CB82E742-9DBD-40C0-BFED-069B41515C70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CB82E742-9DBD-40C0-BFED-069B41515C70}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{CB82E742-9DBD-40C0-BFED-069B41515C70}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{CB82E742-9DBD-40C0-BFED-069B41515C70}.Release|x86.ActiveCfg = Release|Any CPU
+		{CB82E742-9DBD-40C0-BFED-069B41515C70}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CB82E742-9DBD-40C0-BFED-069B41515C70} = {E42E2C99-B793-430E-9FF6-E4861A427A99}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9CAADDC4-B2C2-40A2-8363-F093866C2C40}

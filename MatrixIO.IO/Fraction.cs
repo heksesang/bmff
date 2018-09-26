@@ -5,23 +5,19 @@ namespace MatrixIO
 {
     public readonly struct Fraction : IComparable, IComparable<Fraction>, IEquatable<Fraction>
     {
-        #region Value
         private readonly int _numerator;
-        public int Numerator => _numerator;
-
         private readonly int _denominator;
-        public int Denominator => _denominator;
-        #endregion
-
-        #region Properties
         private readonly bool _isInLowestTerms;
-        public bool IsInLowestTerms { get { return _isInLowestTerms; } }
-        #endregion
 
-        #region Constructors
+        public bool IsInLowestTerms => _isInLowestTerms;
+
         public Fraction(int numerator, int denominator)
         {
-            if (denominator == 0) throw new ArgumentOutOfRangeException("Denominator must not be 0.");
+            if (denominator == 0)
+            {
+                throw new ArgumentOutOfRangeException("Must not be 0.", nameof(denominator));
+            }
+
             if (denominator < 0)
             {
                 if (numerator < 0)
@@ -35,10 +31,12 @@ namespace MatrixIO
                     _denominator = Math.Abs(denominator);
                 }
             }
+
             _numerator = numerator;
             _denominator = denominator;
             _isInLowestTerms = false;
         }
+
         public Fraction(int numerator, int denominator, bool asLowestTerms)
             : this(numerator, denominator)
         {
@@ -50,12 +48,16 @@ namespace MatrixIO
             }
             _isInLowestTerms = asLowestTerms;
         }
+
         private Fraction(bool inLowestTerms, int numerator, int denominator)
             : this(numerator, denominator)
         {
             _isInLowestTerms = inLowestTerms;
         }
-        #endregion
+
+        public int Numerator => _numerator;
+
+        public int Denominator => _denominator;
 
         public Fraction GetLowestTerms()
         {
@@ -87,6 +89,7 @@ namespace MatrixIO
         }
 
         #region Arithmetic Operators
+
         public static Fraction operator +(Fraction a, Fraction b)
         {
             var lcm = LeastCommonMultiple(a.Denominator, b.Denominator);
@@ -94,6 +97,7 @@ namespace MatrixIO
             var denominator = (a.Denominator * lcm) + (b.Denominator * lcm);
             return new Fraction(numerator, denominator, true);
         }
+
         public static Fraction operator -(Fraction a, Fraction b)
         {
             var lcm = LeastCommonMultiple(a.Denominator, b.Denominator);
@@ -101,52 +105,65 @@ namespace MatrixIO
             var denominator = (a.Denominator * lcm) - (b.Denominator * lcm);
             return new Fraction(numerator, denominator, true);
         }
+
         public static Fraction operator *(Fraction a, Fraction b)
         {
             return new Fraction(a.Numerator * b.Numerator, a.Denominator * b.Denominator);
         }
+
         public static Fraction operator /(Fraction a, Fraction b)
         {
             return a * b.GetReciprocal();
         }
+
         #endregion
 
         #region Conversion Operators
+
         public static explicit operator float(Fraction a)
         {
             return (float)a.Numerator / a.Denominator;
         }
+
         public static explicit operator double(Fraction a)
         {
             return (double)a.Numerator / a.Denominator;
         }
+
         public static explicit operator decimal(Fraction a)
         {
             return (decimal)a.Numerator / a.Denominator;
         }
+
         public static implicit operator Fraction(int a)
         {
             return new Fraction(true, a, 1);
         }
+
         #endregion
 
         #region Equality Operators
+
         public static bool operator ==(Fraction a, Fraction b)
         {
             return ((long)a.Numerator * b.Denominator) == ((long)a.Denominator * b.Numerator);
         }
+
         public static bool operator !=(Fraction a, Fraction b)
         {
             return !(a == b);
         }
+
         public static bool operator >(Fraction a, Fraction b)
         {
             return ((long)a.Numerator * b.Denominator) > ((long)a.Denominator * b.Numerator);
         }
+
         public static bool operator <(Fraction a, Fraction b)
         {
             return ((long)a.Numerator * b.Denominator) < ((long)a.Denominator * b.Numerator);
         }
+
         #endregion
 
         #region IComparable<Fraction> Implementation
@@ -155,10 +172,9 @@ namespace MatrixIO
         {
             return (int)(((long)Numerator * other.Denominator) - ((long)Denominator * other.Numerator));
         }
-        public int CompareTo(object obj)
-        {
-            throw new NotImplementedException();
-        }
+
+        public int CompareTo(object obj) => throw new NotImplementedException();
+
         #endregion
 
         public bool Equals(Fraction other)
@@ -181,23 +197,11 @@ namespace MatrixIO
         public override string ToString()
         {
             // TODO: Call ToString(string format) instead once it's written.
-            return string.Format("{0}/{1}", _numerator, _denominator);
+            return $"{_numerator}/{_denominator}";
         }
+        
         #endregion
-
-        public byte[] GetBytes()
-        {
-            var bytes = new byte[8];
-
-            var numerator = BitConverter.GetBytes(_numerator);
-            Buffer.BlockCopy(numerator, 0, bytes, 0, numerator.Length);
-
-            var denominator = BitConverter.GetBytes(_isInLowestTerms ? -_denominator : _denominator);
-            Buffer.BlockCopy(denominator, 0, bytes, numerator.Length, denominator.Length);
-
-            return bytes;
-        }
-
+        
         public static Fraction FromBytes(byte[] buffer, int offset)
         {
             throw new NotImplementedException();
@@ -207,6 +211,7 @@ namespace MatrixIO
         {
             return LeastCommonMultiple(a, b, GreatestCommonDivisor(a, b));
         }
+
         public static int LeastCommonMultiple(int a, int b, int gcd)
         {
             return (a * b) / gcd;
@@ -215,16 +220,19 @@ namespace MatrixIO
         public static int GreatestCommonDivisor(int dividend, int divisor)
         {
             var remainder = -1;
+
             while (remainder != 0)
             {
                 int quotient = dividend / divisor;
                 remainder = dividend % divisor;
+
                 if (remainder != 0)
                 {
                     dividend = divisor;
                     divisor = remainder;
                 }
             }
+
             return divisor;
         }
     }

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 
 namespace MatrixIO.IO.Bmff.Boxes
 {
@@ -19,15 +18,15 @@ namespace MatrixIO.IO.Bmff.Boxes
 
         public uint SampleSize { get; set; }
 
-        public uint SampleCount => (SampleSize == 0) ? (uint)Entries.Count : _sampleCount;
+        public uint SampleCount => (SampleSize == 0) ? (uint)Entries.Length : _sampleCount;
 
-        public IList<SampleSizeEntry> Entries { get; } = new List<SampleSizeEntry>();
+        public SampleSizeEntry[] Entries { get; set; }
 
-        public uint EntryCount => (uint)Entries.Count;
+        public uint EntryCount => (uint)Entries.Length;
 
         internal override ulong CalculateSize()
         {
-            return base.CalculateSize() + 4 + 4 + ((ulong)Entries.Count * 4);
+            return base.CalculateSize() + 4 + 4 + ((ulong)Entries.Length * 4);
         }
 
         protected override void LoadFromStream(Stream stream)
@@ -37,11 +36,13 @@ namespace MatrixIO.IO.Bmff.Boxes
             SampleSize = stream.ReadBEUInt32();
             _sampleCount = stream.ReadBEUInt32();
 
+            Entries = new SampleSizeEntry[_sampleCount];
+
             if (SampleSize == 0)
             {
-                for (uint i = 0; i < _sampleCount; i++)
+                for (int i = 0; i < _sampleCount; i++)
                 {
-                    Entries.Add(new SampleSizeEntry(stream.ReadBEUInt32()));
+                    Entries[i] = new SampleSizeEntry(stream.ReadBEUInt32());
                 }
             }
         }

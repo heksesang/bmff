@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 
 namespace MatrixIO.IO.Bmff.Boxes
 {
@@ -15,13 +14,13 @@ namespace MatrixIO.IO.Bmff.Boxes
         public SampleToChunkBox(Stream stream) 
             : base(stream) { }
 
-        public IList<SampleToChunkEntry> Entries { get; } = new List<SampleToChunkEntry>();
+        public SampleToChunkEntry[] Entries { get; set; }
 
-        public int EntryCount => Entries.Count;
+        public int EntryCount => Entries.Length;
 
         internal override ulong CalculateSize()
         {
-            return base.CalculateSize() + 4 + ((ulong)Entries.Count * (4 + 4 + 4));
+            return base.CalculateSize() + 4 + ((ulong)Entries.Length * (4 + 4 + 4));
         }
 
         protected override void LoadFromStream(Stream stream)
@@ -30,13 +29,15 @@ namespace MatrixIO.IO.Bmff.Boxes
 
             uint entryCount = stream.ReadBEUInt32();
 
+            Entries = new SampleToChunkEntry[entryCount];
+
             for (uint i = 0; i < entryCount; i++)
             {
-                Entries.Add(new SampleToChunkEntry(
+                Entries[i] = new SampleToChunkEntry(
                     firstChunk: stream.ReadBEUInt32(),
                     samplesPerChunk: stream.ReadBEUInt32(),
                     sampleDescriptionIndex: stream.ReadBEUInt32()
-                ));
+                );
             }
         }
 
@@ -44,13 +45,15 @@ namespace MatrixIO.IO.Bmff.Boxes
         {
             base.SaveToStream(stream);
 
-            stream.WriteBEUInt32((uint)Entries.Count);
+            stream.WriteBEUInt32((uint)Entries.Length);
 
-            foreach (SampleToChunkEntry SampleToChunkEntry in Entries)
+            for (int i = 0; i < Entries.Length; i++)
             {
-                stream.WriteBEUInt32(SampleToChunkEntry.FirstChunk);
-                stream.WriteBEUInt32(SampleToChunkEntry.SamplesPerChunk);
-                stream.WriteBEUInt32(SampleToChunkEntry.SampleDescriptionIndex);
+                ref SampleToChunkEntry entry = ref Entries[i];
+
+                stream.WriteBEUInt32(entry.FirstChunk);
+                stream.WriteBEUInt32(entry.SamplesPerChunk);
+                stream.WriteBEUInt32(entry.SampleDescriptionIndex);
             }
         }
 

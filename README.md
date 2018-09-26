@@ -8,8 +8,6 @@ Additional support is underway for MPEG TS and Matroska.
 
 NOTE: This library only parses the container format. It can be used for muxing, demuxing, and other manipulations of the container. It does NOT decode/play the contained track bitstreams.
 
-IMPORTANT: This solution requires that Microsoft's Portable Library Tools be installed for the project to load in Visual Studio 2010. This allows the library to be used with .NET Framework 4, Silverlight 4, Windows Phone 7 and Xbox 360 applications. Visual Studio 2011 has Portable Library support built in.
-
 ## About
 
 This library serializes and deserializes Base Media File Format (ISO 14496-12) files and streams.

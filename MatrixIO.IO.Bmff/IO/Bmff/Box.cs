@@ -4,6 +4,7 @@ using System.IO;
 using System.Reflection;
 using System.Diagnostics;
 using System.Linq;
+using System.Buffers;
 
 namespace MatrixIO.IO.Bmff
 {
@@ -406,7 +407,9 @@ namespace MatrixIO.IO.Bmff
                     source.Seek((long)this.ContentOffset.Value, SeekOrigin.Begin);
 
                     ulong remaining = this.ContentSize.Value;
-                    byte[] buffer = new byte[4096];
+
+                    byte[] buffer = ArrayPool<byte>.Shared.Rent(4096);
+
                     int len = 0;
                     do
                     {
@@ -415,6 +418,8 @@ namespace MatrixIO.IO.Bmff
                         constrainedStream.Write(buffer, 0, len);
                     }
                     while (len == buffer.Length);
+
+                    ArrayPool<byte>.Shared.Return(buffer);
                 }
             }
 

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 
 namespace MatrixIO.IO.Bmff.Boxes
 {
@@ -9,19 +8,19 @@ namespace MatrixIO.IO.Bmff.Boxes
     [Box("stss", "Sync Sample Box")]
     public sealed class SyncSampleBox : FullBox, ITableBox<SyncSampleBox.SyncSampleEntry>
     {
-        public SyncSampleBox() 
+        public SyncSampleBox()
             : base() { }
 
-        public SyncSampleBox(Stream stream) 
+        public SyncSampleBox(Stream stream)
             : base(stream) { }
 
-        public IList<SyncSampleEntry> Entries { get; } = new List<SyncSampleEntry>();
+        public SyncSampleEntry[] Entries { get; set; }
 
-        public int EntryCount => Entries.Count;
+        public int EntryCount => Entries.Length;
 
         internal override ulong CalculateSize()
         {
-            return base.CalculateSize() + 4 + ((ulong)Entries.Count * 4);
+            return base.CalculateSize() + 4 + ((ulong)Entries.Length * 4);
         }
 
         protected override void LoadFromStream(Stream stream)
@@ -30,9 +29,11 @@ namespace MatrixIO.IO.Bmff.Boxes
 
             uint entryCount = stream.ReadBEUInt32();
 
+            Entries = new SyncSampleEntry[entryCount];
+
             for (uint i = 0; i < entryCount; i++)
             {
-                Entries.Add(new SyncSampleEntry(stream.ReadBEUInt32()));
+                Entries[i] = new SyncSampleEntry(stream.ReadBEUInt32());
             }
         }
 
@@ -40,11 +41,13 @@ namespace MatrixIO.IO.Bmff.Boxes
         {
             base.SaveToStream(stream);
 
-            stream.WriteBEUInt32((uint)Entries.Count);
+            stream.WriteBEUInt32((uint)Entries.Length);
 
-            foreach (SyncSampleEntry SyncSampleEntry in Entries)
+            for (int i = 0; i < Entries.Length; i++)
             {
-                stream.WriteBEUInt32(SyncSampleEntry.SampleNumber);
+                ref SyncSampleEntry entry = ref Entries[i];
+
+                stream.WriteBEUInt32(entry.SampleNumber);
             }
         }
 
