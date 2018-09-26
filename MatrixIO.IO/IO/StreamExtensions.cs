@@ -57,15 +57,15 @@ namespace MatrixIO.IO
             int len = stream.Read(buffer, 0, 3);
             if (len < 3) throw new EndOfStreamException();
 
-            return BitConverter.ToInt32(buffer, 0).NetworkToHostOrder();
+            return BinaryPrimitives.ReadInt32BigEndian(buffer);
         }
-        
+
         public static uint ReadBEUInt24(this Stream stream)
         {
             byte[] buffer = new byte[4];
             stream.Read(buffer, 1, 3);
 
-            return BitConverter.ToUInt32(buffer, 0).NetworkToHostOrder();
+            return BinaryPrimitives.ReadUInt32BigEndian(buffer);
         }
         
         public static int ReadBEInt32(this Stream stream)
