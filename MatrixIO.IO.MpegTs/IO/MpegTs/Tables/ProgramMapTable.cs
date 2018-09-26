@@ -4,25 +4,10 @@ using MatrixIO.IO.MpegTs.Descriptors;
 
 namespace MatrixIO.IO.MpegTs.Tables
 {
-    public class ProgramMapTable : TsTable<ProgramMap>
+    public sealed class ProgramMapTable : TsTable<ProgramMap>
     {
-        public ushort ProgramNumber { get { return _identifier; } set { _identifier = value; } }
-
         private ushort _programClockReferencePid;
-        public ushort ProgramClockReferencePid
-        {
-            get { return (ushort)(_programClockReferencePid & 0x1FFF); }
-            set { _programClockReferencePid = (ushort)((_programClockReferencePid & 0xE000) | (value & 0x1FFF)); }
-        }
-
         private ushort _programInfoLength;
-        public ushort ProgramInfoLength
-        {
-            get { return (ushort)(_programInfoLength & 0x0FFF); }
-            set { _programInfoLength = (ushort)((_programInfoLength & 0xF000) | (value & 0x0FFF)); }
-        }
-
-        public IList<TsDescriptor> ProgramInfo { get; private set; }
 
         public ProgramMapTable() { }
         public ProgramMapTable(byte[] buffer, int offset, int length)
@@ -47,25 +32,41 @@ namespace MatrixIO.IO.MpegTs.Tables
                 Rows.Add(row);
             }
         }
+
+        public ushort ProgramNumber
+        {
+            get => _identifier;
+            set => _identifier = value;
+        }
+
+        public ushort ProgramClockReferencePid
+        {
+            get => (ushort)(_programClockReferencePid & 0x1FFF);
+            set => _programClockReferencePid = (ushort)((_programClockReferencePid & 0xE000) | (value & 0x1FFF));
+        }
+
+        public ushort ProgramInfoLength
+        {
+            get => (ushort)(_programInfoLength & 0x0FFF);
+            set => _programInfoLength = (ushort)((_programInfoLength & 0xF000) | (value & 0x0FFF));
+        }
+
+        public IList<TsDescriptor> ProgramInfo { get; private set; }
     }
 
     public class ProgramMap
     {
-        public int Length { get { return 1 + 2 + 2 + StreamInfo.Sum(d => d.Length); } }
-        public StreamType StreamType { get; set; }
-        public ushort PacketIdentifier { get; set; }
-        public IList<TsDescriptor> StreamInfo { get; set; }
-
         public ProgramMap() { }
         public ProgramMap(byte[] buffer, int offset)
         {
             var position = offset;
-            StreamType = (StreamType) buffer[position++];
-            PacketIdentifier = (ushort) (((buffer[position++] << 8) | buffer[position++]) & 0x1FFF);
+            StreamType = (StreamType)buffer[position++];
+            PacketIdentifier = (ushort)(((buffer[position++] << 8) | buffer[position++]) & 0x1FFF);
             var streamInfoLength = (ushort)(((buffer[position++] << 8) | buffer[position++]) & 0x0FFF);
 
             StreamInfo = new List<TsDescriptor>();
             var descriptorEndPosition = position + streamInfoLength;
+
             while (position < descriptorEndPosition)
             {
                 var descriptor = new UnknownDescriptor(buffer, position);
@@ -73,5 +74,13 @@ namespace MatrixIO.IO.MpegTs.Tables
                 position += descriptor.Length;
             }
         }
+
+        public int Length => 1 + 2 + 2 + StreamInfo.Sum(d => d.Length);
+
+        public StreamType StreamType { get; set; }
+
+        public ushort PacketIdentifier { get; set; }
+
+        public IList<TsDescriptor> StreamInfo { get; set; }
     }
 }
