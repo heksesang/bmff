@@ -6,12 +6,6 @@ namespace MatrixIO.IO.MpegTs
 {
     public class PesPacket
     {
-        public StreamIdentifier StreamIdentifier { get; set; }
-        public int PacketLength { get; private set; }
-        public PESHeader Header { get; set; }
-        public byte[] Stuffing { get; set; }
-        public byte[] Data { get; set; }
-
         private const uint PacketStartCodePrefix = 0x00000100;
         private const uint PacketStartCodeMask = 0xFFFFFF00;
         private const uint ProgramStreamEndCode = 0x000001B9;
@@ -19,8 +13,12 @@ namespace MatrixIO.IO.MpegTs
         public PesPacket(byte[] buffer, int offset = 0)
         {
             int position = offset;
+
             if (buffer[position++] != 0 || buffer[position++] != 0 || buffer[position++] != 1)
+            {
                 throw new ArgumentException("PES Packet does not start with 0x000001 Start Code Prefix.");
+            }
+
             StreamIdentifier = (StreamIdentifier)buffer[position++];
 
             PacketLength = (buffer[position++] << 8) | buffer[position++];
@@ -68,6 +66,16 @@ namespace MatrixIO.IO.MpegTs
             }
 #endif
         }
+
+        public StreamIdentifier StreamIdentifier { get; set; }
+
+        public int PacketLength { get; private set; }
+
+        public PESHeader Header { get; set; }
+
+        public byte[] Stuffing { get; set; }
+
+        public byte[] Data { get; set; }
     }
 
     public class PESHeader
