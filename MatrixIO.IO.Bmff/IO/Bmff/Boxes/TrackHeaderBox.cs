@@ -25,7 +25,7 @@ namespace MatrixIO.IO.Bmff.Boxes
 
         public ulong Duration { get; set; }
 
-        private uint[] Reserved2 { get; set; } = new uint[2];
+        private ulong Reserved2 { get; set; }
 
         public short Layer { get; set; }
 
@@ -67,11 +67,8 @@ namespace MatrixIO.IO.Bmff.Boxes
                 Reserved1 = stream.ReadBEUInt32();
                 Duration = stream.ReadBEUInt32();
             }
-            for (int i = 0; i < 2; i++)
-            {
-                Reserved2[0] = stream.ReadBEUInt32();
-            }
 
+            Reserved2 = stream.ReadBEUInt64();
             Layer = stream.ReadBEInt16();
             AlternateGroup = stream.ReadBEInt16();
             Volume = stream.ReadBEInt16();
@@ -107,10 +104,7 @@ namespace MatrixIO.IO.Bmff.Boxes
                 stream.WriteBEUInt32((uint)Duration);
             }
 
-            for (int i = 0; i < 2; i++)
-            {
-                stream.WriteBEUInt32(Reserved2[i]);
-            }
+            stream.WriteBEUInt64(Reserved2);
 
             stream.WriteBEInt16(Layer);
             stream.WriteBEInt16(AlternateGroup);
