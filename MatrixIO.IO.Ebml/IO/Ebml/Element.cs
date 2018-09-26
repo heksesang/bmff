@@ -7,9 +7,8 @@ namespace MatrixIO.IO.Ebml
 {
     public abstract class Element
     {
-        public long Length { get; set; }
-
         protected Element() {}
+
         protected Element(Stream source)
         {
             var identifier = new ClassIdentifier(source);
@@ -20,6 +19,8 @@ namespace MatrixIO.IO.Ebml
         {
             
         }
+
+        public long Length { get; set; }
 
         private static readonly Dictionary<ClassIdentifier, Type> ElementDefinitions = new Dictionary<ClassIdentifier, Type>();
 
