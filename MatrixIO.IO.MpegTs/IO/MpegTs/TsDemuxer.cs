@@ -10,16 +10,7 @@ namespace MatrixIO.IO.MpegTs
     public class TsDemuxer
     {
         private readonly object _syncObject = new object();
-
-        public IList<TsProgram> Programs { get; private set; }
-
         private readonly Dictionary<ushort, TsStream> _streams = new Dictionary<ushort, TsStream>();
-
-        public ICollection<TsStream> Streams
-        {
-            get { return _streams.Values; }
-        }
-
         private int _partialPacketLength = 0;
         private readonly byte[] _partialPacket = new byte[TsPacket.Length];
 
@@ -27,15 +18,23 @@ namespace MatrixIO.IO.MpegTs
         {
             Programs = new List<TsProgram>();
 
-            var programAssociationStream = new TableStream()
-                                               {PacketIdentifier = (ushort) PacketIdentifier.ProgramAssociationTable};
-            programAssociationStream.UnitReceived += ProgramAssociationTableReceived;
-            _streams.Add((ushort) PacketIdentifier.ProgramAssociationTable, programAssociationStream);
+            var programAssociationStream = new TableStream
+            {
+                PacketIdentifier = (ushort)PacketIdentifier.ProgramAssociationTable
+            };
 
-            var descriptionStream = new TableStream() {PacketIdentifier = (ushort) PacketIdentifier.TsDescriptionTable};
+            programAssociationStream.UnitReceived += ProgramAssociationTableReceived;
+            _streams.Add((ushort)PacketIdentifier.ProgramAssociationTable, programAssociationStream);
+
+            var descriptionStream = new TableStream() { PacketIdentifier = (ushort)PacketIdentifier.TsDescriptionTable };
             descriptionStream.UnitReceived += DescriptionTableReceived;
-            _streams.Add((ushort) PacketIdentifier.TsDescriptionTable, descriptionStream);
+            _streams.Add((ushort)PacketIdentifier.TsDescriptionTable, descriptionStream);
         }
+
+        public IList<TsProgram> Programs { get; private set; }
+
+        public ICollection<TsStream> Streams => _streams.Values;
+
 
         public void ProcessInput(byte[] buffer, int offset = 0)
         {
@@ -125,7 +124,7 @@ namespace MatrixIO.IO.MpegTs
 
         public void ProcessPacket(TsPacket packet)
         {
-            if (packet.PacketIdentifier == (ushort) PacketIdentifier.NullPacket)
+            if (packet.PacketIdentifier == (ushort)PacketIdentifier.NullPacket)
                 return; // null packet for padding strict muxrate streams
 #if DEBUG2
             var dbg = new StringBuilder();
@@ -149,11 +148,9 @@ namespace MatrixIO.IO.MpegTs
 
             lock (_syncObject)
             {
-
-
                 var pat = e.DecodedUnit.TableIdentifier == TableIdentifier.ProgramAssociation
-                              ? (ProgramAssociationTable) e.DecodedUnit
-                              : null;
+                    ? (ProgramAssociationTable)e.DecodedUnit
+                    : null;
 
                 if (pat == null) return;
 
@@ -172,11 +169,11 @@ namespace MatrixIO.IO.MpegTs
                 foreach (var r in newProgramRows)
                 {
                     var newProgram = new TsProgram(r.ProgramNumber,
-                                                   new TableStream() {PacketIdentifier = r.PacketIdentifier})
-                                         {
-                                             Status =
+                                                   new TableStream() { PacketIdentifier = r.PacketIdentifier })
+                    {
+                        Status =
                                                  pat.IsCurrent ? TsProgramStatus.Current : TsProgramStatus.Next
-                                         };
+                    };
                     _streams.Add(r.PacketIdentifier, newProgram.ProgramMapStream);
                     Programs.Add(newProgram);
                     newProgram.StreamAdded += AddProgramStream;
@@ -197,10 +194,10 @@ namespace MatrixIO.IO.MpegTs
 
         private void DescriptionTableReceived(object sender, TsStreamEventArgs eventArgs)
         {
-            var e = eventArgs as TsStreamEventArgs<TsTable>;
-            if (e == null) return;
-
-            Debug.WriteLine("Received Description Table");
+            if (eventArgs is TsStreamEventArgs<TsTable>)
+            {
+                Debug.WriteLine("Received Description Table");
+            }
         }
 
         private void AddProgramStream(object sender, ProgramStreamEventArgs e)
