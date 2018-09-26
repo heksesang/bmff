@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-
-namespace MatrixIO.IO.MpegTs.Streams
+﻿namespace MatrixIO.IO.MpegTs.Streams
 {
-    public class ByteStream : TsStream<byte[]>
+    public sealed class ByteStream : TsStream<byte[]>
     {
         protected override byte[] ProcessUnit(TsUnit unit)
         {
