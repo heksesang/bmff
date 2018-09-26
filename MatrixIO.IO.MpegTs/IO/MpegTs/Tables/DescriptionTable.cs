@@ -3,11 +3,13 @@ using MatrixIO.IO.MpegTs.Descriptors;
 
 namespace MatrixIO.IO.MpegTs.Tables
 {
-    public class DescriptionTable : TsTable<string>
+    public sealed class DescriptionTable : TsTable<string>
     {
-        public IList<TsDescriptor> Descriptors { get; private set; } 
-        public DescriptionTable() : base() {}
-        public DescriptionTable(byte[] buffer, int offset, int length) : base(buffer, offset, length)
+        public DescriptionTable()
+            : base() { }
+
+        public DescriptionTable(byte[] buffer, int offset, int length)
+            : base(buffer, offset, length)
         {
             Descriptors = new List<TsDescriptor>();
 
@@ -18,5 +20,8 @@ namespace MatrixIO.IO.MpegTs.Tables
                 _position += descriptor.Length;
             }
         }
+
+        public IList<TsDescriptor> Descriptors { get; private set; }
+
     }
 }
