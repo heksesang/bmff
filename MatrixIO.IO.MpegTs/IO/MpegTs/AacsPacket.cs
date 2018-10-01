@@ -2,25 +2,9 @@
 
 namespace MatrixIO.IO.MpegTs
 {
-    public enum AACSCopyControl
-    {
-        // TODO: Figure out what these mean from the AACS spec
-        Unencrypted,
-        Unknown1,
-        Unknown2,
-        Unknown3,
-    }
-
     public class AacsPacket
     {
-        public AACSCopyControl CopyControl { get; private set; }
-
-        /// <summary>27Mhz Clock</summary>
-        public uint Timestamp { get; private set; }
-
-        public TsPacket TsPacket { get; private set; }
-
-        public const int Length = 4+188;
+        public const int Length = 4 + 188;
 
         public AacsPacket(byte[] buffer, int offset)
         {
@@ -36,5 +20,12 @@ namespace MatrixIO.IO.MpegTs
                 throw new FormatException("Encrypted content not currently supported.");
             }
         }
+
+        public AACSCopyControl CopyControl { get; private set; }
+
+        /// <summary>27Mhz Clock</summary>
+        public uint Timestamp { get; private set; }
+
+        public TsPacket TsPacket { get; private set; }
     }
 }

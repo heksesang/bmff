@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers.Binary;
 using System.Collections;
 using System.IO;
 
@@ -31,7 +32,10 @@ namespace MatrixIO.IO.Bmff
         {
             get
             {
-                byte[] flagBytes32 = BitConverter.GetBytes(_flags.HostToNetworkOrder());
+                byte[] flagBytes32 = new byte[4];
+
+                BinaryPrimitives.WriteUInt32BigEndian(flagBytes32, _flags);
+
                 byte[] flagBytes24 = new byte[3];
                 Buffer.BlockCopy(flagBytes32, 1, flagBytes24, 0, 3);
                 return new BitArray(flagBytes24);

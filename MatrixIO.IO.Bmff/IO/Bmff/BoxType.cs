@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers.Binary;
 
 namespace MatrixIO.IO.Bmff
 {
@@ -42,7 +43,7 @@ namespace MatrixIO.IO.Bmff
 
             if (isBaseType)
             {
-                FourCC = new FourCC(BitConverter.ToUInt32(uuidBytes, 0).NetworkToHostOrder());
+                FourCC = new FourCC(BinaryPrimitives.ReadUInt32BigEndian(uuidBytes.AsSpan(0, 4)));
             }
 
             else FourCC = UUID_FOURCC;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers.Binary;
 using System.Text;
 
 namespace MatrixIO.IO.Bmff
@@ -10,9 +11,9 @@ namespace MatrixIO.IO.Bmff
         public FourCC(string fourcc)
             : this(Encoding.UTF8.GetBytes(fourcc)) { }
 
-        public FourCC(byte[] fourcc)
+        public FourCC(ReadOnlySpan<byte> fourcc)
         {
-            _FourCC = BitConverter.ToUInt32(fourcc, 0).NetworkToHostOrder();
+            _FourCC = BinaryPrimitives.ReadUInt32BigEndian(fourcc);
         }
 
         public FourCC(int fourcc) : this((uint)fourcc) { }
@@ -77,7 +78,11 @@ namespace MatrixIO.IO.Bmff
 
         public byte[] GetBytes()
         {
-            return BitConverter.GetBytes(_FourCC.HostToNetworkOrder());
+            byte[] buffer = new byte[4];
+
+            BinaryPrimitives.WriteUInt32BigEndian(buffer, _FourCC);
+
+            return buffer;
         }
 
         public override string ToString()
