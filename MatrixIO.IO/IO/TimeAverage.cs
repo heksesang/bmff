@@ -15,7 +15,6 @@ namespace MatrixIO.IO
 
         public TimeAverage()
         {
-
             _timer = new Timer(new TimerCallback(TimeElapsed), this, Timeout.Infinite, Timeout.Infinite);
         }
 
@@ -30,7 +29,7 @@ namespace MatrixIO.IO
 
         public void Stop()
         {
-            lock(_syncObject)
+            lock (_syncObject)
             {
                 _timer.Change(Timeout.Infinite, Timeout.Infinite);
                 _running = false;
@@ -39,7 +38,7 @@ namespace MatrixIO.IO
 
         public void TimeElapsed(object state)
         {
-            lock(_syncObject)
+            lock (_syncObject)
             {
                 if (!_running) return;
 
@@ -47,25 +46,31 @@ namespace MatrixIO.IO
                 _currentCount = 0;
 
                 _previousCounts.Add(lastBytes);
-                if(_previousCounts.Count > 300)
+                if (_previousCounts.Count > 300)
+                {
                     _previousCounts.RemoveRange(0, _previousCounts.Count - 300);
+                }
             }
         }
 
         public void Add(long number)
         {
             if (!_running) return;
-            lock(_syncObject) _currentCount += number;
+            lock (_syncObject) _currentCount += number;
         }
 
         public double GetAverage(int seconds)
         {
-            if (seconds < 1 || seconds > 300) throw new ArgumentException();
-            lock(_syncObject)
+            if (seconds < 1 || seconds > 300)
+            {
+                throw new ArgumentException();
+            }
+
+            lock (_syncObject)
             {
                 return _previousCounts.Count > 0
-                           ? _previousCounts.Skip(Math.Max(0, _previousCounts.Count() - seconds)).Take(seconds).Average()
-                           : 0.0;
+                    ? _previousCounts.Skip(Math.Max(0, _previousCounts.Count() - seconds)).Take(seconds).Average()
+                    : 0.0;
             }
         }
 
