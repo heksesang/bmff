@@ -95,14 +95,14 @@ namespace MatrixIO.IO.Bmff.Boxes
         protected override void SaveToStream(Stream stream)
         {
             if (DataOffset.HasValue) Flags |= TrackRunFlags.DataOffsetPresent;
-            if (FirstSampleFlags != null) Flags |= TrackRunFlags.FirstSampleFlagsPresent;
+            if (FirstSampleFlags.HasValue) Flags |= TrackRunFlags.FirstSampleFlagsPresent;
 
             foreach (var entry in Entries)
             {
                 // TODO: There must be a better way... probably involves changing TrackRunEntry
                 if (entry.SampleDuration.HasValue) Flags |= TrackRunFlags.SampleDurationPresent;
                 if (entry.SampleSize.HasValue) Flags |= TrackRunFlags.SampleSizePresent;
-                if (entry.SampleFlags != null) Flags |= TrackRunFlags.SampleFlagsPresent;
+                if (entry.SampleFlags.HasValue) Flags |= TrackRunFlags.SampleFlagsPresent;
                 if (entry.SampleCompositionTimeOffset.HasValue) Flags |= TrackRunFlags.SampleCompositionTimeOffsetsPresent;
             }
 
@@ -113,7 +113,7 @@ namespace MatrixIO.IO.Bmff.Boxes
             if (DataOffset.HasValue)
                 stream.WriteBEInt32(DataOffset.Value);
 
-            if (FirstSampleFlags != null)
+            if (FirstSampleFlags.HasValue)
                 stream.WriteBEUInt32(FirstSampleFlags._flags);
 
             foreach (TrackRunEntry entry in Entries)
@@ -123,7 +123,7 @@ namespace MatrixIO.IO.Bmff.Boxes
                 if ((Flags & TrackRunFlags.SampleSizePresent) == TrackRunFlags.SampleSizePresent)
                     stream.WriteBEUInt32(entry.SampleSize ?? 0);
                 if ((Flags & TrackRunFlags.SampleFlagsPresent) == TrackRunFlags.SampleFlagsPresent)
-                    stream.WriteBEUInt32(entry.SampleFlags != null ? entry.SampleFlags._flags : 0);
+                    stream.WriteBEUInt32(entry.SampleFlags.HasValue ? entry.SampleFlags._flags : 0);
                 if ((Flags & TrackRunFlags.SampleCompositionTimeOffsetsPresent) == TrackRunFlags.SampleCompositionTimeOffsetsPresent)
                     stream.WriteBEUInt32(entry.SampleCompositionTimeOffset ?? 0);
             }

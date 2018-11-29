@@ -13,7 +13,8 @@ namespace MatrixIO.IO.Bmff.Boxes
 
         public TrackExtendsBox()
             : base() { }
-        public TrackExtendsBox(Stream stream) 
+
+        public TrackExtendsBox(Stream stream)
             : base(stream) { }
 
         public uint TrackID { get; set; }
@@ -88,15 +89,16 @@ namespace MatrixIO.IO.Bmff.Boxes
         }
     }
 
-    public class SampleFlags
+    public struct SampleFlags
     {
         internal uint _flags;
 
-        public SampleFlags() { }
         public SampleFlags(uint value)
         {
             _flags = value;
         }
+
+        public bool HasValue => _flags != 0;
 
         public byte SampleDependsOn // 2 bits -- Defined in Independent and Disposable Samples Box
         {
