@@ -22,6 +22,15 @@ namespace MatrixIO.IO.Bmff
             }
         }
 
+        public static T Decode<T>(byte[] data)
+            where T: Box
+        {
+            using (var ms = new MemoryStream(data))
+            {
+                return (T)Box.FromStream(ms);
+            }
+        }
+
 
         public static string GetTestFilePath(string name)
         {
