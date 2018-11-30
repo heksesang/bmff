@@ -8,8 +8,13 @@ namespace MatrixIO.IO.Bmff.Boxes
     [Box("cmvd", "Compressed Movie Data Atom")]
     public sealed class CompressedMovieDataBox : Box, IContentBox
     {
-        public CompressedMovieDataBox() : base() { }
-        public CompressedMovieDataBox(Stream stream) : base(stream) { }
+        public CompressedMovieDataBox() 
+            : base() { }
+
+        public CompressedMovieDataBox(Stream stream)
+            : base(stream) { }
+
+        public uint UncompressedSize { get; set; }
 
         internal override ulong CalculateSize()
         {
@@ -29,7 +34,5 @@ namespace MatrixIO.IO.Bmff.Boxes
 
             stream.WriteBEUInt32(UncompressedSize);
         }
-
-        public uint UncompressedSize { get; set; }
     }
 }

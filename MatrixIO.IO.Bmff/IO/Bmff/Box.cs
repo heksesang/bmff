@@ -10,9 +10,65 @@ namespace MatrixIO.IO.Bmff
 {
     public abstract class Box
     {
-        const int uuidType = 0x75756964; // 
+        const int uuidType = 0x75756964; 
 
         protected Stream _sourceStream;
+
+        protected Box()
+        {
+            var firstBoxAttribute = this.GetType().GetCustomAttributes<BoxAttribute>(true).FirstOrDefault();
+
+            if (firstBoxAttribute != null)
+            {
+                Type = firstBoxAttribute.Type;
+            }
+            else if (!(this is Boxes.UnknownBox))
+            {
+                throw new Exception("BMFF Box derivative is not decorated with a BoxAttribute.");
+            }
+        }
+
+        /// <summary>
+        /// Deserializes a specific box type from the stream. 
+        /// </summary>
+        /// <exception cref="FormatException">Thrown when the next box in the stream is not the expected type.</exception>
+        /// <param name="stream">Stream containing the box to be deserialized at the current position.</param>
+        protected Box(Stream stream)
+        {
+            Offset = (ulong)stream.Position;
+
+            Size = stream.ReadBEUInt32();
+
+            uint type = stream.ReadBEUInt32();
+
+            if (Size == 1)
+            {
+                LargeSize = stream.ReadBEUInt64();
+            }
+
+            Type = (type == uuidType)
+                ? new BoxType(new Guid(stream.ReadBytes(16)))
+                : new BoxType(type);
+
+            bool foundMatchingAttribute = false;
+
+            var boxAttributes = this.GetType().GetCustomAttributes<BoxAttribute>(inherit: true);
+
+            foreach (BoxAttribute boxAttribute in boxAttributes)
+            {
+                if (boxAttribute.Type == Type)
+                {
+                    foundMatchingAttribute = true;
+                }
+            }
+
+            if (!foundMatchingAttribute)
+            {
+                throw new FormatException("Unexpected BMFF Box Type.");
+            }
+
+            Initialize(stream);
+        }
 
         public Stream SourceStream => _sourceStream;
 
@@ -121,62 +177,6 @@ namespace MatrixIO.IO.Bmff
         }
 
         public BoxType Type { get; protected set; }
-
-        protected Box()
-        {
-            var firstBoxAttribute = this.GetType().GetCustomAttributes<BoxAttribute>(true).FirstOrDefault();
-
-            if (firstBoxAttribute != null)
-            {
-                Type = firstBoxAttribute.Type;
-            }
-            else if (!(this is Boxes.UnknownBox))
-            {
-                throw new Exception("BMFF Box derivative is not decorated with a BoxAttribute.");
-            }
-        }
-
-        /// <summary>
-        /// Deserializes a specific box type from the stream. 
-        /// </summary>
-        /// <exception cref="FormatException">Thrown when the next box in the stream is not the expected type.</exception>
-        /// <param name="stream">Stream containing the box to be deserialized at the current position.</param>
-        protected Box(Stream stream)
-        {
-            Offset = (ulong)stream.Position;
-
-            Size = stream.ReadBEUInt32();
-
-            uint type = stream.ReadBEUInt32();
-
-            if (Size == 1)
-            {
-                LargeSize = stream.ReadBEUInt64();
-            }
-         
-            Type = (type == uuidType)
-                ? new BoxType(new Guid(stream.ReadBytes(16)))
-                : new BoxType(type);
-
-            bool foundMatchingAttribute = false;
-
-            var boxAttributes = this.GetType().GetCustomAttributes<BoxAttribute>(inherit: true);
-
-            foreach (BoxAttribute boxAttribute in boxAttributes)
-            {
-                if (boxAttribute.Type == Type)
-                {
-                    foundMatchingAttribute = true;
-                }
-            }
-
-            if (!foundMatchingAttribute)
-            {
-                throw new FormatException("Unexpected BMFF Box Type.");
-            }
-
-            Initialize(stream);
-        }
 
         internal void Initialize(Stream stream, BaseMediaOptions options = BaseMediaOptions.LoadChildren)
         {

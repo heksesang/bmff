@@ -10,8 +10,7 @@ namespace MatrixIO.IO.Bmff
     /// </summary>
     public class BaseMediaReader
     {
-        public Stream BaseStream { get; private set; }
-        public BaseMediaOptions Options { get; private set; }
+        private readonly Stack<Box> _boxStack = new Stack<Box>();
 
         public BaseMediaReader(Stream stream, BaseMediaOptions options = BaseMediaOptions.None)
         {
@@ -20,7 +19,9 @@ namespace MatrixIO.IO.Bmff
             Options = options;
         }
 
-        private readonly Stack<Box> _boxStack = new Stack<Box>();
+        public Stream BaseStream { get; }
+
+        public BaseMediaOptions Options { get; }
 
         public string CurrentPath
         {
@@ -76,7 +77,7 @@ namespace MatrixIO.IO.Bmff
                 //if (currentSuperBox.Children != null & currentSuperBox.Children.Count > 0) ;
                 throw new NotImplementedException();
             }
-            
+
             NextSibling();
         }
     }

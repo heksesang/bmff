@@ -43,7 +43,7 @@ namespace MatrixIO.IO.Bmff.Boxes
             if (SampleDescriptionIndex.HasValue) calculatedSize += 4;
             if (DefaultSampleDuration.HasValue)  calculatedSize += 4;
             if (DefaultSampleSize.HasValue)      calculatedSize += 4;
-            if (DefaultSampleFlags != null)      calculatedSize += 4;
+            if (DefaultSampleFlags.HasValue)     calculatedSize += 4;
 
             return calculatedSize;
         }
@@ -93,7 +93,7 @@ namespace MatrixIO.IO.Bmff.Boxes
             if (SampleDescriptionIndex.HasValue) newFlags |= TrackFragmentFlags.SampleDrescriptionIndexPresent;
             if (DefaultSampleDuration.HasValue)  newFlags |= TrackFragmentFlags.DefaultSampleDurationPresent;
             if (DefaultSampleSize.HasValue)      newFlags |= TrackFragmentFlags.DefaultSampleSizePresent;
-            if (DefaultSampleFlags != null)      newFlags |= TrackFragmentFlags.DefaultSampleFlagsPresent;
+            if (DefaultSampleFlags.HasValue)     newFlags |= TrackFragmentFlags.DefaultSampleFlagsPresent;
             if (DurationIsEmpty)                 newFlags |= TrackFragmentFlags.DurationIsEmpty;
 
             Flags = newFlags;
@@ -106,7 +106,7 @@ namespace MatrixIO.IO.Bmff.Boxes
             if (SampleDescriptionIndex.HasValue) stream.WriteBEUInt32(SampleDescriptionIndex.Value);
             if (DefaultSampleDuration.HasValue)  stream.WriteBEUInt32(DefaultSampleDuration.Value);
             if (DefaultSampleSize.HasValue)      stream.WriteBEUInt32(DefaultSampleSize.Value);
-            if (DefaultSampleFlags != null)      stream.WriteBEUInt32(DefaultSampleFlags._flags);
+            if (DefaultSampleFlags.HasValue)     stream.WriteBEUInt32(DefaultSampleFlags._flags);
         }
 
         [Flags]

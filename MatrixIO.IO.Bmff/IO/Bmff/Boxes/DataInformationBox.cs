@@ -8,10 +8,13 @@ namespace MatrixIO.IO.Bmff.Boxes
     /// Data Information Box ("dinf")
     /// </summary>
     [Box("dinf", "Data Information Box")]
-    public class DataInformationBox : Box, ISuperBox
+    public sealed class DataInformationBox : Box, ISuperBox
     {
-        public DataInformationBox() : base() { }
-        public DataInformationBox(Stream stream) : base(stream) { }
+        public DataInformationBox() 
+            : base() { }
+
+        public DataInformationBox(Stream stream) 
+            : base(stream) { }
 
         public IList<Box> Children { get; } = new List<Box>();
 
