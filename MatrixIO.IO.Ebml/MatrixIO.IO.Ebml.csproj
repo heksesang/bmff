@@ -6,9 +6,5 @@
     <VersionPrefix>1.0.0</VersionPrefix>
     <LangVersion>7.3</LangVersion>
   </PropertyGroup>
-
- <ItemGroup>
-   <ProjectReference Include="..\MatrixIO.IO\MatrixIO.IO.csproj" />
- </ItemGroup>
-
+  
 </Project>

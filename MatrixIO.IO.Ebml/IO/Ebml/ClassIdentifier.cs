@@ -49,7 +49,7 @@ namespace MatrixIO.IO.Ebml
         public ClassIdentifier(Stream source)
         {
             var bytes = new byte[4];
-            byte firstByte = source.ReadOneByte();
+            byte firstByte = (byte)source.ReadByte();
 
             if (firstByte > 0x7F)
             {

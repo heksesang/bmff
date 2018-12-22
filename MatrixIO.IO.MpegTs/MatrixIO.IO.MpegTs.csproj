@@ -4,7 +4,7 @@
     <AssemblyName>MatrixIO.IO.MPEGTS</AssemblyName>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <VersionPrefix>1.0.0</VersionPrefix>
-    <LangVersion>7.1</LangVersion>
+    <LangVersion>7.3</LangVersion>
   </PropertyGroup>
 
  <ItemGroup>
@@ -13,8 +13,6 @@
    <None Remove="Specifications\**" />
  </ItemGroup>
   
-  <ItemGroup>
-    <ProjectReference Include="..\MatrixIO.IO\MatrixIO.IO.csproj" />
-  </ItemGroup>
+
 
 </Project>
