@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using MatrixIO.IO.Bmff.Boxes;
+
 using Xunit;
 
 namespace MatrixIO.IO.Bmff.Tests
@@ -16,25 +17,25 @@ namespace MatrixIO.IO.Bmff.Tests
 
                 var boxes = reader.RootBoxes;
 
-                var fileType  = (FileTypeBox)boxes[0];
-                var movie = (MovieBox)boxes[1];
-                var freeSpace = (FreeSpaceBox)boxes[2];
-                var movieData = (MovieDataBox)boxes[3];
+                var ftpy = (FileTypeBox)boxes[0];
+                var moov = (MovieBox)boxes[1];
+                var free = (FreeSpaceBox)boxes[2];
+                var mdat = (MovieDataBox)boxes[3];
 
                 // File Type
-                Assert.Equal(0u, fileType.Offset);
-                Assert.Equal(32u, fileType.ContentOffset);
-                Assert.Equal(Guid.Parse("70797466-1100-1000-8000-00aa00389b71"), fileType.Type.UserType);
+                Assert.Equal(0u, ftpy.Offset);
+                Assert.Equal(32u, ftpy.ContentOffset);
+                Assert.Equal(Guid.Parse("70797466-1100-1000-8000-00aa00389b71"), ftpy.Type.UserType);
 
                 // Movie
-                Assert.Equal(3, movie.Children.Count);
-                
+                Assert.Equal(3, moov.Children.Count);
+
                 // FreeSpace
-                Assert.Equal(982u, freeSpace.ContentOffset);
+                Assert.Equal(982u, free.ContentOffset);
 
                 // Movie Data
-                Assert.Equal(990u, movieData.ContentOffset);
-                Assert.Equal(1314169u, movieData.ContentSize);
+                Assert.Equal(990u, mdat.ContentOffset);
+                Assert.Equal(1314169u, mdat.ContentSize);
             }
         }
     }

@@ -36,7 +36,7 @@ namespace MatrixIO.IO.Bmff
         {
             var basePath = new DirectoryInfo(Directory.GetCurrentDirectory()).Parent.Parent.Parent.Parent;
 
-            return Path.Combine(basePath.FullName, "TestData", "chicago.mp4");
+            return Path.Combine(basePath.FullName, "TestData", name);
         }
     }
 

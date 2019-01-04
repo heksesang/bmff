@@ -1,5 +1,5 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
+using MatrixIO.IO.Numerics;
 
 namespace MatrixIO.IO.Bmff.Boxes
 {
@@ -18,38 +18,15 @@ namespace MatrixIO.IO.Bmff.Boxes
         /// <summary>
         /// 16.16 Fixed-Point Number
         /// </summary>
-        public uint Width { get; set; }
-
-        public double WidthAsDouble
-        {
-            get
-            {
-                double decimalWidth = (double)Width;
-                return decimalWidth / 65536;
-            }
-            set => Width = (uint)Math.Round(value * 65536, 0);
-        }
+        public FixedPoint_16_16 Width { get; set; }
 
         /// <summary>
         /// 16.16 Fixed-Point Number
         /// </summary>
-        public uint Height { get; set; }
+        public FixedPoint_16_16 Height { get; set; }
 
-        public double HeightAsDouble
-        {
-            get
-            {
-                double decimalHeight = (double)Height;
-                return decimalHeight / 65536;
-            }
-            set => Height = (uint)Math.Round(value * 65536, 0);
-        }
-
-        internal override ulong CalculateSize()
-        {
-            return base.CalculateSize() + 4 + 4;
-        }
-
+        internal override ulong CalculateSize() => base.CalculateSize() + 4 + 4;
+        
         protected override void LoadFromStream(Stream stream)
         {
             base.LoadFromStream(stream);
@@ -62,8 +39,8 @@ namespace MatrixIO.IO.Bmff.Boxes
         {
             base.SaveToStream(stream);
 
-            stream.WriteBEUInt32(Width);
-            stream.WriteBEUInt32(Height);
+            stream.WriteBEUInt32(Width.Value);
+            stream.WriteBEUInt32(Height.Value);
         }
     }
 }

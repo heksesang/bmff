@@ -12,9 +12,14 @@ namespace MatrixIO.IO.Bmff.Boxes
     [Box("meta", "Meta Box")]
     public sealed class MetaBox : FullBox, ISuperBox
     {
-        public MetaBox() : base() { }
-        public MetaBox(byte version, uint flags = 0) : base(version, flags) { }
-        public MetaBox(Stream stream) : base(stream) { }
+        public MetaBox()
+            : base() { }
+
+        public MetaBox(byte version, uint flags = 0)
+            : base(version, flags) { }
+
+        public MetaBox(Stream stream)
+            : base(stream) { }
 
         public IList<Box> Children { get; } = new List<Box>();
 
@@ -74,14 +79,9 @@ namespace MatrixIO.IO.Bmff.Boxes
             //typeof(IPMPControlBox),
         };
 
-        public IEnumerable<Box> OtherBoxes
-        {
-            get
-            {
-                return from c in Children
-                       where !StandardBoxes.Contains(c.GetType())
-                       select c;
-            }
-        }
+        public IEnumerable<Box> OtherBoxes =>
+            from c in Children
+            where !StandardBoxes.Contains(c.GetType())
+            select c;
     }
 }

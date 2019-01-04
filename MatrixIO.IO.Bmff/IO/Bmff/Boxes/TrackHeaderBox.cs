@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using MatrixIO.IO.Numerics;
 
 namespace MatrixIO.IO.Bmff.Boxes
 {
@@ -36,11 +37,11 @@ namespace MatrixIO.IO.Bmff.Boxes
         private ushort Reserved3 { get; set; }
 
         public int[] Matrix { get; set; } = new int[9] { 0x00010000, 0, 0, 0, 0x00010000, 0, 0, 0, 0x40000000 };  // Unity Matrix
-
-        public uint Width { get; set; }
-
-        public uint Height { get; set; }
-
+        
+        public FixedPoint_16_16 Width { get; set; }
+        
+        public FixedPoint_16_16 Height { get; set; }
+   
         internal override ulong CalculateSize()
         {
             return base.CalculateSize() +
@@ -116,8 +117,8 @@ namespace MatrixIO.IO.Bmff.Boxes
                 stream.WriteBEInt32(Matrix[i]);
             }
 
-            stream.WriteBEUInt32(Width);
-            stream.WriteBEUInt32(Height);
+            stream.WriteBEUInt32(Width.Value);
+            stream.WriteBEUInt32(Height.Value);
         }
     }
 }
